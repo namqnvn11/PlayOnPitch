@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class yard extends Model
+{
+    protected $table = 'yards';
+
+    protected $fillable = [
+        'boss_id',
+        'yard_name',
+        'yard_type',
+        'description',
+        'block',
+        'district_id'
+    ];
+
+    public function District()
+    {
+        return $this->belongsTo(district::class, 'district_id');
+    }
+
+    public function Boss()
+    {
+        return $this->belongsTo(Boss::class, 'boss_id');
+    }
+}

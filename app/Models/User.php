@@ -18,10 +18,22 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'full_name',
         'email',
         'password',
+        'phone',
+        'address',
+        'district_id',
+        'google_id',
+        'booking_count',
+        'score',
+        'block',
     ];
+
+    public function District()
+    {
+        return $this->belongsTo(District::class, 'district_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
