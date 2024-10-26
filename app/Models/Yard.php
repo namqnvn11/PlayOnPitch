@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class yard extends Model
+class Yard extends Model
 {
     protected $table = 'yards';
 
