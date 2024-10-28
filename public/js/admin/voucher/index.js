@@ -26,9 +26,8 @@ $(document).ready(function () {
         $.ajax({
             url: url,
             type: 'GET',
-            dataType:"json",
+            dataType: "json",
             success: function (response) {
-
                 if (response.success) {
                     console.log(response.data);
                     var data = response.data;
@@ -40,9 +39,13 @@ $(document).ready(function () {
                     $('input[name="conditions_apply"]').val(data.conditions_apply);
                     $('input[name="user_id"]').val(data.user_id);
                     $('#modal-edit').modal('show');
-                }else{
+                } else {
                     Notification.showError(response.message);
                 }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX error:", error); // Log lỗi vào console để xem chi tiết
+                Notification.showError("An error occurred while fetching data: " + error);
             },
             cache: false,
             contentType: false,
