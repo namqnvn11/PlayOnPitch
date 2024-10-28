@@ -23,46 +23,57 @@ class VoucherController extends Controller
             'name' => 'required',
             'price' => 'required',
             'release_date' => 'required',
-            'end_date' => 'required|',
+            'end_date' => 'required',
             'conditions_apply' => 'required',
             'user_id' => 'required',
         ]);
 
         try {
-            $voucher = new Voucher();
+            // Kiểm tra xem có 'id' trong request không
+            if ($request->has('id') && $request->input('id') != null) {
+                // Tìm voucher theo 'id' để cập nhật
+                $voucher = Voucher::findOrFail($request->input('id'));
+                $message = 'Voucher updated successfully';
+            } else {
+                // Không có 'id' => Tạo mới
+                $voucher = new Voucher();
+                $voucher->block = 0;
+                $voucher->created_at = now();
+                $message = 'Voucher created successfully';
+            }
+
+            // Cập nhật các thông tin từ request
             $voucher->name = $request->input('name');
             $voucher->price = $request->input('price');
             $voucher->release_date = $request->input('release_date');
             $voucher->end_date = $request->input('end_date');
             $voucher->conditions_apply = $request->input('conditions_apply');
             $voucher->user_id = $request->input('user_id');
-            $voucher->block = 0;
-            $voucher->created_at = now();
 
             $voucher->save();
 
             if ($request->ajax()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'User created successfully',
+                    'message' => $message,
                     'voucher' => $voucher
-                ], 201);
+                ], 200);
             }
 
-            // Nếu không phải AJAX, chuyển hướng về danh sách người dùng
-            return redirect()->route('admin.voucher.index')->with('message', 'User created successfully');
+            return redirect()->route('admin.voucher.index')->with('message', $message);
 
         } catch (\Exception $e) {
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed to create user: ' . $e->getMessage()
+                    'message' => 'Failed to process voucher: ' . $e->getMessage()
                 ], 500);
             }
 
-            return redirect()->route('admin.voucher.index')->with('error', 'Failed to create voucher: ' . $e->getMessage());
+            return redirect()->route('admin.voucher.index')->with('error', 'Failed to process voucher: ' . $e->getMessage());
         }
     }
+
 
 
     public function block($id)
@@ -105,29 +116,19 @@ class VoucherController extends Controller
 
     public function detail(Request $request, $id)
     {
-        try {
-            $voucher = Voucher::findOrFail($id);
+            $response = Voucher::findOrFail($id);
 
-            if ($request->ajax()) {
-
+            if($response){
                 return response()->json([
-                    'success' => true,
-                    'message' => 'Voucher details retrieved successfully',
-                    'voucher' => $voucher
-                ], 200);
+                    'success'   => true,
+                    'data'      => $response,
+                ]);
             }
 
-            return view('admin.voucher.detail', compact('voucher'));
+            return response()->json([
+                'success'   => false,
+                'message'   => "Saving failed.",
+            ]);
 
-        } catch (\Exception $e) {
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Failed to retrieve voucher: ' . $e->getMessage()
-                ], 500);
-            }
-
-            return redirect()->route('admin.voucher.index')->with('error', 'Failed to retrieve voucher: ' . $e->getMessage());
-        }
     }
 }

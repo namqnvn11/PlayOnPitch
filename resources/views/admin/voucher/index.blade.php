@@ -57,7 +57,7 @@
                                         <td>{{ $voucher->conditions_apply }}</td>
                                         <td>{{ $voucher->User->full_name }}</td>
                                         <td class="text-center">
-                                            <a role="button" class="btn btn-primary js-on-edit" data-url="{{ route('admin.voucher.detail', ['id' => $voucher->id]) }}">
+                                            <a role="button" class="btn btn-primary js-on-edit" data-url="{{ route('admin.voucher.detail', $voucher->id) }}">
                                                 Detail
                                             </a>
                                             <button type="button" class="btn btn-danger" onclick="showModal({{ $voucher->id }})">
