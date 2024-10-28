@@ -1,17 +1,17 @@
 @extends("layouts.app")
-@section('title', $title ?? 'User')
+@section('title', $title ?? 'Voucher')
 @section("content")
 
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>User</h1>
+                    <h1>Voucher</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Admin</a></li>
-                        <li class="breadcrumb-item active">{{ $title ?? 'User' }}</li>
+                        <li class="breadcrumb-item active">{{ $title ?? 'Voucher' }}</li>
                     </ol>
                 </div>
             </div>
@@ -37,26 +37,30 @@
                             <table class="table table-hover text-nowrap">
                                 <thead>
                                 <tr>
-                                    <th>Full Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Address</th>
-                                    <th>District</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Release date</th>
+                                    <th>End Date</th>
+                                    <th>Conditions Apply</th>
+                                    <th>User</th>
                                     <th class="text-center" style="width: 170px;">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
-                                @foreach($users as $user)
+                                @foreach($vouchers as $voucher)
                                     <tr>
-                                        <td>{{ $user->full_name }}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>{{ $user->phone }}</td>
-                                        <td>{{ $user->address }}</td>
-                                        <td>{{ $user->District->name }}</td>
+                                        <td>{{ $voucher->name }}</td>
+                                        <td>{{ $voucher->price }}</td>
+                                        <td>{{ $voucher->release_date }}</td>
+                                        <td>{{ $voucher->end_date }}</td>
+                                        <td>{{ $voucher->conditions_apply }}</td>
+                                        <td>{{ $voucher->User->full_name }}</td>
                                         <td class="text-center">
-
-                                            <button type="button" class="btn btn-danger" onclick="showModal({{ $user->id }})">
+                                            <a role="button" class="btn btn-primary js-on-edit" data-url="{{ route('admin.voucher.detail', ['id' => $voucher->id]) }}">
+                                                Detail
+                                            </a>
+                                            <button type="button" class="btn btn-danger" onclick="showModal({{ $voucher->id }})">
                                                 Block
                                             </button>
                                         </td>
@@ -68,7 +72,7 @@
                             </table>
                             <!---- Phân trang----->
                             <div class="pagination-custom">
-                                {!! $users->appends(request()->input())->links('pagination::bootstrap-4') !!}
+                                {!! $vouchers->appends(request()->input())->links('pagination::bootstrap-4') !!}
                             </div>
 
                         </div>
@@ -81,25 +85,24 @@
     </section>
 
 
-    @include('admin.user.elements.modal_edit')
-    @include('admin.user.elements.modal_confirm')
+    @include('admin.voucher.elements.modal_edit')
+    @include('admin.voucher.elements.modal_confirm')
 
 @endsection
 
 @section("pagescript")
     <script>
-        const STORE_URL = "{{ route('admin.user.store') }}";
-
-        {{--const DELETE_URL = "{{ route('admin.user.destroy') }}";--}}
+        const STORE_URL = "{{ route('admin.voucher.store') }}";
+        {{--const DELETE_URL = "{{ route('admin.voucher.destroy') }}";--}}
     </script>
     <script>
-        function showModal(userId) {
+        function showModal(voucherId) {
             const form = document.getElementById('form-block');
-            form.action = `/admin/user/block/${userId}`;
+            form.action = `/admin/voucher/block/${voucherId}`;
             $('#modal-confirm').modal('show');
         }
     </script>
-    <script src="{{ asset('js/admin/user/index.js?t='.config('constants.app_version') )}}"></script>
+    <script src="{{ asset('js/admin/voucher/index.js?t='.config('constants.app_version') )}}"></script>
 @endsection
 
 

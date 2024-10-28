@@ -16,37 +16,37 @@
 
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="">Full Name</label>
-                        <input type="text" name="full_name" class="form-control" placeholder="Enter full name">
+                        <label for="">Name</label>
+                        <input type="text" name="name" class="form-control" placeholder="Enter name voucher">
                     </div>
 
                     <div class="form-group">
-                        <label for="">Email</label>
-                        <input type="text" name="email" class="form-control" placeholder="Enter email">
+                        <label for="">Price</label>
+                        <input type="number" name="price" class="form-control" placeholder="Enter price">
                     </div>
 
                     <div class="form-group">
-                        <label for="">Password</label>
-                        <input type="password" name="password" class="form-control" placeholder="Enter password">
+                        <label for="">Release Date</label>
+                        <input type="date" name="release_date" class="form-control" placeholder="Enter release date">
                     </div>
 
                     <div class="form-group">
-                        <label for="">Phone</label>
-                        <input type="text" name="phone" class="form-control" placeholder="Enter phone number">
+                        <label for="">End Date</label>
+                        <input type="date" name="end_date" class="form-control" placeholder="Enter end date">
                     </div>
 
                     <div class="form-group">
-                        <label for="">Address</label>
-                        <input type="text" name="address" class="form-control" placeholder="Enter address">
+                        <label for="">Conditions Apply</label>
+                        <input type="number" name="conditions_apply" class="form-control" placeholder="Enter conditions apply">
                     </div>
 
 
                     <div class="form-group">
-                        <label for="">District</label>
-                        <select class="form-control" name="district_id" required>
-                            <option value="">Select District</option>
-                            @foreach($District as $district)
-                                <option value="{{ $district->id }}">{{ $district->name }}</option>
+                        <label for="">User</label>
+                        <select class="form-control" name="user_id" required>
+                            <option value="">Select User</option>
+                            @foreach($Users as $user)
+                                <option value="{{ $user->id }}">{{ $user->full_name }}</option>
                             @endforeach
                         </select>
                     </div>

@@ -72,7 +72,6 @@ class UserController extends Controller
         try {
             $user = User::find($id);
 
-            // Kiểm tra nếu người dùng tồn tại
             if (!$user) {
                 return redirect()->route('admin.user.index')->with('error', 'User not found.');
             }
@@ -81,11 +80,9 @@ class UserController extends Controller
             $user->block = 1;
             $user->save();
 
-            // Chuyển hướng về trang danh sách người dùng với thông báo thành công
             return redirect()->route('admin.user.index')->with('message', 'User blocked successfully');
 
         } catch (\Exception $e) {
-            // Chuyển hướng về trang danh sách người dùng với thông báo lỗi
             return redirect()->route('admin.user.index')->with('error', 'Failed to block user: ' . $e->getMessage());
         }
     }
