@@ -29,40 +29,50 @@ class UserController extends Controller
         ]);
 
         try {
-            $user = new User();
+            // Kiểm tra xem có 'id' trong request không
+            if ($request->has('id') && $request->input('id') != null) {
+
+                $user = User::findOrFail($request->input('id'));
+                $message = 'User updated successfully';
+            } else {
+                // Không có 'id' => Tạo mới
+                $user = new User();
+                $user->booking_count  = 0;
+                $user->score = 0;
+                $user->block = 0;
+                $user->created_at = now();
+                $message = 'User created successfully';
+            }
+
+            // Cập nhật các thông tin từ request
             $user->full_name = $request->input('full_name');
             $user->email = $request->input('email');
             $user->password = Hash::make($request->input('password'));
             $user->phone = $request->input('phone');
             $user->address = $request->input('address');
             $user->district_id = $request->input('district_id');
-            $user->booking_count = 0;
-            $user->score = 0;
-            $user->block = 0;
-            $user->created_at = now();
 
             $user->save();
 
             if ($request->ajax()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'User created successfully',
+                    'message' => $message,
                     'user' => $user
-                ], 201);
+                ], 200);
             }
 
-            // Nếu không phải AJAX, chuyển hướng về danh sách người dùng
-            return redirect()->route('admin.user.index')->with('message', 'User created successfully');
+            return redirect()->route('admin.user.index')->with('message', $message);
 
         } catch (\Exception $e) {
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed to create user: ' . $e->getMessage()
+                    'message' => 'Failed to process user: ' . $e->getMessage()
                 ], 500);
             }
 
-            return redirect()->route('admin.user.index')->with('error', 'Failed to create user: ' . $e->getMessage());
+            return redirect()->route('admin.user.index')->with('error', 'Failed to process user: ' . $e->getMessage());
         }
     }
 
@@ -102,6 +112,24 @@ class UserController extends Controller
             return redirect()->route('admin.user.index')->with('error', 'Failed to UnBlock user: ' . $e->getMessage());
 
         }
+
+    }
+
+    public function detail(Request $request, $id)
+    {
+        $response = User::findOrFail($id);
+
+        if($response){
+            return response()->json([
+                'success'   => true,
+                'data'      => $response,
+            ]);
+        }
+
+        return response()->json([
+            'success'   => false,
+            'message'   => "Saving failed.",
+        ]);
 
     }
 

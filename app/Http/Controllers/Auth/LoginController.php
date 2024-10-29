@@ -18,16 +18,20 @@ class LoginController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (Auth::guard('admin')->attempt($credentials)) { // Sử dụng guard 'admin'
+        if (Auth::guard('admin')->attempt($credentials)) {
             return redirect()->route('admin.user.index');
+        }
+
+        if (Auth::guard('boss')->attempt($credentials)) {
+            return redirect()->route('boss.yard.index');
         }
 
         return back()->withErrors(['email' => 'Invalid credentials']);
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
-        Auth::guard('admin')->logout(); // Sử dụng guard 'admin' cho logout
+        Auth::logout();
         return redirect('/login');
     }
 }

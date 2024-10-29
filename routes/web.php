@@ -2,9 +2,13 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
+
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Admin\BossController;
+
+use App\Http\Controllers\Boss\YardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,6 +38,21 @@ Route::middleware(['auth:admin'])->group(function () {
             Route::get('/detail/{id}', [VoucherController::class, 'detail'])->name('detail');
             Route::post('/block/{id}', [VoucherController::class, 'block'])->name('block');
             Route::post('/unblock/{id}', [VoucherController::class, 'unblock'])->name('unblock');
+        });
+
+        Route::prefix('boss')->name('boss.')->group(function () {
+            Route::get('/index', [BossController::class, 'index'])->name('index');
+            Route::post('/store', [BossController::class, 'store'])->name('store');
+            Route::post('/block/{id}', [BossController::class, 'block'])->name('block');
+            Route::post('/unblock/{id}', [BossController::class, 'unblock'])->name('unblock');
+        });
+    });
+    Route::prefix('boss')->name('boss.')->group(function () {
+        Route::prefix('yard')->name('yard.')->group(function () {
+            Route::get('/index', [YardController::class, 'index'])->name('index');
+            Route::post('/store', [YardController::class, 'store'])->name('store');
+            Route::post('/block/{id}', [YardController::class, 'block'])->name('block');
+            Route::post('/unblock/{id}', [YardController::class, 'unblock'])->name('unblock');
         });
     });
 });
