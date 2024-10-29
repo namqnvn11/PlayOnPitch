@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class VoucherController extends Controller
 {
@@ -19,30 +20,43 @@ class VoucherController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'price' => 'required',
-            'release_date' => 'required',
-            'end_date' => 'required',
+            'price' => 'required|numeric',
+            'release_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:release_date',
             'conditions_apply' => 'required',
-            'user_id' => 'required',
+            'user_id' => 'required|exists:users,id',
         ]);
 
+
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         try {
-            // Kiểm tra xem có 'id' trong request không
+
             if ($request->has('id') && $request->input('id') != null) {
-                // Tìm voucher theo 'id' để cập nhật
+
                 $voucher = Voucher::findOrFail($request->input('id'));
                 $message = 'Voucher updated successfully';
             } else {
-                // Không có 'id' => Tạo mới
+
                 $voucher = new Voucher();
                 $voucher->block = 0;
                 $voucher->created_at = now();
                 $message = 'Voucher created successfully';
             }
 
-            // Cập nhật các thông tin từ request
+
             $voucher->name = $request->input('name');
             $voucher->price = $request->input('price');
             $voucher->release_date = $request->input('release_date');
@@ -76,6 +90,7 @@ class VoucherController extends Controller
 
 
 
+
     public function block($id)
     {
         try {
@@ -85,7 +100,7 @@ class VoucherController extends Controller
                 return redirect()->route('admin.voucher.index')->with('error', 'Voucher not found.');
             }
 
-            // Cập nhật trạng thái block
+
             $voucher->block = 1;
             $voucher->save();
 

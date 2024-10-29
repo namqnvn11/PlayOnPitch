@@ -7,6 +7,7 @@ use App\Models\District;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -19,32 +20,45 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+
+        $validator = Validator::make($request->all(), [
             'full_name' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:users,email,' . $request->input('id'),
             'password' => 'required|min:8',
             'phone' => 'required',
             'address' => 'required',
             'district_id' => 'required',
         ]);
 
+
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         try {
-            // Kiểm tra xem có 'id' trong request không
+
             if ($request->has('id') && $request->input('id') != null) {
 
                 $user = User::findOrFail($request->input('id'));
                 $message = 'User updated successfully';
             } else {
-                // Không có 'id' => Tạo mới
+
                 $user = new User();
-                $user->booking_count  = 0;
+                $user->booking_count = 0;
                 $user->score = 0;
                 $user->block = 0;
                 $user->created_at = now();
                 $message = 'User created successfully';
             }
 
-            // Cập nhật các thông tin từ request
+
             $user->full_name = $request->input('full_name');
             $user->email = $request->input('email');
             $user->password = Hash::make($request->input('password'));
@@ -77,6 +91,7 @@ class UserController extends Controller
     }
 
 
+
     public function block($id)
     {
         try {
@@ -86,7 +101,7 @@ class UserController extends Controller
                 return redirect()->route('admin.user.index')->with('error', 'User not found.');
             }
 
-            // Cập nhật trạng thái block
+
             $user->block = 1;
             $user->save();
 

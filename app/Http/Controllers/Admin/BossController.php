@@ -8,7 +8,7 @@ use App\Models\Boss;
 use Flasher\Laravel\Facade\Flasher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Validator;
 class BossController extends Controller
 {
     public function index()
@@ -20,21 +20,32 @@ class BossController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email|unique:bosses|unique:admins',
-            'password' => 'required|min:8',
-            'full_name' => 'required',
-            'phone' => 'required|min:10',
-            'company_name' => 'required',
-            'company_address' => 'required',
-            'status' => 'required',
-            'district_id' => 'required',
-        ]);
-
         try {
-            // Kiểm tra xem có 'id' trong request không
+
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email|unique:bosses|unique:admins',
+                'password' => 'required|min:8',
+                'full_name' => 'required',
+                'phone' => 'required|min:10',
+                'company_name' => 'required',
+                'company_address' => 'required',
+                'status' => 'required',
+                'district_id' => 'required',
+            ]);
+
+
+            if ($validator->fails()) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
             if ($request->has('id') && $request->input('id') != null) {
-                // Tìm boss theo 'id' để cập nhật
+
                 $boss = Boss::findOrFail($request->input('id'));
                 $message = 'Boss updated successfully';
             } else {
@@ -45,7 +56,6 @@ class BossController extends Controller
                 $message = 'Boss created successfully';
             }
 
-            // Cập nhật các thông tin từ request
             $boss->email = $request->input('email');
             $boss->password = Hash::make($request->input('password'));
             $boss->full_name = $request->input('full_name');
@@ -69,7 +79,6 @@ class BossController extends Controller
 
         } catch (\Exception $e) {
             if ($request->ajax()) {
-                flash()->error('Failed to precess boss');
                 return response()->json([
                     'success' => false,
                     'message' => 'Failed to process boss: ' . $e->getMessage()
@@ -91,7 +100,6 @@ class BossController extends Controller
                 return redirect()->route('admin.boss.index')->with('error', 'Boss not found.');
             }
 
-            // Cập nhật trạng thái block
             $boss->block = 1;
             $boss->save();
 

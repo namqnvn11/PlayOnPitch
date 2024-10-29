@@ -40,10 +40,7 @@ $(document).ready(function () {
                     Notification.showError(response.message);
                 }
             },
-            error: function (xhr, status, error) {
-                console.error("AJAX error:", error); // Log lỗi vào console để xem chi tiết
-                Notification.showError("An error occurred while fetching data: " + error);
-            },
+
             cache: false,
             contentType: false,
             processData: false
@@ -92,7 +89,6 @@ function deleteData() {
 }
 
 function saveData() {
-
     $("form#form-data").submit(function(e) {
         e.preventDefault();
         console.log("Submit save");
@@ -101,10 +97,9 @@ function saveData() {
         $.ajax({
             url: STORE_URL,
             type: 'POST',
-            dataType:"json",
+            dataType: "json",
             data: formData,
-            success: function (response) {
-
+            success: function(response) {
                 if (response.success) {
                     Notification.showSuccess(response.message);
                     $('#modal-edit').modal('hide');
@@ -114,10 +109,27 @@ function saveData() {
                     setTimeout(() => {
                         window.location.reload();
                     }, 1200);
-
-
-                }else{
+                } else {
                     Notification.showError(response.message);
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 422) { // Xử lý lỗi validate
+                    let errors = xhr.responseJSON.errors;
+
+                    // Xóa các thông báo lỗi cũ
+                    $('.error-message').remove();
+
+                    // Hiển thị các lỗi mới
+                    $.each(errors, function(field, messages) {
+                        messages.forEach(function(message) {
+                            $(`input[name="${field}"]`).after(`<span class="error-message" style="color: red;">${message}</span>`);
+                        });
+                    });
+                } else {
+                    // Các lỗi khác
+                    console.error("AJAX error:", xhr.statusText);
+                    Notification.showError("An error occurred: " + xhr.statusText);
                 }
             },
             cache: false,
