@@ -28,4 +28,9 @@ class Boss extends Authenticatable
     {
         return $this->belongsTo(District::class, 'district_id');
     }
+
+    public function Province()
+    {
+        return $this->district->province();
+    }
 }

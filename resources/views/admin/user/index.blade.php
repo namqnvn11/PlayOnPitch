@@ -41,7 +41,6 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Address</th>
-                                    <th>District</th>
                                     <th class="text-center" style="width: 170px;">Action</th>
                                 </tr>
                                 </thead>
@@ -52,8 +51,7 @@
                                         <td>{{ $user->full_name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->phone }}</td>
-                                        <td>{{ $user->address }}</td>
-                                        <td>{{ $user->District->name }}</td>
+                                        <td>{{ $user->address . ", " . $user->District->name . ", " . $user->District->Province->name }}</td>
                                         <td class="text-center">
 
                                             <button type="button" class="btn btn-danger" onclick="showModal({{ $user->id }})">
@@ -89,6 +87,7 @@
 @section("pagescript")
     <script>
         const STORE_URL = "{{ route('admin.user.store') }}";
+        var getDistrictsUrl = "{{ route('admin.user.getDistricts') }}";
 
         {{--const DELETE_URL = "{{ route('admin.user.destroy') }}";--}}
     </script>

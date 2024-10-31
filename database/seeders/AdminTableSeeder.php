@@ -23,6 +23,8 @@ class AdminTableSeeder extends Seeder
             ],
         ];
 
+
+
         DB::table('admins')->insert($list);
 
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Boss;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,11 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
+
+        $boss = Boss::where('email', $request->email)->first();
+        if ($boss && $boss->block == 1) {
+            return back()->withErrors(['email' => 'Your account has been blocked.']);
+        }
 
         if (Auth::guard('admin')->attempt($credentials)) {
             return redirect()->route('admin.user.index');

@@ -29,7 +29,7 @@
 
 
     <li class="nav-item">
-        <a href="{{ route('logout') }}" class="nav-link">
+        <a href="{{ route('admin.logout') }}" class="nav-link">
             <i class="nav-icon far fa-circle text-info"></i>
             <p>Logout</p>
         </a>

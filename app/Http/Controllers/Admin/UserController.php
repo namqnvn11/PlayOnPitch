@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\District;
+use App\Models\Province;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,8 @@ class UserController extends Controller
     {
         $users = User::where('block', 0)->paginate(10);
         $District = District::all();
-        return view('admin.user.index', compact('users', 'District'));
+        $Province = Province::all();
+        return view('admin.user.index', compact('users', 'District', 'Province'));
     }
 
     public function store(Request $request)
@@ -146,6 +148,21 @@ class UserController extends Controller
             'message'   => "Saving failed.",
         ]);
 
+    }
+
+    public function getDistricts(Request $request)
+    {
+        if (!$request->has('province_id')) {
+            return response()->json(['error' => 'Province ID is required'], 400);
+        }
+
+        $districts = District::where('province_id', $request->province_id)->get();
+
+        if ($districts->isEmpty()) {
+            return response()->json(['error' => 'No districts found for this province'], 404);
+        }
+
+        return response()->json($districts);
     }
 
 

@@ -49,12 +49,15 @@
 
                                 @foreach($yards as $yard)
                                     <tr>
-                                        <td>{{ $yard->boss_id }}</td>
+                                        <td>{{ $yard->Boss->company_name }}</td>
                                         <td>{{ $yard->yard_name }}</td>
                                         <td>{{ $yard->yard_type }}</td>
                                         <td>{{ $yard->description }}</td>
                                         <td>{{ $yard->District->name }}</td>
                                         <td class="text-center">
+                                            <a role="button" class="btn btn-primary js-on-edit" data-url="{{ route('boss.yard.detail', $yard->id) }}">
+                                                Detail
+                                            </a>
 
                                             <button type="button" class="btn btn-danger" onclick="showModal({{ $yard->id }})">
                                                 Block
@@ -89,6 +92,7 @@
 @section("pagescript")
     <script>
         const STORE_URL = "{{ route('boss.yard.store') }}";
+        var getDistrictsUrl = "{{ route('boss.yard.getDistricts') }}";
 
         {{--const DELETE_URL = "{{ route('boss.yard.destroy') }}";--}}
     </script>

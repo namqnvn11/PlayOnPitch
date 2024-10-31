@@ -16,6 +16,34 @@ $(document).ready(function () {
         _modal.modal('show');
     });
 
+    $(document).ready(function () {
+
+        $('#province_id').on('change', function () {
+            var provinceId = $(this).val();
+            if (provinceId) {
+                $.ajax({
+                    url: getDistrictsUrl,
+                    type: 'GET',
+                    data: { province_id: provinceId },
+                    success: function (data) {
+                        $('#district_id').empty();
+                        $('#district_id').append('<option value="">Select District</option>');
+                        $.each(data, function (key, district) {
+                            $('#district_id').append('<option value="' + district.id + '">' + district.name + '</option>');
+                        });
+                    },
+
+                    error: function () {
+                        Notification.showError('Error when retrieving district data.');
+                    }
+                });
+            } else {
+                $('#district_id').empty();
+                $('#district_id').append('<option value="">Select District</option>');
+            }
+        });
+    });
+
     $(document).on('click', '.js-on-edit', function () {
         var _modal = $('#modal-edit');
         var url = $(this).attr('data-url');

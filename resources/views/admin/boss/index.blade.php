@@ -43,7 +43,7 @@
                                     <th>Company Name</th>
                                     <th>Company Address</th>
                                     <th>Status</th>
-                                    <th>District</th>
+
                                     <th class="text-center" style="width: 170px;">Action</th>
                                 </tr>
                                 </thead>
@@ -55,9 +55,9 @@
                                         <td>{{ $boss->full_name }}</td>
                                         <td>{{ $boss->phone }}</td>
                                         <td>{{ $boss->company_name }}</td>
-                                        <td>{{ $boss->company_address }}</td>
+                                        <td>{{ $boss->company_address . ", " . $boss->District->name . ", " . $boss->District->Province->name }}</td>
                                         <td>{{ $boss->status == 1 ? 'Mới' : 'Cũ' }}</td>
-                                        <td>{{ $boss->District->name }}</td>
+
                                         <td class="text-center">
 
                                             <button type="button" class="btn btn-danger" onclick="showModal({{ $boss->id }})">
@@ -93,6 +93,7 @@
 @section("pagescript")
     <script>
         const STORE_URL = "{{ route('admin.boss.store') }}";
+        var getDistrictsUrl = "{{ route('admin.boss.getDistricts') }}";
 
         {{--const DELETE_URL = "{{ route('admin.boss.destroy') }}";--}}
     </script>

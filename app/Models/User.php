@@ -35,6 +35,11 @@ class User extends Authenticatable
         return $this->belongsTo(District::class, 'district_id');
     }
 
+    public function Province()
+    {
+        return $this->district->province();
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

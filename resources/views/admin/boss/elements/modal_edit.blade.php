@@ -59,12 +59,19 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="province_id">Province</label>
+                        <select class="form-control" name="province_id" id="province_id" required>
+                            <option value="">Select Province</option>
+                            @foreach($Province as $province)
+                                <option value="{{ $province->id }}">{{ $province->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="district_id">District</label>
                         <select class="form-control" name="district_id" id="district_id" required>
                             <option value="">Select District</option>
-                            @foreach($District as $district)
-                                <option value="{{ $district->id }}">{{ $district->name }}</option>
-                            @endforeach
                         </select>
                     </div>
                 </div>
