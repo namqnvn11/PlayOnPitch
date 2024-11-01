@@ -24,6 +24,12 @@
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
+        <a href="{{ route('auth.google') }}" class="btn btn-primary">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" style="width: 20px; margin-right: 8px;">
+            Đăng nhập bằng Google
+        </a>
+
+
         <!-- Remember Me -->
         <div class="block mt-4">
             <label for="remember_me" class="inline-flex items-center">

@@ -1,5 +1,5 @@
 <?php
-
+require base_path('routes/auth.php');
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Support\Facades\Route;
@@ -15,15 +15,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('login', [LoginController::class, 'showLoginForm'])
-    ->middleware(RedirectIfAuthenticated::class)
-    ->name('login');
-Route::post('login', [LoginController::class, 'login'])->name('login');
+//Route::get('/login', [LoginController::class, 'showLoginForm'])
+//    ->middleware(RedirectIfAuthenticated::class)
+//    ->name('login');
+//Route::post('login', [LoginController::class, 'login'])->name('login');
 
 
-//Route::get('/dashboard', function () {
-//    return view('dashboard');
-//})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', function () {
+    return view('user.home');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth:admin'])->group(function () {
 
@@ -67,5 +67,3 @@ Route::middleware(['auth:boss'])->group(function () {
         });
     });
 });
-
-
