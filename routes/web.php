@@ -35,6 +35,8 @@ Route::middleware(['auth:admin'])->group(function () {
             Route::post('/block/{id}', [UserController::class, 'block'])->name('block');
             Route::post('/unblock/{id}', [UserController::class, 'unblock'])->name('unblock');
             Route::get('/get-districts', [UserController::class, 'getDistricts'])->name('getDistricts');
+            Route::get('/search', [UserController::class, 'search'])->name('search');
+
         });
 
         Route::prefix('voucher')->name('voucher.')->group(function () {
@@ -51,6 +53,7 @@ Route::middleware(['auth:admin'])->group(function () {
             Route::post('/block/{id}', [BossController::class, 'block'])->name('block');
             Route::post('/unblock/{id}', [BossController::class, 'unblock'])->name('unblock');
             Route::get('/get-districts', [BossController::class, 'getDistricts'])->name('getDistricts');
+            Route::get('/search', [BossController::class, 'search'])->name('search');
         });
     });
 });

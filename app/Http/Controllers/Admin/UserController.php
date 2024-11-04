@@ -14,7 +14,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::where('block', 0)->paginate(10);
+        $users= User::orderby('created_at')->where('block',0)->paginate(10);
         $District = District::all();
         $Province = Province::all();
         return view('admin.user.index', compact('users', 'District', 'Province'));
@@ -165,5 +165,32 @@ class UserController extends Controller
         return response()->json($districts);
     }
 
+    public function search(Request $request){
+
+        $block= $request->input('block','active');
+        $query = User::query();
+
+        if ($request->searchText !== null) {
+            $searchText = $request->input('searchText');
+            $query->where(function($q) use ($searchText) {
+                $q->where('full_name', 'like', '%' . $searchText . '%')
+                    ->orWhere('email', 'like', '%' . $searchText . '%');
+            });
+        }
+
+        if ($block === 'active') {
+            $query->where('block', false);
+        } elseif ($block === 'blocked') {
+            $query->where('block', true);
+        }
+
+        $users = $query->orderByDesc('created_at')
+            ->paginate(10)
+            ->appends($request->input());
+        $District = District::all();
+        $Province = Province::all();
+
+        return view('admin.user.index', compact('users', 'District', 'Province'));
+    }
 
 }

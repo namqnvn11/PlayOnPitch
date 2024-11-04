@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Boss;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -23,7 +24,10 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        DB::table('admins')->insert($list);
+//        DB::table('admins')->insert($list);
+//        User::factory()->count(10)->create();
+        Boss::factory()->count(15)->create();
+
 
     }
 }

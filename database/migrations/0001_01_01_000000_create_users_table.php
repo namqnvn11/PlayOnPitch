@@ -17,13 +17,13 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('phone');
-            $table->string('address');
-            $table->integer('district_id');
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
+            $table->integer('district_id')->nullable();
             $table->string('google_id')->nullable();
             $table->integer('booking_count')->nullable();
             $table->integer('score')->nullable();
-            $table->boolean('block');
+            $table->boolean('block')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

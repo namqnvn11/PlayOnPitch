@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('company_address');
             $table->boolean('status');
             $table->integer('district_id');
-            $table->boolean('block');
+            $table->boolean('block')->default(false);
             $table->timestamps();
         });
     }

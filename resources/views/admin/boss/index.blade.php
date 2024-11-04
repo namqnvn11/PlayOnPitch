@@ -24,14 +24,41 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title"></h3>
-                            <div class="card-tools">
+                        {{-- card header--}}
+                        <div class="flex justify-between p-3 border rounded-top items-center">
+
+                            <div class="search-filter flex">
+                                <form action="{{url('admin/boss/search')}}" method="get" id="filterForm" class="flex">
+                                    <x-text-input placeholder="search name or email" name="searchText" value="{{ old('searchText', request('searchText')) }}"/>
+                                    <x-secondary-button type="submit" class="ml-1" data-toggle="tooltip" data-placement="bottom" title="trạng thái mới cũ">search</x-secondary-button>
+
+                                    <div class="flex items-center ml-4">
+                                        <label for="status" class="mt-1" >Status</label>
+                                        <x-select name="status" id="status" onchange="filterStatus()" >
+                                            <option value="all" {{ old('status', request('status')) == 'all' ? 'selected' : '' }}>All</option>
+                                            <option value="new" {{ old('status', request('status')) == 'new' ? 'selected' : '' }}>New</option>
+                                            <option value="old" {{ old('status', request('status')) == 'old' ? 'selected' : '' }}>Old</option>
+                                        </x-select>
+                                    </div>
+
+                                    <div class="flex items-center ml-4">
+                                        <x-select name="block" id="block" onchange="filterStatus()" >
+                                            <option value="active" {{ old('block', request('block')) == 'active' ? 'selected' : '' }}>Active</option>
+                                            <option value="blocked" {{ old('block', request('block')) == 'blocked' ? 'selected' : '' }}>Blocked</option>
+                                            <option value="all" {{ old('block', request('block')) == 'all' ? 'selected' : '' }}>All</option>
+                                        </x-select>
+                                    </div>
+
+                                </form>
+                            </div>
+
+                            <div class="add-new-user">
                                 <a role="button" class="btn btn-success js-on-create">
                                     + Add new
                                 </a>
                             </div>
                         </div>
+                        {{--end card header--}}
 
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-nowrap">
@@ -59,14 +86,18 @@
                                         <td>{{ $boss->status == 1 ? 'Mới' : 'Cũ' }}</td>
 
                                         <td class="text-center">
-
-                                            <button type="button" class="btn btn-danger" onclick="showModal({{ $boss->id }})">
-                                                Block
-                                            </button>
+                                            @if($boss->block)
+                                                <button type="button" class="btn btn-secondary" onclick="showModal({{ $boss->id }})">
+                                                    UnClock
+                                                </button>
+                                            @else
+                                                <button type="button" class="btn btn-danger" onclick="showModal({{ $boss->id }})">
+                                                    Block
+                                                </button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
-
 
                                 </tbody>
                             </table>
@@ -102,6 +133,9 @@
             const form = document.getElementById('form-block');
             form.action = `/admin/boss/block/${bossId}`;
             $('#modal-confirm').modal('show');
+        }
+        function filterStatus(){
+            document.getElementById('filterForm').submit();
         }
     </script>
     <script src="{{ asset('js/admin/boss/index.js?t='.config('constants.app_version') )}}"></script>
