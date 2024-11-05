@@ -15,10 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Route::get('/login', [LoginController::class, 'showLoginForm'])
-//    ->middleware(RedirectIfAuthenticated::class)
-//    ->name('login');
-//Route::post('login', [LoginController::class, 'login'])->name('login');
+Route::get('/login', [LoginController::class, 'showLoginForm'])
+    ->middleware(RedirectIfAuthenticated::class)
+    ->name('login');
+Route::post('login', [LoginController::class, 'login'])->name('login');
 
 
 Route::get('/dashboard', function () {
