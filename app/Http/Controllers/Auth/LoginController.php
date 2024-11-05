@@ -31,7 +31,9 @@ class LoginController extends Controller
         if (Auth::guard('boss')->attempt($credentials)) {
             return redirect()->route('boss.yard.index');
         }
-
+        if (Auth::guard('web')->attempt($credentials)) {
+            return 'login success';
+        }
         return back()->withErrors(['email' => 'Invalid credentials']);
     }
 
