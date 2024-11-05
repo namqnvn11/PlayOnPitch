@@ -45,6 +45,7 @@ Route::middleware(['auth:admin'])->group(function () {
             Route::get('/detail/{id}', [VoucherController::class, 'detail'])->name('detail');
             Route::post('/block/{id}', [VoucherController::class, 'block'])->name('block');
             Route::post('/unblock/{id}', [VoucherController::class, 'unblock'])->name('unblock');
+            Route::get('/search', [VoucherController::class, 'search'])->name('search');
         });
 
         Route::prefix('boss')->name('boss.')->group(function () {
@@ -67,6 +68,7 @@ Route::middleware(['auth:boss'])->group(function () {
             Route::post('/block/{id}', [YardController::class, 'block'])->name('block');
             Route::post('/unblock/{id}', [YardController::class, 'unblock'])->name('unblock');
             Route::get('/get-districts', [YardController::class, 'getDistricts'])->name('getDistricts');
+            Route::get('/search', [YardController::class, 'search'])->name('search');
         });
     });
 });

@@ -28,6 +28,5 @@ class DatabaseSeeder extends Seeder
         User::factory()->count(10)->create();
         Boss::factory()->count(10)->create();
 
-
     }
 }

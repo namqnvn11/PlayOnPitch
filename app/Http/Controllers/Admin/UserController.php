@@ -164,7 +164,6 @@ class UserController extends Controller
 
         return response()->json($districts);
     }
-
     public function search(Request $request){
 
         $block= $request->input('block','active');
@@ -192,5 +191,6 @@ class UserController extends Controller
 
         return view('admin.user.index', compact('users', 'District', 'Province'));
     }
+
 
 }

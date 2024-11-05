@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\District;
+use App\Models\Province;
 use App\Models\User;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
@@ -145,5 +147,36 @@ class VoucherController extends Controller
                 'message'   => "Saving failed.",
             ]);
 
+    }
+    public function search(Request $request){
+
+        $block= $request->input('block','active');
+        $fromDate= $request->input('fromDate');
+        $toDate= $request->input('toDate');
+        $searchText = $request->input('searchText');
+        $query = Voucher::query();
+
+        if ($request->searchText !== null) {
+            $query->where(function($q) use ($searchText) {
+                $q->where('name', 'like', '%' . $searchText . '%');
+            });
+        }
+
+        if ($block === 'active') {
+            $query->where('block', false);
+        } elseif ($block === 'blocked') {
+            $query->where('block', true);
+        }
+
+        if ($fromDate !== null && $toDate !== null) {
+            $query->whereBetween('release_date', [$fromDate, $toDate]);
+        }
+
+        $vouchers = $query->orderByDesc('created_at')
+            ->paginate(10)
+            ->appends($request->input());
+
+        $Users = User::all();
+        return view('admin.voucher.index', compact('vouchers', 'Users'));
     }
 }

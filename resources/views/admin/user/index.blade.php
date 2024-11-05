@@ -42,9 +42,9 @@
                             </div>
 
                             <div class="add-new-user">
-                                <a role="button" class="btn btn-success js-on-create">
+                                <x-add-new-button role="button" class="js-on-create">
                                     + Add new
-                                </a>
+                                </x-add-new-button>
                             </div>
                         </div>
                         {{--end card header--}}
@@ -61,9 +61,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+
                                 @if($users->count()==0)
-                                    <tr><td colspan="5">No User</td></tr>
+                                    <tr><td colspan="5">No User Found</td></tr>
                                 @endif
+
                                 @foreach($users as $user)
                                     <tr>
                                         <td>{{ $user->full_name }}</td>
@@ -77,15 +79,14 @@
 
                                         <td class="text-center">
                                             @if($user->block)
-                                                <button type="button" class="btn btn-secondary" onclick="showModal({{ $user->id }})">
-                                                    UnClock
-                                                </button>
+                                                <x-unblock-button type="button" onclick="showModal({{ $user->id }})">
+                                                    Unblock
+                                                </x-unblock-button>
                                             @else
-                                                <button type="button" class="btn btn-danger" onclick="showModal({{ $user->id }})">
+                                                <x-block-button type="button" onclick="showModal({{ $user->id }})">
                                                     Block
-                                                </button>
+                                                </x-block-button>
                                             @endif
-
 
                                         </td>
                                     </tr>
@@ -96,14 +97,13 @@
                             </table>
 
                             <!---- Phân trang----->
-                            <div class="pagination-custom">
-                                {!! $users->appends(request()->input())->links('pagination::bootstrap-4') !!}
-                            </div>
-
-                        </div>
-
+                            @if ($users->hasPages())
+                                <x-paginate-container>
+                                    {!! $users->appends(request()->input())->links('pagination::bootstrap-4') !!}
+                                </x-paginate-container>
+                            @endif
                     </div>
-
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,7 +1,6 @@
 @extends("layouts.app")
 @section('title', $title ?? 'Voucher')
 @section("content")
-
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -24,14 +23,42 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title"></h3>
+
+                        {{-- card header--}}
+                        <div class="flex justify-between p-3 border rounded-top align-middle">
+
+                            <div class="search-filter flex">
+                                <form action="{{url('admin/voucher/search')}}" method="get" id="filterForm" class="flex">
+                                    <x-text-input placeholder="search name or email" name="searchText" value="{{ old('searchText', request('searchText')) }}"/>
+                                    <x-secondary-button type="submit" class="ml-1">search</x-secondary-button>
+                                    <div class="flex items-center ml-4">
+                                        <x-select name="block" id="" onchange="filterStatus()" >
+                                            <option value="active" {{ old('block', request('block')) == 'active' ? 'selected' : '' }}>Active</option>
+                                            <option value="blocked" {{ old('block', request('block')) == 'blocked' ? 'selected' : '' }}>Blocked</option>
+                                            <option value="all" {{ old('block', request('block')) == 'all' ? 'selected' : '' }}>All</option>
+                                        </x-select>
+                                    </div>
+
+                                    <div class="ml-3">
+                                        <label for="fromDate">From</label>
+                                        <x-timepicker value="{{ old('fromDate', request('fromDate')) }}" name="fromDate" onchange="filterDate()"/>
+                                    </div>
+
+                                    <div class="ml-3">
+                                        <label for="toDate">To</label>
+                                        <x-timepicker name="toDate" value="{{ old('toDate', request('toDate')) }}" onchange="filterDate()"/>
+                                    </div>
+
+                                </form>
+                            </div>
+
                             <div class="card-tools">
-                                <a role="button" class="btn btn-success js-on-create">
+                                <x-add-new-button role="button" class="btn btn-success js-on-create">
                                     + Add new
-                                </a>
+                                </x-add-new-button>
                             </div>
                         </div>
+                        {{--end card header--}}
 
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-nowrap">
@@ -48,6 +75,10 @@
                                 </thead>
                                 <tbody>
 
+                                @if($vouchers->count()==0)
+                                    <tr><td colspan="7">No Voucher Found</td></tr>
+                                @endif
+
                                 @foreach($vouchers as $voucher)
                                     <tr>
                                         <td>{{ $voucher->name }}</td>
@@ -57,23 +88,30 @@
                                         <td>{{ $voucher->conditions_apply }}</td>
                                         <td>{{ $voucher->User->full_name }}</td>
                                         <td class="text-center">
-                                            <a role="button" class="btn btn-primary js-on-edit" data-url="{{ route('admin.voucher.detail', $voucher->id) }}">
+                                            <x-detail-button role="button" class="js-on-edit" data-url="{{ route('admin.voucher.detail', $voucher->id) }}">
                                                 Detail
-                                            </a>
-                                            <button type="button" class="btn btn-danger" onclick="showModal({{ $voucher->id }})">
-                                                Block
-                                            </button>
+                                            </x-detail-button>
+                                            @if($voucher->block)
+                                                <x-unblock-button type="button" class="" onclick="showModal({{ $voucher->id }})">
+                                                    UnClock
+                                                </x-unblock-button>
+                                            @else
+                                                <x-block-button type="button" class="" onclick="showModal({{ $voucher->id }})">
+                                                    Block
+                                                </x-block-button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
 
-
                                 </tbody>
                             </table>
                             <!---- Phân trang----->
-                            <div class="pagination-custom">
-                                {!! $vouchers->appends(request()->input())->links('pagination::bootstrap-4') !!}
-                            </div>
+                            @if($vouchers->hasPages())
+                                <x-paginate-container>
+                                    {!! $vouchers->appends(request()->input())->links('pagination::bootstrap-4') !!}
+                                </x-paginate-container>
+                            @endif
 
                         </div>
 
@@ -101,6 +139,13 @@
             form.action = `/admin/voucher/block/${voucherId}`;
             $('#modal-confirm').modal('show');
         }
+        function filterStatus(){
+            document.getElementById('filterForm').submit();
+        }
+        function filterDate(){
+            document.getElementById('filterForm').submit();
+        }
+
     </script>
     <script src="{{ asset('js/admin/voucher/index.js?t='.config('constants.app_version') )}}"></script>
 @endsection
