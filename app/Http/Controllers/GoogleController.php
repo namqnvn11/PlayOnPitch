@@ -11,7 +11,9 @@ use Laravel\Socialite\Facades\Socialite;
 class GoogleController extends Controller
 {
     public function redirectToGoogle(){
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')
+            ->with(['prompt'=>'select_account'])
+            ->redirect();
     }
     public function handleGoogleCallback(){
         $user = Socialite::driver('google')->stateless()->user();
@@ -26,7 +28,7 @@ class GoogleController extends Controller
             ],[
                 'full_name' => $user->name,
                 'google_id'=> $user->id,
-                'password' => encrypt('abcd1234')
+                'password' => bcrypt(''),
             ]);
             Auth::login($newUser);
         }
