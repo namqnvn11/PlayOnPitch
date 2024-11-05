@@ -12,7 +12,7 @@ class LoginController extends Controller
 {
     public function showLoginForm()
     {
-        return view('auth.login');
+        return view('admin-boss-login');
     }
 
     public function login(Request $request)
@@ -27,7 +27,6 @@ class LoginController extends Controller
         if (Auth::guard('admin')->attempt($credentials)) {
             return redirect()->route('admin.user.index');
         }
-
         if (Auth::guard('boss')->attempt($credentials)) {
             return redirect()->route('boss.yard.index');
         }
@@ -40,6 +39,6 @@ class LoginController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect('/login');
+        return redirect('admin-boss/login');
     }
 }
