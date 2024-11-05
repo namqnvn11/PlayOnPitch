@@ -24,9 +24,9 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-//        DB::table('admins')->insert($list);
-//        User::factory()->count(10)->create();
-        Boss::factory()->count(15)->create();
+        DB::table('admins')->insert($list);
+        User::factory()->count(10)->create();
+        Boss::factory()->count(10)->create();
 
 
     }

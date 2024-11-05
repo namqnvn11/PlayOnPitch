@@ -20,9 +20,9 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->integer('district_id')->nullable();
-            $table->string('google_id')->nullable();
-            $table->integer('booking_count')->nullable();
-            $table->integer('score')->nullable();
+            $table->string('google_id')->default(null)->nullable();
+            $table->integer('booking_count')->default(0)->nullable();
+            $table->integer('score')->default(0)->nullable();
             $table->boolean('block')->default(false);
             $table->rememberToken();
             $table->timestamps();
