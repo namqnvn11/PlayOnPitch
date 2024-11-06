@@ -59,10 +59,11 @@ $(document).ready(function () {
                 if (response.success) {
                     console.log(response.data);
                     var data = response.data;
-                    $('input[name="yard_name"]').val(data.yard_name);
-                    $('input[name="yard_type"]').val(data.yard_type);
+                    $('input[name="id"]').val(data.id);
+                    $('select[name="yard_name"]').val(data.yard_name).trigger('change');
+                    $('select[name="yard_type"]').val(data.yard_type).trigger('change');
                     $('input[name="description"]').val(data.description);
-                    $('input[name="district_id"]').val(data.district_id);
+                    $('select[name="district_id"]').val(data.district_id).trigger('change');
                     $('#modal-edit').modal('show');
                 } else {
                     Notification.showError(response.message);
@@ -152,6 +153,7 @@ function saveData() {
                     $.each(errors, function(field, messages) {
                         messages.forEach(function(message) {
                             $(`input[name="${field}"]`).after(`<span class="error-message" style="color: red;">${message}</span>`);
+                            $(`select[name="${field}"]`).after(`<span class="error-message" style="color: red;">${message}</span>`);
                         });
                     });
                 } else {

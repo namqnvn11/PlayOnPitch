@@ -25,10 +25,7 @@ class YardController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'yard_name' => [
-                'required',
-                'unique:yards,yard_name' . ($request->has('id') ? ',' . $request->id : ''),
-            ],
+            'yard_name' => 'required|unique:yards,yard_name,' . $request->input('id'),
             'yard_type' => 'required',
             'description' => 'required',
             'district_id' => 'required|exists:districts,id',
@@ -50,7 +47,7 @@ class YardController extends Controller
 
             if ($request->has('id') && $request->input('id') != null) {
 
-                $yard = Yard::findOrFail($request->input('id'));
+                $yard = Yard::find($request->input('id'));
                 $message = 'Yard updated successfully';
             } else {
 
