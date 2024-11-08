@@ -32,7 +32,7 @@
                                     <x-text-input placeholder="search name or email" name="searchText" value="{{ old('searchText', request('searchText')) }}"/>
                                     <x-secondary-button type="submit" class="ml-1">search</x-secondary-button>
                                     <div class="flex items-center ml-4">
-                                        <x-select name="block" id="" onchange="filterStatus()" >
+                                        <x-select name="block" id="" onchange="filter()" >
                                             <option value="active" {{ old('block', request('block')) == 'active' ? 'selected' : '' }}>Active</option>
                                             <option value="blocked" {{ old('block', request('block')) == 'blocked' ? 'selected' : '' }}>Blocked</option>
                                             <option value="all" {{ old('block', request('block')) == 'all' ? 'selected' : '' }}>All</option>
@@ -78,6 +78,9 @@
                                         @endif
 
                                         <td class="text-center">
+                                            <x-detail-button role="button" class="js-on-edit" data-url="{{ route('admin.user.detail', $user->id) }}">
+                                                Detail
+                                            </x-detail-button>
                                             @if($user->block)
                                                 <x-unblock-button type="button" onclick="showModal({{ $user->id }})">
                                                     Unblock
@@ -128,7 +131,7 @@
             form.action = `/admin/user/block/${userId}`;
             $('#modal-confirm').modal('show');
         }
-        function filterStatus(){
+        function filter(){
             document.getElementById('filterForm').submit();
         }
     </script>

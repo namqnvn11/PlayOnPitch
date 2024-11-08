@@ -18,40 +18,40 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="text" name="email" id="email" class="form-control" placeholder="Enter email">
+                        <input type="text" name="email" id="email" class="form-control rounded-md" placeholder="Enter email">
 
                     </div>
 
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" name="password" id="password" class="form-control" placeholder="Enter password">
+                        <input type="password" name="password" id="password" class="form-control rounded-md" placeholder="Enter password">
 
                     </div>
 
                     <div class="form-group">
                         <label for="full_name">Full Name</label>
-                        <input type="text" name="full_name" id="full_name" class="form-control" placeholder="Enter full name">
+                        <input type="text" name="full_name" id="full_name" class="form-control rounded-md" placeholder="Enter full name">
 
                     </div>
 
                     <div class="form-group">
                         <label for="phone">Phone</label>
-                        <input type="text" name="phone" id="phone" class="form-control" placeholder="Enter phone">
+                        <input type="text" name="phone" id="phone" class="form-control rounded-md" placeholder="Enter phone">
                     </div>
 
                     <div class="form-group">
                         <label for="company_name">Company Name</label>
-                        <input type="text" name="company_name" id="company_name" class="form-control" placeholder="Enter company name">
+                        <input type="text" name="company_name" id="company_name" class="form-control rounded-md" placeholder="Enter company name">
                     </div>
 
                     <div class="form-group">
                         <label for="company_address">Company Address</label>
-                        <input type="text" name="company_address" id="company_address" class="form-control" placeholder="Enter company address">
+                        <input type="text" name="company_address" id="company_address" class="form-control rounded-md" placeholder="Enter company address">
                     </div>
 
                     <div class="form-group">
                         <label for="status">Status</label>
-                        <select class="form-control" name="status" id="status" required>
+                        <select class="form-control rounded-md" name="status" id="status">
                             <option value="">Select status</option>
                             <option value="0">Cũ</option>
                             <option value="1">Mới</option>
@@ -59,8 +59,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="province_id">Province</label>
-                        <select class="form-control" name="province_id" id="province_id" required>
+                        <label for="province">Province</label>
+                        <select class="form-control rounded-md" name="province" id="province">
                             <option value="">Select Province</option>
                             @foreach($Province as $province)
                                 <option value="{{ $province->id }}">{{ $province->name }}</option>
@@ -69,8 +69,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="district_id">District</label>
-                        <select class="form-control" name="district_id" id="district_id" required>
+                        <label for="district">District</label>
+                        <select class="form-control rounded-md" name="district" id="district">
                             <option value="">Select District</option>
                         </select>
                     </div>

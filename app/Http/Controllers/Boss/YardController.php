@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Boss;
 use App\Models\District;
 use App\Models\Province;
+use App\Models\User;
 use App\Models\Yard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,11 @@ class YardController extends Controller
 {
     public function index()
     {
-        $yards = Yard::where('block', 0)->paginate(10);
+        $currenBoss= Auth::guard('boss')->user();
+        $yards = Yard::where('block', 0)
+                        ->where('boss_id',$currenBoss->id)
+                        ->orderBy('yard_name', 'asc')
+                        ->paginate(10);
         $District = District::all();
         $Province = Province::all();
         return view('boss.yard.index', compact('yards', 'District', 'Province'));
@@ -163,5 +168,34 @@ class YardController extends Controller
         }
 
         return response()->json($districts);
+    }
+
+    public function search(Request $request){
+
+        $currenBoss= Auth::guard('boss')->user();
+        $block= $request->input('block','active');
+        $query = Yard::query();
+        $query->where('boss_id',$currenBoss->id);
+
+        if ($request->searchText !== null) {
+            $searchText = $request->input('searchText');
+            $query->where(function($q) use ($searchText) {
+                $q->where('yard_name', 'like', '%' . $searchText . '%');
+            });
+        }
+
+        if ($block === 'active') {
+            $query->where('block', false);
+        } elseif ($block === 'blocked') {
+            $query->where('block', true);
+        }
+
+        $yards = $query->orderByDesc('created_at')
+            ->paginate(10)
+            ->appends($request->input());
+        $District = District::all();
+        $Province = Province::all();
+
+        return view('boss.yard.index', compact('yards', 'District', 'Province'));
     }
 }

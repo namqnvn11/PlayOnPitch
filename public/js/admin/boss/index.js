@@ -6,6 +6,8 @@ $(document).ready(function () {
     $(document).on('click', '.js-on-create', function () {
         var _modal = $('#modal-edit');
         $('#form-data')[0].reset();
+        $('#password').attr('placeholder', 'Enter password');
+        $('.error-message').remove();
         _modal.find('h4').text('Add new');
         _modal.modal('show');
     });
@@ -19,37 +21,45 @@ $(document).ready(function () {
     });
 
     $(document).ready(function () {
-
-        $('#province_id').on('change', function () {
+        $('#province').on('change', function () {
             var provinceId = $(this).val();
+            fetchDistricts(provinceId)
+        });
+    });
+
+
+    function fetchDistricts(provinceId) {
+        return new Promise((resolve,reject)=>{
             if (provinceId) {
                 $.ajax({
                     url: getDistrictsUrl,
                     type: 'GET',
                     data: { province_id: provinceId },
                     success: function (data) {
-                        $('#district_id').empty();
-                        $('#district_id').append('<option value="">Select District</option>');
+                        $('#district').empty();
+                        $('#district').append('<option value="">Select District</option>');
                         $.each(data, function (key, district) {
-                            $('#district_id').append('<option value="' + district.id + '">' + district.name + '</option>');
+                            $('#district').append('<option value="' + district.id + '">' + district.name + '</option>');
                         });
+                        resolve();
                     },
-
                     error: function () {
                         Notification.showError('Error when retrieving district data.');
+                        reject();
                     }
                 });
             } else {
-                $('#district_id').empty();
-                $('#district_id').append('<option value="">Select District</option>');
+                $('#district').empty();
+                $('#district').append('<option value="">Select District</option>');
             }
-        });
-    });
+        })
+
+    }
 
     $(document).on('click', '.js-on-edit', function () {
         var _modal = $('#modal-edit');
         var url = $(this).attr('data-url');
-
+        $('.error-message').remove();
         $('#form-data')[0].reset();
         _modal.find('h4').text('Edit');
 
@@ -61,15 +71,22 @@ $(document).ready(function () {
                 if (response.success) {
                     console.log(response.data);
                     var data = response.data;
+                    $('input[name="id"]').val(data.id);
                     $('input[name="email"]').val(data.email);
-                    $('input[name="password"]').val(data.password);
+                    $('input[name="password"]').attr('placeholder', 'fill to update password');
                     $('input[name="full_name"]').val(data.full_name);
                     $('input[name="phone"]').val(data.phone);
                     $('input[name="company_name"]').val(data.company_name);
                     $('input[name="company_address"]').val(data.company_address);
-                    $('input[name="status"]').val(data.status);
-                    $('input[name="district_id"]').val(data.district_id);
-                    $('#modal-edit').modal('show');
+                    $('select[name="status"]').val(data.status.toString());
+                    $('select[name="province"]').val(response.province.id);
+                    fetchDistricts($('#province').val())
+                        .then(()=>{
+                            $('select[name="district"]').val(response.district.id);
+                            $('#modal-edit').modal('show');
+                        }).catch(()=>{
+                        Notification.showError('Error when retrieving district data.');
+                    })
                 } else {
                     Notification.showError(response.message);
                 }
@@ -162,11 +179,13 @@ function saveData() {
                     $.each(errors, function(field, messages) {
                         messages.forEach(function(message) {
                             $(`input[name="${field}"]`).after(`<span class="error-message" style="color: red;">${message}</span>`);
+                            $(`select[name="${field}"]`).after(`<span class="error-message" style="color: red;">${message}</span>`);
                         });
                     });
                 } else {
                     // Các lỗi khác
                     console.error("AJAX error:", xhr.statusText);
+                    console.log(xhr.status);
                     Notification.showError("An error occurred: " + xhr.statusText);
                 }
             },

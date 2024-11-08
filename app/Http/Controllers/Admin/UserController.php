@@ -22,15 +22,17 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-
+        $passwordValidateRule= ($request->has('id') && $request->input('id') != null) ? 'nullable' : 'required';
         $validator = Validator::make($request->all(), [
             'full_name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $request->input('id'),
-            'password' => 'required|min:8',
+            'email' => 'required|email|unique:users,email,' . $request->input('id'), //keèm id để bỏ qua email của chính nó khi cập nhật (khi update)
+            'password'=> $passwordValidateRule . '|min:8',
             'phone' => 'required',
             'address' => 'required',
-            'district_id' => 'required',
+            'district' => 'required',
+            'province' => 'required',
         ]);
+
 
 
         if ($validator->fails()) {
@@ -47,11 +49,9 @@ class UserController extends Controller
         try {
 
             if ($request->has('id') && $request->input('id') != null) {
-
                 $user = User::findOrFail($request->input('id'));
                 $message = 'User updated successfully';
             } else {
-
                 $user = new User();
                 $user->booking_count = 0;
                 $user->score = 0;
@@ -60,13 +60,15 @@ class UserController extends Controller
                 $message = 'User created successfully';
             }
 
+            if ($request->filled('password')) {
+                $user->password = Hash::make($request->input('password'));
+            }
 
             $user->full_name = $request->input('full_name');
             $user->email = $request->input('email');
-            $user->password = Hash::make($request->input('password'));
             $user->phone = $request->input('phone');
             $user->address = $request->input('address');
-            $user->district_id = $request->input('district_id');
+            $user->district_id = $request->input('district');
 
             $user->save();
 
@@ -135,11 +137,13 @@ class UserController extends Controller
     public function detail(Request $request, $id)
     {
         $response = User::findOrFail($id);
-
+        $district = District::findOrFail($response->district_id);
         if($response){
             return response()->json([
                 'success'   => true,
                 'data'      => $response,
+                'district' => $district,
+                'province' => $district->province,
             ]);
         }
 
@@ -191,6 +195,4 @@ class UserController extends Controller
 
         return view('admin.user.index', compact('users', 'District', 'Province'));
     }
-
-
 }

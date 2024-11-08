@@ -22,36 +22,33 @@ class BossController extends Controller
 
     public function store(Request $request)
     {
-        try {
+        $passwordValidateRule= ($request->has('id') && $request->input('id') != null) ? 'nullable' : 'required';
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:bosses,email,' . $request->input('id'),
+            'password'=> $passwordValidateRule . '|min:8',
+            'full_name' => 'required',
+            'phone' => 'required|min:10',
+            'company_name' => 'required',
+            'company_address' => 'required',
+            'status' => 'required',
+            'district' => 'required',
+            'province' => 'required',
+        ]);
 
-            $validator = Validator::make($request->all(), [
-                'email' => 'required|email|unique:bosses|unique:admins',
-                'password' => 'required|min:8',
-                'full_name' => 'required',
-                'phone' => 'required|min:10',
-                'company_name' => 'required',
-                'company_address' => 'required',
-                'status' => 'required',
-                'district_id' => 'required',
-            ]);
-
-
-            if ($validator->fails()) {
-                if ($request->ajax()) {
-                    return response()->json([
-                        'success' => false,
-                        'errors' => $validator->errors()
-                    ], 422);
-                }
-                return redirect()->back()->withErrors($validator)->withInput();
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
             }
-
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        try {
             if ($request->has('id') && $request->input('id') != null) {
-
                 $boss = Boss::findOrFail($request->input('id'));
                 $message = 'Boss updated successfully';
             } else {
-                // Không có 'id' => Tạo mới
                 $boss = new Boss();
                 $boss->block = 0;
                 $boss->created_at = now();
@@ -59,14 +56,17 @@ class BossController extends Controller
             }
 
             $boss->email = $request->input('email');
-            $boss->password = Hash::make($request->input('password'));
+
+            if ($request->filled('password')) {
+                $boss->password = Hash::make($request->input('password'));
+            }
+
             $boss->full_name = $request->input('full_name');
             $boss->phone = $request->input('phone');
             $boss->company_name = $request->input('company_name');
             $boss->company_address = $request->input('company_address');
             $boss->status = $request->input('status');
-            $boss->district_id = $request->input('district_id');
-
+            $boss->district_id = $request->input('district');
             $boss->save();
 
             if ($request->ajax()) {
@@ -83,13 +83,14 @@ class BossController extends Controller
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed to process boss: ' . $e->getMessage()
+                    'message' => 'Failed to process boss'
                 ], 500);
             }
 
-            return redirect()->route('admin.boss.index')->with('error', 'Failed to process boss: ' . $e->getMessage());
+            return redirect()->route('admin.boss.index')->with('error', 'Failed to process boss');
         }
     }
+
 
 
 
@@ -131,11 +132,13 @@ class BossController extends Controller
     public function detail(Request $request, $id)
     {
         $response = Boss::findOrFail($id);
-
+        $district = District::findOrFail($response->district_id);
         if($response){
             return response()->json([
                 'success'   => true,
                 'data'      => $response,
+                'district' => $district,
+                'province' => $district->province,
             ]);
         }
 
@@ -163,9 +166,8 @@ class BossController extends Controller
 
     public function search(Request $request){
         $block= $request->input('block','active');
-        $status= $request->input('status','all');
+        $status= $request->input('filterStatus','all');
         $query = Boss::query();
-
         if ($request->searchText !== null) {
             $searchText = $request->input('searchText');
             $query->where(function($q) use ($searchText) {

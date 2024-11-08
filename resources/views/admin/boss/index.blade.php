@@ -34,15 +34,15 @@
 
                                     <div class="flex items-center ml-4">
                                         <label for="status" class="mt-1" >Status</label>
-                                        <x-select name="status" id="status" onchange="filterStatus()" >
-                                            <option value="all" {{ old('status', request('status')) == 'all' ? 'selected' : '' }}>All</option>
-                                            <option value="new" {{ old('status', request('status')) == 'new' ? 'selected' : '' }}>New</option>
-                                            <option value="old" {{ old('status', request('status')) == 'old' ? 'selected' : '' }}>Old</option>
+                                        <x-select name="filterStatus" id="filterStatus" onchange="filter()" >
+                                            <option value="all" {{ old('filterStatus', request('filterStatus')) == 'all' ? 'selected' : '' }}>All</option>
+                                            <option value="new" {{ old('filterStatus', request('filterStatus')) == 'new' ? 'selected' : '' }}>New</option>
+                                            <option value="old" {{ old('filterStatus', request('filterStatus')) == 'old' ? 'selected' : '' }}>Old</option>
                                         </x-select>
                                     </div>
 
                                     <div class="flex items-center ml-4">
-                                        <x-select name="block" id="block" onchange="filterStatus()" >
+                                        <x-select name="block" id="block" onchange="filter()" >
                                             <option value="active" {{ old('block', request('block')) == 'active' ? 'selected' : '' }}>Active</option>
                                             <option value="blocked" {{ old('block', request('block')) == 'blocked' ? 'selected' : '' }}>Blocked</option>
                                             <option value="all" {{ old('block', request('block')) == 'all' ? 'selected' : '' }}>All</option>
@@ -90,6 +90,9 @@
                                         <td>{{ $boss->status == 1 ? 'Mới' : 'Cũ' }}</td>
 
                                         <td class="text-center">
+                                            <x-detail-button role="button" class="js-on-edit" data-url="{{ route('admin.boss.detail', $boss->id) }}">
+                                                Detail
+                                            </x-detail-button>
                                             @if($boss->block)
                                                 <x-unblock-button type="button" class="btn btn-secondary" onclick="showModal({{ $boss->id }})">
                                                     UnBlock
@@ -142,7 +145,7 @@
             form.action = `/admin/boss/block/${bossId}`;
             $('#modal-confirm').modal('show');
         }
-        function filterStatus(){
+        function filter(){
             document.getElementById('filterForm').submit();
         }
     </script>

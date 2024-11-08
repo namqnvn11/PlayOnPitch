@@ -2,6 +2,7 @@
 require base_path('routes/auth.php');
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Models\District;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 
@@ -32,6 +33,7 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::prefix('user')->name('user.')->group(function () {
             Route::get('/index', [UserController::class, 'index'])->name('index');
             Route::post('/store', [UserController::class, 'store'])->name('store');
+            Route::get('/detail/{id}', [UserController::class, 'detail'])->name('detail');
             Route::post('/block/{id}', [UserController::class, 'block'])->name('block');
             Route::post('/unblock/{id}', [UserController::class, 'unblock'])->name('unblock');
             Route::get('/get-districts', [UserController::class, 'getDistricts'])->name('getDistricts');
@@ -51,10 +53,15 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::prefix('boss')->name('boss.')->group(function () {
             Route::get('/index', [BossController::class, 'index'])->name('index');
             Route::post('/store', [BossController::class, 'store'])->name('store');
+            Route::get('/detail/{id}', [BossController::class, 'detail'])->name('detail');
             Route::post('/block/{id}', [BossController::class, 'block'])->name('block');
             Route::post('/unblock/{id}', [BossController::class, 'unblock'])->name('unblock');
             Route::get('/get-districts', [BossController::class, 'getDistricts'])->name('getDistricts');
             Route::get('/search', [BossController::class, 'search'])->name('search');
+            Route::get('test',function (){
+                $districts = District::all();
+                return view('boss.test')->with('districts', $districts);
+            });
         });
     });
 });

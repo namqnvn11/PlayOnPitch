@@ -28,6 +28,8 @@
 
     <link rel="stylesheet" href="{{  asset('assets/libraries/toastr/toastr.min.css' ) }}">
     <link rel="stylesheet" href="{{  asset('css/custom.css?v='.config('constant.app_version') ) }}">
+
+    @vite('resources/css/app.css')
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
