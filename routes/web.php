@@ -38,6 +38,7 @@ Route::middleware(['auth:admin'])->group(function () {
             Route::post('/unblock/{id}', [UserController::class, 'unblock'])->name('unblock');
             Route::get('/get-districts', [UserController::class, 'getDistricts'])->name('getDistricts');
             Route::get('/search', [UserController::class, 'search'])->name('search');
+            Route::post('/reset-password/{id}', [UserController::class, 'resetPassword'])->name('reset-password');
 
         });
 
@@ -58,10 +59,6 @@ Route::middleware(['auth:admin'])->group(function () {
             Route::post('/unblock/{id}', [BossController::class, 'unblock'])->name('unblock');
             Route::get('/get-districts', [BossController::class, 'getDistricts'])->name('getDistricts');
             Route::get('/search', [BossController::class, 'search'])->name('search');
-            Route::get('test',function (){
-                $districts = District::all();
-                return view('boss.test')->with('districts', $districts);
-            });
         });
     });
 });

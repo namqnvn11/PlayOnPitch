@@ -27,7 +27,7 @@ class BossController extends Controller
             'email' => 'required|email|unique:bosses,email,' . $request->input('id'),
             'password'=> $passwordValidateRule . '|min:8',
             'full_name' => 'required',
-            'phone' => 'required|min:10',
+            'phone' => ['required', 'string', 'regex:/^((\+84|0)(\d{9,10}))|((0\d{2,3})\d{7,8})$/'],
             'company_name' => 'required',
             'company_address' => 'required',
             'status' => 'required',
@@ -100,16 +100,24 @@ class BossController extends Controller
             $boss = Boss::find($id);
 
             if (!$boss) {
-                return redirect()->route('admin.boss.index')->with('error', 'Boss not found.');
+                return  response()->json([
+                    'success' => false,
+                    'message' => 'Boss not found'
+                ]);
             }
 
             $boss->block = 1;
             $boss->save();
 
-            return redirect()->route('admin.boss.index')->with('message', 'Boss blocked successfully');
-
+            return response()->json([
+                'success' => true,
+                'message' => $boss->full_name . ' blocked successfully.'
+            ]);
         } catch (\Exception $e) {
-            return redirect()->route('admin.boss.index')->with('error', 'Failed to block Boss: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ],301);
         }
     }
 
@@ -120,11 +128,16 @@ class BossController extends Controller
             $boss->block = 0;
             $boss->save();
 
-            return redirect()->route('admin.boss.index')->with('message', 'Boss UnBlock successfully');
-
+            return response()->json([
+                'success' => true,
+                'message' => $boss->full_name . ' unblocked successfully.'
+            ]);
         }catch(\Exception $e)
         {
-            return redirect()->route('admin.$boss.index')->with('error', 'Failed to UnBlock user: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
 
     }

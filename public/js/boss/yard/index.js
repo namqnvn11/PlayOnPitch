@@ -4,7 +4,14 @@ $(document).ready(function () {
     $(document).on('click', '.js-on-create', function () {
         var _modal = $('#modal-edit');
         $('#form-data')[0].reset();
+        $('.error-message').remove();
         _modal.find('h4').text('Add new');
+        fetchDistricts($('#province_id').attr('province-id')).then(()=>{
+                $('select[name="district"]').val($('#district_id').attr('district-id'));
+                console.log( $('select[name="district"]').val());
+        }
+        );
+
         _modal.modal('show');
     });
 
@@ -16,10 +23,22 @@ $(document).ready(function () {
         _modal.modal('show');
     });
 
-    $(document).ready(function () {
+    $(document).on('keydown', function(event) {
+        if (event.key === "Escape" || event.keyCode === 27) {
+            $('#modal-confirm').modal('hide');
+            $('#modal-edit').modal('hide');
+        }
+    });
 
+    $(document).ready(function () {
         $('#province_id').on('change', function () {
             var provinceId = $(this).val();
+            fetchDistricts(provinceId);
+        });
+    });
+
+    function fetchDistricts(provinceId) {
+        return new Promise((resolve,reject)=>{
             if (provinceId) {
                 $.ajax({
                     url: getDistrictsUrl,
@@ -31,23 +50,25 @@ $(document).ready(function () {
                         $.each(data, function (key, district) {
                             $('#district_id').append('<option value="' + district.id + '">' + district.name + '</option>');
                         });
+                        resolve();
                     },
-
                     error: function () {
                         Notification.showError('Error when retrieving district data.');
+                        reject();
                     }
                 });
             } else {
                 $('#district_id').empty();
                 $('#district_id').append('<option value="">Select District</option>');
             }
-        });
-    });
+        })
+    }
 
     $(document).on('click', '.js-on-edit', function () {
         var _modal = $('#modal-edit');
         var url = $(this).attr('data-url');
-
+        console.log(url);
+        $('.error-message').remove();
         $('#form-data')[0].reset();
         _modal.find('h4').text('Edit');
 
@@ -59,11 +80,18 @@ $(document).ready(function () {
                 if (response.success) {
                     console.log(response.data);
                     var data = response.data;
-                    $('input[name="yard_name"]').val(data.yard_name);
-                    $('input[name="yard_type"]').val(data.yard_type);
-                    $('input[name="description"]').val(data.description);
-                    $('input[name="district_id"]').val(data.district_id);
-                    $('#modal-edit').modal('show');
+                    $('input[name="id"]').val(data.id);
+                    $('select[name="yard_name"]').val(data.yard_name);
+                    $('select[name="yard_type"]').val(data.yard_type);
+                    $('textarea[name="description"]').val(data.description);
+                    $('select[name="province"]').val(response.province.id);
+                    fetchDistricts($('#province_id').val())
+                        .then(()=>{
+                            $('select[name="district"]').val(response.district.id);
+                            $('#modal-edit').modal('show');
+                        }).catch(()=>{
+                        Notification.showError('Error when retrieving district data.');
+                    })
                 } else {
                     Notification.showError(response.message);
                 }
@@ -81,6 +109,10 @@ $(document).ready(function () {
     deleteData();
 
 });
+
+function loadBossAddress(){
+
+}
 
 function deleteData() {
 
@@ -144,19 +176,19 @@ function saveData() {
             error: function(xhr) {
                 if (xhr.status === 422) { // Xử lý lỗi validate
                     let errors = xhr.responseJSON.errors;
-
                     // Xóa các thông báo lỗi cũ
                     $('.error-message').remove();
 
                     // Hiển thị các lỗi mới
                     $.each(errors, function(field, messages) {
                         messages.forEach(function(message) {
-                            $(`input[name="${field}"]`).after(`<span class="error-message" style="color: red;">${message}</span>`);
+                            $(`textarea[name="${field}"]`).after(`<span class="error-message" style="color: red;">${message}</span>`);
+                            $(`select[name="${field}"]`).after(`<span class="error-message" style="color: red;">${message}</span>`);
                         });
                     });
                 } else {
                     // Các lỗi khác
-                    console.error("AJAX error:", xhr.statusText);
+                    console.error("AJAX error:", xhr);
                     Notification.showError("An error occurred: " + xhr.statusText);
                 }
             },
@@ -166,3 +198,58 @@ function saveData() {
         });
     });
 }
+
+function showModalBlock(yardId) {
+    const form = document.getElementById('form-block');
+    document.getElementById('confirmLabel').innerHTML='Are you sure you want to block this Yard?'
+    document.getElementById('modalTitle').innerHTML='Block Yard';
+    document.getElementById('yardId').value= yardId;
+    form.action = `/boss/yard/block/${yardId}`;
+    $('#modal-confirm').modal('show');
+}
+function showModalUnBlock(yardId){
+    const form = document.getElementById('form-block');
+    form.action = `/boss/yard/unblock/${yardId}`;
+    document.getElementById('confirmLabel').innerHTML='Are you sure you want to unblock this Yard?'
+    document.getElementById('modalTitle').innerHTML='Unblock Yard';
+    document.getElementById('yardId').value= yardId;
+    $('#modal-confirm').modal('show');
+}
+function filter(){
+    document.getElementById('filterForm').submit();
+}
+
+function blockUnBlockSubmit(event){
+    event.preventDefault();
+    const form = document.getElementById('form-block');
+    var formData = new FormData(form);
+    let yardId= document.getElementById('yardId').value;
+    let submitURL= document.getElementById('modalTitle').innerHTML==='Block Yard' ? BLOCK_URL : UNBLOCK_URL;
+    submitURL= submitURL+'/'+yardId;
+    $.ajax({
+        url: submitURL,
+        type: 'POST',
+        dataType: "json",
+        data: formData,
+        success: function(response) {
+            if (response.success) {
+                Notification.showSuccess(response.message);
+                $('#modal-confirm').modal('hide');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } else {
+                Notification.showError(response.message);
+            }
+        },
+        error: function(xhr) {
+            console.log(xhr.status);
+            Notification.showError("An error occurred: " + xhr.statusText);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+}
+
+

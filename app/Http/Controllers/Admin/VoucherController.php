@@ -22,13 +22,12 @@ class VoucherController extends Controller
 
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|min:0',
             'release_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:release_date',
-            'conditions_apply' => 'required',
+            'conditions_apply' => 'required|numeric|min:0',
             'user_id' => 'required|exists:users,id',
         ]);
 
@@ -99,17 +98,24 @@ class VoucherController extends Controller
             $voucher = Voucher::find($id);
 
             if (!$voucher) {
-                return redirect()->route('admin.voucher.index')->with('error', 'Voucher not found.');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Voucher not found'
+                ]);
             }
-
 
             $voucher->block = 1;
             $voucher->save();
 
-            return redirect()->route('admin.voucher.index')->with('message', 'Voucher blocked successfully');
-
+            return response()->json([
+                'success' => true,
+                'message' => 'Voucher '. $voucher->name .' blocked successfully'
+            ]);
         } catch (\Exception $e) {
-            return redirect()->route('admin.voucher.index')->with('error', 'Failed to block Voucher: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
     }
 
@@ -120,13 +126,16 @@ class VoucherController extends Controller
             $voucher->block = 0;
             $voucher->save();
 
-            return redirect()->route('admin.voucher.index')->with('message', 'Voucher UnBlock successfully');
-
+            return response()->json([
+                'success' => true,
+                'message' => 'Voucher '. $voucher->name .' unblocked successfully'
+            ]);
         }catch(\Exception $e)
         {
-
-            return redirect()->route('admin.$voucher.index')->with('error', 'Failed to UnBlock user: ' . $e->getMessage());
-
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
 
     }
@@ -151,8 +160,10 @@ class VoucherController extends Controller
     public function search(Request $request){
 
         $block= $request->input('block','active');
-        $fromDate= $request->input('fromDate');
-        $toDate= $request->input('toDate');
+        $fromReleaseDate= $request->input('fromReleaseDate');
+        $toReleaseDate= $request->input('toReleaseDate');
+        $fromExpireDate= $request->input('fromExpireDate');
+        $toExpireDate= $request->input('toExpireDate');
         $searchText = $request->input('searchText');
         $query = Voucher::query();
 
@@ -168,8 +179,12 @@ class VoucherController extends Controller
             $query->where('block', true);
         }
 
-        if ($fromDate !== null && $toDate !== null) {
-            $query->whereBetween('release_date', [$fromDate, $toDate]);
+        if ($fromReleaseDate !== null && $toReleaseDate !== null) {
+            $query->whereBetween('release_date', [$fromReleaseDate, $toReleaseDate]);
+        }
+
+        if ($fromExpireDate !== null && $toExpireDate !== null) {
+            $query->whereBetween('end_date', [$fromExpireDate, $toExpireDate]);
         }
 
         $vouchers = $query->orderByDesc('created_at')

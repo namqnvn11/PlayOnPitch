@@ -27,12 +27,11 @@ class UserController extends Controller
             'full_name' => 'required',
             'email' => 'required|email|unique:users,email,' . $request->input('id'), //keèm id để bỏ qua email của chính nó khi cập nhật (khi update)
             'password'=> $passwordValidateRule . '|min:8',
-            'phone' => 'required',
+            'phone' => ['required', 'string', 'regex:/^((\+84|0)(\d{9,10}))|((0\d{2,3})\d{7,8})$/'],
             'address' => 'required',
             'district' => 'required',
             'province' => 'required',
         ]);
-
 
 
         if ($validator->fails()) {
@@ -102,17 +101,24 @@ class UserController extends Controller
             $user = User::find($id);
 
             if (!$user) {
-                return redirect()->route('admin.user.index')->with('error', 'User not found.');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not found'
+                ]);
             }
-
 
             $user->block = 1;
             $user->save();
 
-            return redirect()->route('admin.user.index')->with('message', 'User blocked successfully');
-
+            return response()->json([
+                'success' => true,
+                'message' => $user->full_name . ' blocked successfully'
+            ]);
         } catch (\Exception $e) {
-            return redirect()->route('admin.user.index')->with('error', 'Failed to block user: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
     }
 
@@ -123,13 +129,16 @@ class UserController extends Controller
             $user->block = 0;
             $user->save();
 
-            return redirect()->route('admin.user.index')->with('message', 'User UnBlock successfully');
-
+            return response()->json([
+                'success' => true,
+                'message' => $user->full_name . ' unblocked successfully'
+            ]);
         }catch(\Exception $e)
         {
-
-            return redirect()->route('admin.user.index')->with('error', 'Failed to UnBlock user: ' . $e->getMessage());
-
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
 
     }
@@ -194,5 +203,41 @@ class UserController extends Controller
         $Province = Province::all();
 
         return view('admin.user.index', compact('users', 'District', 'Province'));
+    }
+
+    function  resetPassword(request $request,$id){
+
+            $validator= Validator::make($request->all(),['new-password'=>'required|min:8']);
+            if ($validator->fails()) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+        try {
+            $user= User::find($id);
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not found'
+                ]);
+            }
+            $user->password = Hash::make($request->input('password'));
+            $user->save();
+            return response()->json([
+                'success' => true,
+                'message' => $user->full_name.'\'password reset successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+
     }
 }

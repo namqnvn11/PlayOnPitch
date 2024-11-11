@@ -11,6 +11,7 @@ use App\Models\Yard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class YardController extends Controller
 {
@@ -28,17 +29,21 @@ class YardController extends Controller
 
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'yard_name' => [
                 'required',
-                'unique:yards,yard_name' . ($request->has('id') ? ',' . $request->id : ''),
+                'string',
+                //kiểm tra có trùng tên với các sân có cùng boss id và chỉ xét các sân không bị block
+                Rule::unique('yards')->ignore($request->id)->where(function ($query) use ($request) {
+                    return $query->where('boss_id', Auth::guard('boss')->id())
+                        ->where('block', false);
+                })
             ],
             'yard_type' => 'required',
             'description' => 'required',
-            'district_id' => 'required|exists:districts,id',
+            'district' => 'required|exists:districts,id',
+            'province' => 'required|exists:provinces,id',
         ]);
-
 
         if ($validator->fails()) {
             if ($request->ajax()) {
@@ -70,7 +75,7 @@ class YardController extends Controller
             $yard->yard_name = $request->input('yard_name');
             $yard->yard_type = $request->input('yard_type');
             $yard->description = $request->input('description');
-            $yard->district_id = $request->input('district_id');
+            $yard->district_id = $request->input('district');
 
             $yard->save();
 
@@ -101,21 +106,29 @@ class YardController extends Controller
 
     public function block($id)
     {
+
         try {
             $yard = Yard::find($id);
 
             if (!$yard) {
-                return redirect()->route('boss.yard.index')->with('error', 'Yard not found.');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Yard not found'
+                ]);
             }
-
 
             $yard->block = 1;
             $yard->save();
 
-            return redirect()->route('boss.yard.index')->with('message', 'Yard blocked successfully');
-
+            return response()->json([
+                'success' => true,
+                'message' => $yard->yard_name. ' blocked successfully'
+            ]);
         } catch (\Exception $e) {
-            return redirect()->route('boss.yard.index')->with('error', 'Failed to block Yard: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
     }
 
@@ -123,16 +136,30 @@ class YardController extends Controller
     {
         try {
             $yard = Yard::find($id);
+
+            //kiểm tra nếu mở khóa thì có bị trùng tên với sân hiện tại
+            $activeYardList= Yard::where('boss_id',Auth::guard('boss')->id())
+                ->where('block',0)->get();
+            foreach ($activeYardList as $activeYard) {
+                if ($activeYard->yard_name === $yard->yard_name) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Sân số ' . $yard->yard_name . ' already exist'
+                    ]);
+                }
+            }
             $yard->block = 0;
             $yard->save();
-
-            return redirect()->route('boss.yard.index')->with('message', 'Yard UnBlock successfully');
-
+            return response()->json([
+                'success' => true,
+                'message' => $yard->yard_name. ' unblocked successfully'
+            ]);
         }catch(\Exception $e)
         {
-
-            return redirect()->route('boss.$yard.index')->with('error', 'Failed to UnBlock user: ' . $e->getMessage());
-
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
 
     }
@@ -140,11 +167,13 @@ class YardController extends Controller
     public function detail(Request $request, $id)
     {
         $response = Yard::findOrFail($id);
-
+        $district = District::findOrFail($response->district_id);
         if($response){
             return response()->json([
                 'success'   => true,
                 'data'      => $response,
+                'district' => $district,
+                'province' => $district->province,
             ]);
         }
 

@@ -17,33 +17,32 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="">Name</label>
-                        <input type="text" name="name" class="form-control" placeholder="Enter name voucher">
+                        <input type="text" name="name" class="form-control rounded-md border-gray-400" placeholder="Enter name voucher">
                     </div>
 
                     <div class="form-group">
                         <label for="">Price</label>
-                        <input type="number" name="price" class="form-control" placeholder="Enter price">
+                        <input type="number" name="price" class="form-control rounded-md border-gray-400" placeholder="Enter price">
                     </div>
 
                     <div class="form-group">
                         <label for="">Release Date</label>
-                        <input type="date" name="release_date" class="form-control" placeholder="Enter release date">
+                        <input type="date" name="release_date" class="form-control rounded-md border-gray-400" placeholder="Enter release date">
                     </div>
 
                     <div class="form-group">
                         <label for="">End Date</label>
-                        <input type="date" name="end_date" class="form-control" placeholder="Enter end date">
+                        <input type="date" name="end_date" class="form-control rounded-md border-gray-400" placeholder="Enter end date">
                     </div>
 
                     <div class="form-group">
                         <label for="">Conditions Apply</label>
-                        <input type="number" name="conditions_apply" class="form-control" placeholder="Enter conditions apply">
+                        <input type="number" name="conditions_apply" class="form-control rounded-md border-gray-400" placeholder="Enter conditions apply">
                     </div>
-
 
                     <div class="form-group">
                         <label for="">User</label>
-                        <select class="form-control" name="user_id" required>
+                        <select class="form-control rounded-md border-gray-400" name="user_id">
                             <option value="">Select User</option>
                             @foreach($Users as $user)
                                 <option value="{{ $user->id }}">{{ $user->full_name }}</option>

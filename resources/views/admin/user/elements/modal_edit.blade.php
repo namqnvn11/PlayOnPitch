@@ -17,33 +17,33 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="">Full Name</label>
-                        <input type="text" name="full_name" class="form-control rounded-md" placeholder="Enter full name">
+                        <input type="text" name="full_name" class="form-control rounded-md border-gray-400" placeholder="Enter full name">
                     </div>
 
                     <div class="form-group">
                         <label for="">Email</label>
-                        <input type="text" name="email" class="form-control rounded-md" placeholder="Enter email">
+                        <input type="text" name="email" class="form-control rounded-md border-gray-400" placeholder="Enter email">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="passwordGroup">
                         <label for="">Password</label>
-                        <input type="password" name="password" class="form-control rounded-md" placeholder="Enter password" id="password">
+                        <input type="password" name="password" class="form-control rounded-md border-gray-400" placeholder="Enter password" id="password">
                     </div>
 
                     <div class="form-group">
                         <label for="">Phone</label>
-                        <input type="text" name="phone" class="form-control rounded-md" placeholder="Enter phone number">
+                        <input type="text" name="phone" class="form-control rounded-md border-gray-400" placeholder="Enter phone number">
                     </div>
 
                     <div class="form-group">
                         <label for="">Address</label>
-                        <input type="text" name="address" class="form-control rounded-md" placeholder="Enter address">
+                        <input type="text" name="address" class="form-control rounded-md border-gray-400" placeholder="Enter address">
                     </div>
 
 
                     <div class="form-group">
                         <label for="province">Province</label>
-                        <select class="form-control rounded-md" name="province" id="province">
+                        <select class="form-control rounded-md border-gray-400" name="province" id="province">
                             <option value="">Select Province</option>
                             @foreach($Province as $province)
                                 <option value="{{ $province->id }}">{{ $province->name }}</option>
@@ -53,7 +53,7 @@
 
                     <div class="form-group">
                         <label for="district">District</label>
-                        <select class="form-control rounded-md" name="district" id="district">
+                        <select class="form-control rounded-md border-gray-400" name="district" id="district">
                             <option value="">Select District</option>
                         </select>
                     </div>
@@ -61,7 +61,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default mr-1" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary" id="submitAddNewUser">Save</button>
                 </div>
             </form>
         </div>

@@ -18,35 +18,35 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="text" name="email" id="email" class="form-control rounded-md" placeholder="Enter email">
+                        <input type="text" name="email" id="email" class="form-control rounded-md border-gray-400" placeholder="Enter email">
 
                     </div>
 
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" name="password" id="password" class="form-control rounded-md" placeholder="Enter password">
+                        <input type="password" name="password" id="password" class="form-control rounded-md border-gray-400" placeholder="Enter password">
 
                     </div>
 
                     <div class="form-group">
                         <label for="full_name">Full Name</label>
-                        <input type="text" name="full_name" id="full_name" class="form-control rounded-md" placeholder="Enter full name">
+                        <input type="text" name="full_name" id="full_name" class="form-control rounded-md border-gray-400" placeholder="Enter full name">
 
                     </div>
 
                     <div class="form-group">
                         <label for="phone">Phone</label>
-                        <input type="text" name="phone" id="phone" class="form-control rounded-md" placeholder="Enter phone">
+                        <input type="text" name="phone" id="phone" class="form-control rounded-md border-gray-400" placeholder="Enter phone">
                     </div>
 
                     <div class="form-group">
                         <label for="company_name">Company Name</label>
-                        <input type="text" name="company_name" id="company_name" class="form-control rounded-md" placeholder="Enter company name">
+                        <input type="text" name="company_name" id="company_name" class="form-control rounded-md border-gray-400" placeholder="Enter company name">
                     </div>
 
                     <div class="form-group">
                         <label for="company_address">Company Address</label>
-                        <input type="text" name="company_address" id="company_address" class="form-control rounded-md" placeholder="Enter company address">
+                        <input type="text" name="company_address" id="company_address" class="form-control rounded-md border-gray-400" placeholder="Enter company address">
                     </div>
 
                     <div class="form-group">

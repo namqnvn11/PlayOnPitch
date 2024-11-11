@@ -1,9 +1,9 @@
 $(document).ready(function () {
 
-
     $(document).on('click', '.js-on-create', function () {
         var _modal = $('#modal-edit');
         $('#form-data')[0].reset();
+        $('.error-message').remove();
         _modal.find('h4').text('Add new');
         _modal.modal('show');
     });
@@ -16,10 +16,16 @@ $(document).ready(function () {
         _modal.modal('show');
     });
 
+    $(document).on('keydown', function(event) {
+        if (event.key === "Escape" || event.keyCode === 27) {
+            $('#modal-confirm').modal('hide');
+        }
+    });
+
     $(document).on('click', '.js-on-edit', function () {
         var _modal = $('#modal-edit');
         var url = $(this).attr('data-url');
-
+        $('.error-message').remove();
         $('#form-data')[0].reset();
         _modal.find('h4').text('Edit');
 
@@ -130,6 +136,7 @@ function saveData() {
                     $.each(errors, function(field, messages) {
                         messages.forEach(function(message) {
                             $(`input[name="${field}"]`).after(`<span class="error-message" style="color: red;">${message}</span>`);
+                            $(`select[name="${field}"]`).after(`<span class="error-message" style="color: red;">${message}</span>`);
                         });
                     });
                 } else {
@@ -142,5 +149,58 @@ function saveData() {
             contentType: false,
             processData: false
         });
+    });
+}
+
+function showModalBlock(voucherId) {
+    const form = document.getElementById('form-block');
+    document.getElementById('confirmLabel').innerHTML='Are you sure you want to block this Voucher?'
+    document.getElementById('modalTitle').innerHTML='Block Voucher';
+    document.getElementById('voucherId').value= voucherId;
+    form.action = `/admin/voucher/block/${voucherId}`;
+    $('#modal-confirm').modal('show');
+}
+function showModalUnBlock(voucherId){
+    const form = document.getElementById('form-block');
+    form.action = `/admin/voucher/unblock/${voucherId}`;
+    document.getElementById('confirmLabel').innerHTML='Are you sure you want to unblock this Voucher?'
+    document.getElementById('modalTitle').innerHTML='Unblock Voucher';
+    document.getElementById('voucherId').value= voucherId;
+    $('#modal-confirm').modal('show');
+}
+function filter(){
+    document.getElementById('filterForm').submit();
+}
+
+function blockUnBlockSubmit(event){
+    event.preventDefault();
+    const form = document.getElementById('form-block');
+    var formData = new FormData(form);
+    let voucherId= document.getElementById('voucherId').value;
+    let submitURL= document.getElementById('modalTitle').innerHTML==='Block Voucher' ? BLOCK_URL : UNBLOCK_URL;
+    submitURL= submitURL+'/'+voucherId;
+    $.ajax({
+        url: submitURL,
+        type: 'POST',
+        dataType: "json",
+        data: formData,
+        success: function(response) {
+            if (response.success) {
+                Notification.showSuccess(response.message);
+                $('#modal-confirm').modal('hide');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } else {
+                Notification.showError(response.message);
+            }
+        },
+        error: function(xhr) {
+            console.log(xhr.status);
+            Notification.showError("An error occurred: " + xhr.statusText);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
     });
 }

@@ -27,6 +27,12 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on('keydown', function(event) {
+        if (event.key === "Escape" || event.keyCode === 27) {
+            $('#modal-confirm').modal('hide');
+        }
+    });
+
 
     function fetchDistricts(provinceId) {
         return new Promise((resolve,reject)=>{
@@ -69,7 +75,7 @@ $(document).ready(function () {
             dataType: "json",
             success: function (response) {
                 if (response.success) {
-                    console.log(response.data);
+                    // console.log(response.data);
                     var data = response.data;
                     $('input[name="id"]').val(data.id);
                     $('input[name="email"]').val(data.email);
@@ -193,5 +199,57 @@ function saveData() {
             contentType: false,
             processData: false
         });
+    });
+}
+
+function showModalBlock(bossId) {
+    const form = document.getElementById('form-block');
+    document.getElementById('confirmLabel').innerHTML='Are you sure you want to block this Boss?'
+    document.getElementById('modalTitle').innerHTML='Block Boss';
+    document.getElementById('bossId').value= bossId;
+    form.action = `/admin/boss/block/${bossId}`;
+    $('#modal-confirm').modal('show');
+}
+function showModalUnBlock(bossId){
+    const form = document.getElementById('form-block');
+    form.action = `/admin/boss/unblock/${bossId}`;
+    document.getElementById('confirmLabel').innerHTML='Are you sure you want to unblock this Boss?'
+    document.getElementById('modalTitle').innerHTML='Unblock Boss'
+    document.getElementById('bossId').value= bossId;
+    $('#modal-confirm').modal('show');
+}
+function filter(){
+    document.getElementById('filterForm').submit();
+}
+function blockUnBlockSubmit(event){
+    event.preventDefault();
+    const form = document.getElementById('form-block');
+    var formData = new FormData(form);
+    let bossId= document.getElementById('bossId').value;
+    let submitURL= document.getElementById('modalTitle').innerHTML==='Block Boss' ? BLOCK_URL : UNBLOCK_URL;
+    submitURL= submitURL+'/'+bossId;
+    $.ajax({
+        url: submitURL,
+        type: 'POST',
+        dataType: "json",
+        data: formData,
+        success: function(response) {
+            if (response.success) {
+                Notification.showSuccess(response.message);
+                $('#modal-confirm').modal('hide');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } else {
+                Notification.showError(response.message);
+            }
+        },
+        error: function(xhr) {
+            console.log(xhr.status);
+            Notification.showError("An error occurred: " + xhr.statusText);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
     });
 }

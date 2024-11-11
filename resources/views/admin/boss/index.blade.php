@@ -29,12 +29,12 @@
 
                             <div class="search-filter flex">
                                 <form action="{{url('admin/boss/search')}}" method="get" id="filterForm" class="flex">
-                                    <x-text-input placeholder="search name or email" name="searchText" value="{{ old('searchText', request('searchText')) }}"/>
+                                    <x-text-input placeholder="Search name or email" name="searchText" value="{{ old('searchText', request('searchText')) }}"/>
                                     <x-secondary-button type="submit" class="ml-1" data-toggle="tooltip" data-placement="bottom" title="trạng thái mới cũ">search</x-secondary-button>
 
                                     <div class="flex items-center ml-4">
-                                        <label for="status" class="mt-1" >Status</label>
-                                        <x-select name="filterStatus" id="filterStatus" onchange="filter()" >
+                                        <label for="status" class="mt-1">Status</label>
+                                        <x-select name="filterStatus" id="filterStatus" onchange="filter()" class="ml-1">
                                             <option value="all" {{ old('filterStatus', request('filterStatus')) == 'all' ? 'selected' : '' }}>All</option>
                                             <option value="new" {{ old('filterStatus', request('filterStatus')) == 'new' ? 'selected' : '' }}>New</option>
                                             <option value="old" {{ old('filterStatus', request('filterStatus')) == 'old' ? 'selected' : '' }}>Old</option>
@@ -86,7 +86,8 @@
                                         <td>{{ $boss->full_name }}</td>
                                         <td>{{ $boss->phone }}</td>
                                         <td>{{ $boss->company_name }}</td>
-                                        <td>{{ $boss->company_address . ", " . $boss->District->name . ", " . $boss->District->Province->name }}</td>
+{{--                                        <td>{{ $boss->company_address . ", " . $boss->District->name . ", " . $boss->District->Province->name }}</td>--}}
+                                        <td>{{ $boss->District->name . ", " . $boss->District->Province->name }}</td>
                                         <td>{{ $boss->status == 1 ? 'Mới' : 'Cũ' }}</td>
 
                                         <td class="text-center">
@@ -94,11 +95,11 @@
                                                 Detail
                                             </x-detail-button>
                                             @if($boss->block)
-                                                <x-unblock-button type="button" class="btn btn-secondary" onclick="showModal({{ $boss->id }})">
+                                                <x-unblock-button type="button" class="btn btn-secondary" onclick="showModalUnBlock({{ $boss->id }})">
                                                     UnBlock
                                                 </x-unblock-button>
                                             @else
-                                                <x-block-button type="button" class="btn btn-danger" onclick="showModal({{ $boss->id }})">
+                                                <x-block-button type="button" class="btn btn-danger" onclick="showModalBlock({{ $boss->id }})">
                                                     Block
                                                 </x-block-button>
                                             @endif
@@ -136,18 +137,9 @@
     <script>
         const STORE_URL = "{{ route('admin.boss.store') }}";
         var getDistrictsUrl = "{{ route('admin.boss.getDistricts') }}";
-
+        const BLOCK_URL= "{{url('/admin/boss/block')}}"
+        const UNBLOCK_URL= "{{url('/admin/boss/unblock')}}"
         {{--const DELETE_URL = "{{ route('admin.boss.destroy') }}";--}}
-    </script>
-    <script>
-        function showModal(bossId) {
-            const form = document.getElementById('form-block');
-            form.action = `/admin/boss/block/${bossId}`;
-            $('#modal-confirm').modal('show');
-        }
-        function filter(){
-            document.getElementById('filterForm').submit();
-        }
     </script>
     <script src="{{ asset('js/admin/boss/index.js?t='.config('constants.app_version') )}}"></script>
 @endsection

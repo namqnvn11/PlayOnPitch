@@ -29,7 +29,7 @@
 
                             <div class="search-filter flex">
                                 <form action="{{url('admin/user/search')}}" method="get" id="filterForm" class="flex">
-                                    <x-text-input placeholder="search name or email" name="searchText" value="{{ old('searchText', request('searchText')) }}"/>
+                                    <x-text-input placeholder="Search name or email" name="searchText" value="{{ old('searchText', request('searchText')) }}"/>
                                     <x-secondary-button type="submit" class="ml-1">search</x-secondary-button>
                                     <div class="flex items-center ml-4">
                                         <x-select name="block" id="" onchange="filter()" >
@@ -67,30 +67,29 @@
                                 @endif
 
                                 @foreach($users as $user)
-                                    <tr>
+                                    <tr onclick="viewDetail(event)" data-url="{{ route('admin.user.detail', $user->id) }}" class="cursor-default">
                                         <td>{{ $user->full_name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->phone }}</td>
                                         @if($user->address)
-                                        <td>{{ $user->address . ", " . $user->District->name . ", " . $user->District->Province->name }}</td>
+{{--                                        <td>{{ $user->address . ", " . $user->District->name . ", " . $user->District->Province->name }}</td>--}}
+                                        <td>{{$user->District->name . ", " . $user->District->Province->name }}</td>
                                         @else
                                             <td></td>
                                         @endif
-
                                         <td class="text-center">
-                                            <x-detail-button role="button" class="js-on-edit" data-url="{{ route('admin.user.detail', $user->id) }}">
-                                                Detail
+                                            <x-detail-button role="button" class="js-on-reset-password w-[130px]" onclick="prepareResetPassword(event,{{$user->id}})">
+                                                Reset Password
                                             </x-detail-button>
                                             @if($user->block)
-                                                <x-unblock-button type="button" onclick="showModal({{ $user->id }})">
+                                                <x-unblock-button type="button" onclick="showModalUnBlock({{ $user->id }},event)">
                                                     Unblock
                                                 </x-unblock-button>
                                             @else
-                                                <x-block-button type="button" onclick="showModal({{ $user->id }})">
+                                                <x-block-button type="button" onclick="showModalBlock({{ $user->id }},event)">
                                                     Block
                                                 </x-block-button>
                                             @endif
-
                                         </td>
                                     </tr>
                                 @endforeach
@@ -101,9 +100,9 @@
 
                             <!---- Phân trang----->
                             @if ($users->hasPages())
-                                <x-paginate-container>
+                                <x-paginate-container >
                                     {!! $users->appends(request()->input())->links('pagination::bootstrap-4') !!}
-                                </x-paginate-container>
+                                </x-paginate-container >
                             @endif
                     </div>
                     </div>
@@ -115,25 +114,17 @@
 
     @include('admin.user.elements.modal_edit')
     @include('admin.user.elements.modal_confirm')
-
+    @include('admin.user.elements.modal_confirm_reset_password')
 @endsection
 
 @section("pagescript")
     <script>
         const STORE_URL = "{{ route('admin.user.store') }}";
         var getDistrictsUrl = "{{ route('admin.user.getDistricts') }}";
-
+        const BLOCK_URL= "{{url('/admin/user/block')}}"
+        const UNBLOCK_URL= "{{url('/admin/user/unblock')}}"
+        const RESET_PASSWORD_URL= '{{url('admin/user/reset-password')}}'
         {{--const DELETE_URL = "{{ route('admin.user.destroy') }}";--}}
-    </script>
-    <script>
-        function showModal(userId) {
-            const form = document.getElementById('form-block');
-            form.action = `/admin/user/block/${userId}`;
-            $('#modal-confirm').modal('show');
-        }
-        function filter(){
-            document.getElementById('filterForm').submit();
-        }
     </script>
     <script src="{{ asset('js/admin/user/index.js?t='.config('constants.app_version') )}}"></script>
 @endsection

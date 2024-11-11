@@ -29,26 +29,49 @@
 
                             <div class="search-filter flex">
                                 <form action="{{url('admin/voucher/search')}}" method="get" id="filterForm" class="flex">
-                                    <x-text-input placeholder="search name or email" name="searchText" value="{{ old('searchText', request('searchText')) }}"/>
-                                    <x-secondary-button type="submit" class="ml-1">search</x-secondary-button>
-                                    <div class="flex items-center ml-4">
-                                        <x-select name="block" id="" onchange="filterStatus()" >
-                                            <option value="active" {{ old('block', request('block')) == 'active' ? 'selected' : '' }}>Active</option>
-                                            <option value="blocked" {{ old('block', request('block')) == 'blocked' ? 'selected' : '' }}>Blocked</option>
-                                            <option value="all" {{ old('block', request('block')) == 'all' ? 'selected' : '' }}>All</option>
-                                        </x-select>
-                                    </div>
+                                    <div class="">
+                                        <div>
+                                            <x-text-input placeholder="Search voucher name" name="searchText" value="{{ old('searchText', request('searchText')) }}"/>
+                                            <x-secondary-button type="submit" class="ml-1">search</x-secondary-button>
+                                        </div>
 
-                                    <div class="ml-3">
-                                        <label for="fromDate">From</label>
-                                        <x-timepicker value="{{ old('fromDate', request('fromDate')) }}" name="fromDate" onchange="filterDate()"/>
+                                        <div class="mt-2">
+                                            <x-select name="block" id="" onchange="filter()" >
+                                                <option value="active" {{ old('block', request('block')) == 'active' ? 'selected' : '' }}>Active</option>
+                                                <option value="blocked" {{ old('block', request('block')) == 'blocked' ? 'selected' : '' }}>Blocked</option>
+                                                <option value="all" {{ old('block', request('block')) == 'all' ? 'selected' : '' }}>All</option>
+                                            </x-select>
+                                            <x-secondary-button type="submit" class="ml-1"><a href="{{url('admin/voucher/index')}}">clear search</a></x-secondary-button>
+                                        </div>
                                     </div>
+                                    <div class="">
+                                        <div class="flex justify-start items-center rounded px-2">
+                                            <div class="ml-2">
+                                                <label for="fromReleaseDate">From</label>
+                                                <x-timepicker value="{{ old('fromReleaseDate', request('fromReleaseDate')) }}" name="fromReleaseDate" onchange="filter()"/>
+                                            </div>
+                                            <div class="ml-3">
+                                                <label for="toReleaseDate">To</label>
+                                                <x-timepicker name="toReleaseDate" value="{{ old('toReleaseDate', request('toReleaseDate')) }}" onchange="filter()"/>
+                                            </div>
+                                            <div class="font-bold ml-2 self-start">Release Date</div>
+                                        </div>
 
-                                    <div class="ml-3">
-                                        <label for="toDate">To</label>
-                                        <x-timepicker name="toDate" value="{{ old('toDate', request('toDate')) }}" onchange="filterDate()"/>
+                                        <div class="flex justify-start items-center rounded px-2 mt-2">
+                                            <div class="flex">
+                                                <div class="ml-2">
+                                                    <label for="fromExpireDate">From</label>
+                                                    <x-timepicker value="{{ old('fromExpireDate', request('fromExpireDate')) }}" name="fromExpireDate" onchange="filter()"/>
+                                                </div>
+
+                                                <div class="ml-3">
+                                                    <label for="toExpireDate">To</label>
+                                                    <x-timepicker name="toExpireDate" value="{{ old('toExpireDate', request('toExpireDate')) }}" onchange="filter()"/>
+                                                </div>
+                                            </div>
+                                            <div class="font-bold ml-2 self-start">Expire Date</div>
+                                        </div>
                                     </div>
-
                                 </form>
                             </div>
 
@@ -92,11 +115,11 @@
                                                 Detail
                                             </x-detail-button>
                                             @if($voucher->block)
-                                                <x-unblock-button type="button" class="" onclick="showModal({{ $voucher->id }})">
-                                                    UnClock
+                                                <x-unblock-button type="button" class="" onclick="showModalUnBlock({{ $voucher->id }})">
+                                                    UnBlock
                                                 </x-unblock-button>
                                             @else
-                                                <x-block-button type="button" class="" onclick="showModal({{ $voucher->id }})">
+                                                <x-block-button type="button" class="" onclick="showModalBlock({{ $voucher->id }})">
                                                     Block
                                                 </x-block-button>
                                             @endif
@@ -131,21 +154,9 @@
 @section("pagescript")
     <script>
         const STORE_URL = "{{ route('admin.voucher.store') }}";
+        const BLOCK_URL= "{{url('/admin/voucher/block')}}"
+        const UNBLOCK_URL= "{{url('/admin/voucher/unblock')}}"
         {{--const DELETE_URL = "{{ route('admin.voucher.destroy') }}";--}}
-    </script>
-    <script>
-        function showModal(voucherId) {
-            const form = document.getElementById('form-block');
-            form.action = `/admin/voucher/block/${voucherId}`;
-            $('#modal-confirm').modal('show');
-        }
-        function filterStatus(){
-            document.getElementById('filterForm').submit();
-        }
-        function filterDate(){
-            document.getElementById('filterForm').submit();
-        }
-
     </script>
     <script src="{{ asset('js/admin/voucher/index.js?t='.config('constants.app_version') )}}"></script>
 @endsection
