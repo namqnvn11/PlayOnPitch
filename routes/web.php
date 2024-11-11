@@ -1,6 +1,7 @@
 <?php
 require base_path('routes/auth.php');
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileUserController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
@@ -70,3 +71,18 @@ Route::middleware(['auth:boss'])->group(function () {
         });
     });
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileUserController::class, 'showProfile'])->name('profile.show');
+
+    Route::post('/profile/update', [ProfileUserController::class, 'updateProfile'])->name('profile.update');
+
+    Route::post('/password/update', [ProfileUserController::class, 'updatePassword'])->name('password.update');
+
+    Route::get('/detail/{id}', [ProfileUserController::class, 'detail'])->name('detail');
+
+    Route::get('/get-provinces', [ProfileUserController::class, 'getProvinces'])->name('getProvinces');
+
+    Route::get('/get-districts', [ProfileUserController::class, 'getDistricts'])->name('getDistricts');
+});
+

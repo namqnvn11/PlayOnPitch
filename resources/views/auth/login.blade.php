@@ -40,14 +40,18 @@
         @csrf
         <!-- Email Input -->
         <div class="mb-3">
-            <input type="email" class="form-control" id="login-email" name="email" placeholder="Nhập email" value="{{ old('email') }}" required autofocus autocomplete="username">
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <input type="email" class="form-control" id="login-email" name="email" placeholder="Nhập email" value="{{ old('email') }}">
+            @error('email')
+            <div class="text-danger text-left mt-2">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Password Input -->
         <div class="mb-3">
-            <input type="password" class="form-control" id="login-password" name="password" placeholder="Nhập mật khẩu" required autocomplete="current-password">
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            <input type="password" class="form-control" id="login-password" name="password" placeholder="Nhập mật khẩu">
+            @error('password')
+            <div class="text-danger text-left mt-2">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Forgot Password Link -->
