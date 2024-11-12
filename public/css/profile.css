@@ -99,11 +99,12 @@ header {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 55px;
-    height: 101px;
+    margin-top: 10px;
+    height: 5%;
 }
 
 .registration input {
+    margin-top: 25px;
     padding: 10px;
     border: none;
     border-radius: 10px;
@@ -112,6 +113,7 @@ header {
 }
 
 .registration button {
+    margin-top: 25px;
     padding: 10px;
     border: none;
     border-radius: 10px;
@@ -243,7 +245,7 @@ footer {
 .logout-btn {
     margin-top: 20px;
     padding: 12px;
-    width: 360%;
+    width: 315%;
     border: 1px solid #4CAF50;
     color: #4CAF50;
     background-color: white;

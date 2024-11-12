@@ -73,14 +73,11 @@
             </div>
             <div class="info-row">
                 <label>Địa chỉ:</label>
-                <span>{{ Auth::user()->address}}</span>
+                <span>{{ Auth::user()->address . ", " . Auth::user()->District->name . ", " . Auth::user()->District->Province->name}}</span>
             </div>
-            <div class="info-row">
-                <label>Mật khẩu:</label>
-                <span>******** </span>
-            </div>
+
             <button class="edit-btn js-on-edit" data-bs-toggle="modal" data-bs-target="#editInfoModal" onclick="openEditModal()">Chỉnh sửa</button>
-            <button class="edit-btn js-on-edit" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Đổi mật khẩu</button>
+            <button class="edit-btn js-on-edit" data-bs-toggle="modal" data-bs-target="#changePasswordModal" style="width: 20%">Đổi mật khẩu</button>
         </div>
     </div>
 </div>
@@ -88,7 +85,7 @@
 <div style="background-color: #2e7d32">
     <section class="registration">
         <div class="form">
-            <h2 style="margin-right: 250px">Bạn muốn đăng ký sử dụng<br> website quản lý sân bóng MIỄN PHÍ?</h2>
+            <h2 style="margin-right: 250px">Bạn muốn đăng ký sử dụng website quản lý sân bóng MIỄN PHÍ?</h2>
             <input type="text" placeholder="Nhập họ và tên">
             <input type="text" placeholder="Nhập số điện thoại">
             <input type="email" placeholder="Nhập email">

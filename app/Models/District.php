@@ -22,4 +22,9 @@ class District extends Model
     {
         return $this->hasMany(Boss::class);
     }
+
+    public function User()
+    {
+        return $this->hasMany(Boss::class);
+    }
 }
