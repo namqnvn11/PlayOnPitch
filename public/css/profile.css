@@ -1,0 +1,333 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+}
+
+/* Header */
+header {
+    width: 100%;
+    background-color: #4CB551;
+    color: white;
+}
+
+/* Đường kẻ ngang trong Header */
+.divider {
+    border: 0;
+    border-top: 1px solid #026464;
+    margin: 0 5%;
+}
+
+.dividers {
+    border: 0;
+    border-top: 1px solid #4CB551;
+    margin: 0 5%;
+}
+
+.nav-menu {
+    width: 72%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.nav-menu ul {
+    display: flex;
+    gap: 15px;
+    list-style-type: none;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+    color: #ddd;
+}
+
+/* Authentication Button */
+.auth-button button {
+    background-color: #309C3E;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.auth-button button:hover {
+    background-color: #246A2C;
+}
+
+.top-section {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 50px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding-left: 5%;
+    width: 72%;
+    margin: 0 auto;
+}
+
+/* Registration Section */
+.registration {
+    width: 72%;
+    margin: 30px auto;
+    margin-bottom: 0px;
+    padding: 30px;
+    text-align: center;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 30px;
+}
+
+.registration .form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 55px;
+    height: 101px;
+}
+
+.registration input {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    width: 184px;
+    height: 45px;
+}
+
+.registration button {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    width: 133px;
+    height: 45px;
+    color: white;
+    background-color: #3F9C4B;
+}
+
+.registration button:hover {
+    background-color: #246A2C;
+    color: white;
+}
+
+/* Footer */
+footer {
+    background-color: #2e7d32;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 0;
+
+}
+
+.footer-section h3 {
+    margin-bottom: 10px;
+    font-size: 24px;
+
+}
+
+.footer-section p {
+    margin-bottom: 10px;
+    font-size: 16px;
+    padding-top: 35px;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    padding-top: 35px;
+}
+
+.footer-section ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-section button {
+    background-color: #309C3E;
+    color: white;
+    border: none;
+    margin-top: 20px;
+    padding: 20px;
+    cursor: pointer;
+    width: 536px;
+    height: 103px;
+    font-size: 16px;
+}
+
+.footer-section button:hover {
+    background-color: #246A2C;
+    color: white;
+}
+
+.banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.banner img {
+    border-radius: 20px;
+    width: 72%;
+    height: 140px;
+    object-fit: cover;
+}
+
+.profile-container {
+    display: flex;
+    gap: 20px;
+    max-width: 72%;
+    margin: 40px auto;
+}
+
+
+.sidebar {
+    width: 350px;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.user-info p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.menu {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+}
+
+.menu li {
+    margin-bottom: 10px;
+}
+
+.menu a {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.menu a:hover {
+    background-color: #e8f5e9;
+    color: #4CAF50;
+}
+
+.logout-btn {
+    margin-top: 20px;
+    padding: 12px;
+    width: 360%;
+    border: 1px solid #4CAF50;
+    color: #4CAF50;
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #e8f5e9;
+}
+
+/* Profile Details */
+.profile-details {
+    flex: 1;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-details h2 {
+    font-size: 20px;
+    color: black;
+    margin-bottom: 20px;
+}
+
+.details-box {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 10px 20px;
+    align-items: center;
+}
+
+
+.details-box p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.details-box p span {
+    padding-left: 40vh;
+    font-weight: bold;
+    color: #333;
+}
+
+.details-box a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.details-box a:hover {
+    text-decoration: underline;
+}
+
+.info-row {
+    display: contents;
+}
+
+.info-row label {
+    font-weight: bold;
+    color: #333;
+    text-align: left;
+    padding-left: 10px;
+    padding-bottom: 20px;
+}
+
+.info-row span {
+    padding-left: 20vh;
+}
+
+.edit-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: 1px solid #4CAF50;
+    color: #4CAF50;
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-btn:hover {
+    background-color: #e8f5e9;
+}
+
