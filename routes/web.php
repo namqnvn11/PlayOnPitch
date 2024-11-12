@@ -1,6 +1,5 @@
 <?php
 require base_path('routes/auth.php');
-use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Models\District;
 use Illuminate\Support\Facades\Route;
@@ -12,9 +11,17 @@ use App\Http\Controllers\Admin\BossController;
 
 use App\Http\Controllers\Boss\YardController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\YardListController;
+use App\Http\Controllers\User\YardDetailController;
+
+
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('admin-boss/login', [LoginController::class, 'showLoginForm'])
     ->middleware(RedirectIfAuthenticated::class)
@@ -22,9 +29,9 @@ Route::get('admin-boss/login', [LoginController::class, 'showLoginForm'])
 Route::post('admin-boss/login', [LoginController::class, 'login'])->name('admin-boss.login');
 
 
-Route::get('/dashboard', function () {
-    return view('user.home');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('login', [LoginController::class, 'showLoginUser'])
+    ->middleware(RedirectIfAuthenticated::class)
+    ->name('login');
 
 Route::middleware(['auth:admin'])->group(function () {
 
@@ -64,6 +71,7 @@ Route::middleware(['auth:admin'])->group(function () {
         });
     });
 });
+
 Route::middleware(['auth:boss'])->group(function () {
     Route::prefix('boss')->name('boss.')->group(function () {
         Route::get('logout', [LoginController::class, 'logout'])->name('logout');
@@ -75,6 +83,29 @@ Route::middleware(['auth:boss'])->group(function () {
             Route::post('/unblock/{id}', [YardController::class, 'unblock'])->name('unblock');
             Route::get('/get-districts', [YardController::class, 'getDistricts'])->name('getDistricts');
             Route::get('/search', [YardController::class, 'search'])->name('search');
+        });
+    });
+});
+
+Route::middleware(['auth:web'])->group(function () {
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('logout', [LoginController::class, 'logout'])->name('logout');
+        Route::prefix('home')->name('home.')->group(function () {
+            Route::get('/index', [HomeController::class, 'index'])->name('index');
+            Route::get('/get-districts', [HomeController::class, 'getDistricts'])->name('getDistricts');
+        });
+
+        Route::prefix('yardlist')->name('yardlist.')->group(function () {
+            Route::get('/index', [YardListController::class, 'index'])->name('index');
+            Route::get('/get-districts', [YardListController::class, 'getDistricts'])->name('getDistricts');
+        });
+
+        Route::prefix('yarddetail')->name('yarddetail.')->group(function () {
+            Route::get('/index', [YardDetailController::class, 'index'])->name('index');
+        });
+
+        Route::prefix('profile')->name('profile.')->group(function () {
+            Route::get('/index', [ProfileController::class, 'index'])->name('index');
         });
     });
 });
