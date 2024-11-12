@@ -106,6 +106,11 @@ Route::middleware(['auth:web'])->group(function () {
 
         Route::prefix('profile')->name('profile.')->group(function () {
             Route::get('/index', [ProfileController::class, 'index'])->name('index');
+            Route::post('/update', [ProfileController::class, 'updateProfile'])->name('update');
+            Route::post('/password_update', [ProfileController::class, 'updatePassword'])->name('updatePassword');
+            Route::get('/detail/{id}', [ProfileController::class, 'detail'])->name('detail');
+            Route::get('/get-provinces', [ProfileController::class, 'getProvinces'])->name('getProvinces');
+            Route::get('/get-districts', [ProfileController::class, 'getDistricts'])->name('getDistricts');
         });
     });
 });
