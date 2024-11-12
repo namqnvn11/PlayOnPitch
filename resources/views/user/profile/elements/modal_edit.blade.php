@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form method="post" id="form-data" enctype="multipart/form-data" action="{{ url('profile/update') }}">
+            <form method="POST" action="{{ route('user.profile.update') }}" enctype="multipart/form-data" id="form-edit">
                 @csrf
                 <input type="hidden" name="id" value="{{ $user->id }}">
 
@@ -82,7 +82,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary" onclick="submitForm(event)">Save</button>
                 </div>
             </form>
         </div>

@@ -6,49 +6,6 @@ $(document).ready(function () {
     const $districtSelect = $('#district_id');
     const $changePasswordForm = $('#changePasswordForm');
 
-    // Hàm submit form chung cho việc lưu và xóa
-    function submitForm(formSelector, url, successMessage, errorMessage) {
-        $(formSelector).submit(function (e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                dataType: "json",
-                data: formData,
-                success: function (response) {
-                    if (response.success) {
-                        Notification.showSuccess(successMessage || response.message);
-                        $modalEdit.modal('hide'); // Đóng modal khi lưu thành công
-                        setTimeout(() => window.location.reload(), 1200); // Tải lại trang sau khi lưu hoặc xóa thành công
-                    } else {
-                        Notification.showError(response.message);
-                    }
-                },
-                error: function (xhr) {
-                    if (xhr.status === 422) {
-                        // Hiển thị lỗi từ server (lỗi validate)
-                        const errors = xhr.responseJSON.errors;
-                        $('.error-message').remove(); // Xóa thông báo lỗi cũ
-                        for (const [field, messages] of Object.entries(errors)) {
-                            messages.forEach(message => {
-                                $(`input[name="${field}"], select[name="${field}"]`).after(
-                                    `<span class="error-message" style="color: red;">${message}</span>`
-                                );
-                            });
-                        }
-                    } else {
-                        Notification.showError(xhr);
-                    }
-                },
-                cache: false,
-                contentType: false,
-                processData: false
-            });
-        });
-    }
-
     // Load Districts on Province Change
     $provinceSelect.on('change', function () {
         const provinceId = $(this).val();
@@ -56,13 +13,17 @@ $(document).ready(function () {
 
         if (provinceId) {
             $.ajax({
-                url: '/get-districts',
+                url: '/user/profile/get-districts',
                 type: 'GET',
                 data: { province_id: provinceId },
                 success: function (data) {
-                    data.forEach(district => {
-                        $districtSelect.append(`<option value="${district.id}">${district.name}</option>`);
-                    });
+                    if (data.length > 0) {
+                        data.forEach(district => {
+                            $districtSelect.append(`<option value="${district.id}">${district.name}</option>`);
+                        });
+                    } else {
+                        $districtSelect.append('<option value="">Không có huyện nào</option>');
+                    }
                 },
                 error: function () {
                     Notification.showError('Lỗi khi lấy dữ liệu huyện.');
@@ -73,10 +34,8 @@ $(document).ready(function () {
 
     // Open Edit Modal and Load Data
     $(document).on('click', '.js-on-edit', function () {
-        const url = $(this).data('url'); // Lấy URL từ thuộc tính data-url của nút
-
-        // Xóa dữ liệu cũ và thiết lập tiêu đề modal
-        $formData[0].reset();
+        const url = $(this).data('url');
+        $('#form-data')[0].reset();
         $modalEdit.find('h4').text('Chỉnh sửa');
 
         // Gửi yêu cầu AJAX để lấy dữ liệu và hiển thị modal
@@ -108,55 +67,93 @@ $(document).ready(function () {
         });
     });
 
-    // Gọi hàm submit form cho cả hai trường hợp lưu và xóa
-    submitForm('#form-data', 'user/profile/update', 'Lưu thành công', 'Lỗi khi lưu dữ liệu');
-    submitForm('#form-delete', 'user/profile/delete', 'Xóa thành công', 'Lỗi khi xóa dữ liệu');
-
-    // Submit change password form
+    // Submit Change Password Form
     $changePasswordForm.submit(function (e) {
         e.preventDefault(); // Ngừng việc gửi form
         const formData = new FormData(this); // Lấy dữ liệu từ form
 
         $.ajax({
             beforeSend: function () {
-                $('#changePasswordForm button[type="submit"]').prop('disabled', true); // Disable button submit khi gửi
+                $('#changePasswordForm button[type="submit"]').prop('disabled', true);
             },
             complete: function () {
-                $('#changePasswordForm button[type="submit"]').prop('disabled', false); // Enable lại button khi đã hoàn thành request
+                $('#changePasswordForm button[type="submit"]').prop('disabled', false);
             },
-            url: $(this).attr('action'), // Đường dẫn gửi yêu cầu (POST)
+            url: $(this).attr('action'),
             type: 'POST',
-            dataType: "json",  // Trả về dữ liệu dưới dạng JSON
+            dataType: "json",
             data: formData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             success: function (response) {
-
-                if (response.success) {Notification.showSuccess(response.message)
-                    $('#changePasswordModal').modal('hide');  // Đóng modal khi thành công
-                }else {
-                    Notification.showError(response.message)
+                if (response.success) {
+                    Notification.showSuccess(response.message);
+                    $('#changePasswordModal').modal('hide');
+                    setTimeout(function () {
+                        window.location.href = '/user/profile/index';
+                    }, 1200);
+                } else {
+                    Notification.showError(response.message || 'Đã xảy ra lỗi.');
                 }
             },
             error: function (xhr) {
-                if (xhr.status === 422) {
-
-                    const errors = xhr.responseJSON.errors;
-                    console.log(errors);
-                    $('.text-danger').remove();  // Xóa các thông báo lỗi cũ
-
-                    // Hiển thị thông báo lỗi dưới mỗi input
-                    for (const [field, messages] of Object.entries(errors)) {
-                        messages.forEach(message => {
-                            $(`input[name="${field}"]`).after(
-                                `<div class="text-danger">${message}</div>`
-                            );
-                        });
-                    }
-                } else {
-                    Notification.showError(xhr.message);                }
+                handleFormErrors(xhr);
             },
             cache: false,
             contentType: false,
             processData: false
         });
     });
+
+    // Submit Edit Form
+    $('#form-edit').submit(function (event) {
+        event.preventDefault();
+        const form = this;
+        const url = form.getAttribute('action');
+        const formData = new FormData(form);
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: "json",
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    Notification.showSuccess(response.message);
+                    $modalEdit.modal('hide');
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1200);
+                } else {
+                    Notification.showError(response.message);
+                }
+            },
+            error: function (xhr) {
+                handleFormErrors(xhr);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    });
+
+    // Handle form errors
+    function handleFormErrors(xhr) {
+        if (xhr.status === 422) {
+            const errors = xhr.responseJSON.errors;
+            $('.text-danger').remove();  // Remove old error messages
+
+            // Loop through errors and display below the corresponding input field
+            for (const [field, messages] of Object.entries(errors)) {
+                messages.forEach(message => {
+                    $(`input[name="${field}"], select[name="${field}"]`).after(
+                        `<div class="text-danger">${message}</div>`
+                    );
+                });
+            }
+        } else {
+            Notification.showError(xhr.responseJSON.message || 'Đã xảy ra lỗi.');
+        }
+    }
 });

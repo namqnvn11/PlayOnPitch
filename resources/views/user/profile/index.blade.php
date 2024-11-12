@@ -6,10 +6,9 @@
     <title>Play On Pitch</title>
     <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <header>
@@ -80,13 +79,11 @@
                 <label>Mật khẩu:</label>
                 <span>******** </span>
             </div>
-            <button class="edit-btn js-on-edit" data-bs-toggle="modal" data-bs-target="#editInfoModal">Chỉnh sửa</button>
+            <button class="edit-btn js-on-edit" data-bs-toggle="modal" data-bs-target="#editInfoModal" onclick="openEditModal()">Chỉnh sửa</button>
             <button class="edit-btn js-on-edit" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Đổi mật khẩu</button>
         </div>
     </div>
 </div>
-
-
 
 <div style="background-color: #2e7d32">
     <section class="registration">
@@ -134,16 +131,17 @@
 </html>
 
 @include('user.profile.elements.modal_edit')
-
 <script>
-    function openEditModal(){
-        var _modal = $('#modal-edit');
-        _modal.modal('show');
+    function openEditModal() {
+        var myModal = new bootstrap.Modal(document.getElementById('modal-edit'));
+        myModal.show();
     }
-    function closeModal(){
-        var _modal = $('#modal-edit');
-        _modal.modal('hide');
+
+    function closeModal() {
+        var myModal = new bootstrap.Modal(document.getElementById('modal-edit'));
+        myModal.hide();
     }
+
 </script>
 @include('user.profile.elements.changePassword')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

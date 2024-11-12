@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <!-- Form for changing password -->
-                <form action="{{ route('password.update') }}" method="POST" id="changePasswordForm">
+                <form action="{{ url('/user/profile/password_update') }}" method="POST" id="changePasswordForm">
                     @csrf
 
                     <!-- Current Password Field -->
