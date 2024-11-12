@@ -15,6 +15,11 @@ class LoginController extends Controller
         return view('admin-boss-login');
     }
 
+    public function showLoginUser()
+    {
+        return view('user.login');
+    }
+
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -31,14 +36,26 @@ class LoginController extends Controller
             return redirect()->route('boss.yard.index');
         }
         if (Auth::guard('web')->attempt($credentials)) {
-            return 'login success';
+            return redirect()->route('user.home.index');
         }
         return back()->withErrors(['email' => 'Invalid credentials']);
     }
 
     public function logout()
     {
-        Auth::logout();
-        return redirect('admin-boss/login');
+
+        if (Auth::guard('admin')->check()) {
+            Auth::guard('admin')->logout();
+            return redirect()->route('admin.boss/login');
+        }
+        if (Auth::guard('boss')->check()) {
+            Auth::guard('boss')->logout();
+            return redirect()->route('admin.boss/login');
+        }
+        if (Auth::guard('web')->check()) {
+            Auth::guard('web')->logout();
+            return redirect()->route('user.home.index');
+        }
+        return back()->withErrors(['email' => 'Logout Failed']);
     }
 }
