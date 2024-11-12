@@ -6,7 +6,9 @@ $(document).ready(function () {
     $(document).on('click', '.js-on-create', function () {
         var _modal = $('#modal-edit');
         $('#form-data')[0].reset();
-        $('#password').attr('placeholder', 'Enter password');
+        $('input[name="email"]').prop('disabled', false);
+        $('input[name="id"]').val(null);
+        $('#password_group').show();
         $('.error-message').remove();
         _modal.find('h4').text('Add new');
         _modal.modal('show');
@@ -30,90 +32,87 @@ $(document).ready(function () {
     $(document).on('keydown', function(event) {
         if (event.key === "Escape" || event.keyCode === 27) {
             $('#modal-confirm').modal('hide');
+            $('#modal-confirm-reset-password').modal('hide');
         }
     });
-
-
-    function fetchDistricts(provinceId) {
-        return new Promise((resolve,reject)=>{
-            if (provinceId) {
-                $.ajax({
-                    url: getDistrictsUrl,
-                    type: 'GET',
-                    data: { province_id: provinceId },
-                    success: function (data) {
-                        $('#district').empty();
-                        $('#district').append('<option value="">Select District</option>');
-                        $.each(data, function (key, district) {
-                            $('#district').append('<option value="' + district.id + '">' + district.name + '</option>');
-                        });
-                        resolve();
-                    },
-                    error: function () {
-                        Notification.showError('Error when retrieving district data.');
-                        reject();
-                    }
-                });
-            } else {
-                $('#district').empty();
-                $('#district').append('<option value="">Select District</option>');
-            }
-        })
-
-    }
-
-    $(document).on('click', '.js-on-edit', function () {
-        var _modal = $('#modal-edit');
-        var url = $(this).attr('data-url');
-        $('.error-message').remove();
-        $('#form-data')[0].reset();
-        _modal.find('h4').text('Edit');
-
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: "json",
-            success: function (response) {
-                if (response.success) {
-                    // console.log(response.data);
-                    var data = response.data;
-                    $('input[name="id"]').val(data.id);
-                    $('input[name="email"]').val(data.email);
-                    $('input[name="password"]').attr('placeholder', 'fill to update password');
-                    $('input[name="full_name"]').val(data.full_name);
-                    $('input[name="phone"]').val(data.phone);
-                    $('input[name="company_name"]').val(data.company_name);
-                    $('input[name="company_address"]').val(data.company_address);
-                    $('select[name="status"]').val(data.status.toString());
-                    $('select[name="province"]').val(response.province.id);
-                    fetchDistricts($('#province').val())
-                        .then(()=>{
-                            $('select[name="district"]').val(response.district.id);
-                            $('#modal-edit').modal('show');
-                        }).catch(()=>{
-                        Notification.showError('Error when retrieving district data.');
-                    })
-                } else {
-                    Notification.showError(response.message);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error("AJAX error:", error); // Log lỗi vào console để xem chi tiết
-                Notification.showError("An error occurred while fetching data: " + error);
-            },
-            cache: false,
-            contentType: false,
-            processData: false
-        });
-
-        _modal.modal('show');
-    });
-
-
     saveData();
     deleteData();
 
 });
+
+function fetchDistricts(provinceId) {
+    return new Promise((resolve,reject)=>{
+        if (provinceId) {
+            $.ajax({
+                url: getDistrictsUrl,
+                type: 'GET',
+                data: { province_id: provinceId },
+                success: function (data) {
+                    $('#district').empty();
+                    $('#district').append('<option value="">Select District</option>');
+                    $.each(data, function (key, district) {
+                        $('#district').append('<option value="' + district.id + '">' + district.name + '</option>');
+                    });
+                    resolve();
+                },
+                error: function () {
+                    Notification.showError('Error when retrieving district data.');
+                    reject();
+                }
+            });
+        } else {
+            $('#district').empty();
+            $('#district').append('<option value="">Select District</option>');
+        }
+    })
+}
+
+// $(document).on('click', '.js-on-edit', function () {
+function viewDetail(event){
+    var _modal = $('#modal-edit');
+    var url = event.currentTarget.getAttribute('data-url');
+    $('.error-message').remove();
+    $('#form-data')[0].reset();
+    _modal.find('h4').text('Edit');
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: "json",
+        success: function (response) {
+            if (response.success) {
+                var data = response.data;
+                $('input[name="id"]').val(data.id);
+                $('input[name="email"]').val(data.email).prop('disabled', true);
+                $('#password_group').hide();
+                $('input[name="full_name"]').val(data.full_name);
+                $('input[name="phone"]').val(data.phone);
+                $('input[name="company_name"]').val(data.company_name);
+                $('input[name="company_address"]').val(data.company_address);
+                $('select[name="status"]').val(data.status.toString());
+                $('select[name="province"]').val(response.province.id);
+                fetchDistricts($('#province').val())
+                    .then(()=>{
+                        $('select[name="district"]').val(response.district.id);
+                        $('#modal-edit').modal('show');
+                    }).catch(()=>{
+                    Notification.showError('Error when retrieving district data.');
+                })
+            } else {
+                Notification.showError(response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("AJAX error:", error); // Log lỗi vào console để xem chi tiết
+            Notification.showError("An error occurred while fetching data: " + error);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    _modal.modal('show');
+};
 
 function deleteData() {
 
@@ -190,7 +189,6 @@ function saveData() {
                     });
                 } else {
                     // Các lỗi khác
-                    console.error("AJAX error:", xhr.statusText);
                     console.log(xhr.status);
                     Notification.showError("An error occurred: " + xhr.statusText);
                 }
@@ -202,7 +200,8 @@ function saveData() {
     });
 }
 
-function showModalBlock(bossId) {
+function showModalBlock(event,bossId) {
+    event.stopPropagation();
     const form = document.getElementById('form-block');
     document.getElementById('confirmLabel').innerHTML='Are you sure you want to block this Boss?'
     document.getElementById('modalTitle').innerHTML='Block Boss';
@@ -210,7 +209,8 @@ function showModalBlock(bossId) {
     form.action = `/admin/boss/block/${bossId}`;
     $('#modal-confirm').modal('show');
 }
-function showModalUnBlock(bossId){
+function showModalUnBlock(event,bossId){
+    event.stopPropagation();
     const form = document.getElementById('form-block');
     form.action = `/admin/boss/unblock/${bossId}`;
     document.getElementById('confirmLabel').innerHTML='Are you sure you want to unblock this Boss?'
@@ -247,6 +247,60 @@ function blockUnBlockSubmit(event){
         error: function(xhr) {
             console.log(xhr.status);
             Notification.showError("An error occurred: " + xhr.statusText);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+}
+
+function prepareResetPassword(event,bossId){
+    //chặn bubble event
+    event.stopPropagation();
+    document.getElementById('resetPasswordBossId').value=bossId;
+    document.getElementById('new_password').value='12345678';
+    var _modal = $('#modal-confirm-reset-password');
+    $('.error-message').remove();
+    _modal.modal('show');
+}
+
+function resetPassword(event){
+    event.preventDefault();
+    const form = document.getElementById('form-reset-password');
+    var formData = new FormData(form);
+    let bossId= document.getElementById('resetPasswordBossId').value;
+    let submitURL= RESET_PASSWORD_URL+ '/'+ bossId;
+    $.ajax({
+        url: submitURL,
+        type: 'POST',
+        dataType: "json",
+        data: formData,
+        success: function(response) {
+            if (response.success) {
+                Notification.showSuccess(response.message);
+                $('#modal-confirm-reset-password').modal('hide');
+            } else {
+                Notification.showError(response.message);
+            }
+        },
+        error: function(xhr) {
+            if (xhr.status){
+                let errors = xhr.responseJSON.errors;
+                console.log(errors);
+                // Xóa các thông báo lỗi cũ
+                $('.error-message').remove();
+
+                // Hiển thị các lỗi mới
+                $.each(errors, function(field, messages) {
+                    messages.forEach(function(message) {
+                        $(`input[name="${field}"]`).after(`<span class="error-message" id="error-message" style="color: red;">${message}</span>`);
+                    });
+                });
+            }else {
+                console.log(xhr.status);
+                Notification.showError("An error occurred: " + xhr.statusText);
+            }
+
         },
         cache: false,
         contentType: false,

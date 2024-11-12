@@ -59,7 +59,6 @@ $districtList= $currentBoss->Province->Districts;
                                     <th>Company</th>
                                     <th>Yard Name</th>
                                     <th>Yard Type</th>
-{{--                                    <th>Description</th>--}}
                                     <th>District</th>
                                     <th class="text-center" style="width: 170px;">Action</th>
                                 </tr>
@@ -75,9 +74,12 @@ $districtList= $currentBoss->Province->Districts;
                                         <td>{{ $yard->Boss->company_name }}</td>
                                         <td>{{ $yard->yard_name }}</td>
                                         <td>{{ $yard->yard_type }}</td>
-                                 {{--                                        <td>{{ $yard->description }}</td>--}}
                                         <td>{{ $yard->District->name }}</td>
                                         <td class="text-center">
+
+                                            <x-secondary-button class="">
+                                                Pricing
+                                            </x-secondary-button>
                                             <x-detail-button role="button" class="btn btn-primary js-on-edit" data-url="{{ route('boss.yard.detail', $yard->id) }}">
                                                 Detail
                                             </x-detail-button>
@@ -95,7 +97,6 @@ $districtList= $currentBoss->Province->Districts;
                                         </td>
                                     </tr>
                                 @endforeach
-
 
                                 </tbody>
                             </table>

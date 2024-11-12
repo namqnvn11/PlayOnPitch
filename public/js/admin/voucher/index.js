@@ -35,7 +35,6 @@ $(document).ready(function () {
             dataType: "json",
             success: function (response) {
                 if (response.success) {
-                    console.log(response.data);
                     var data = response.data;
                     $('input[name="id"]').val(data.id);
                     $('input[name="name"]').val(data.name);

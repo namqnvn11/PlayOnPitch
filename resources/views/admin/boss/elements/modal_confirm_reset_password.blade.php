@@ -7,12 +7,12 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <input type="hidden" value="" id="resetPasswordUserId">
+            <input type="hidden" value="" id="resetPasswordBossId">
             <form method="POST" id="form-reset-password">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="" id="confirmLabel">Are you sure you want to reset password of this User?</label>
+                        <label for="" id="confirmLabel">Are you sure you want to reset password of this Boss?</label>
                     </div>
                     <div class="form-group">
                         <label for="">New Password</label>

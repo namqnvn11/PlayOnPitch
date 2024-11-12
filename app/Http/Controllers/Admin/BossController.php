@@ -23,8 +23,12 @@ class BossController extends Controller
     public function store(Request $request)
     {
         $passwordValidateRule= ($request->has('id') && $request->input('id') != null) ? 'nullable' : 'required';
+        $emailRule = 'required|email|unique:bosses,email';
+        if ($request->has('id') && $request->input('id') != null) {
+            $emailRule = 'nullable';
+        }
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:bosses,email,' . $request->input('id'),
+            'email' => $emailRule,
             'password'=> $passwordValidateRule . '|min:8',
             'full_name' => 'required',
             'phone' => ['required', 'string', 'regex:/^((\+84|0)(\d{9,10}))|((0\d{2,3})\d{7,8})$/'],
@@ -53,9 +57,10 @@ class BossController extends Controller
                 $boss->block = 0;
                 $boss->created_at = now();
                 $message = 'Boss created successfully';
+                $boss->email = $request->input('email');
             }
 
-            $boss->email = $request->input('email');
+
 
             if ($request->filled('password')) {
                 $boss->password = Hash::make($request->input('password'));
@@ -208,5 +213,41 @@ class BossController extends Controller
         $Province = Province::all();
 
         return view('admin.boss.index', compact('bosses', 'District', 'Province'));
+    }
+
+    function  resetPassword(request $request,$id){
+
+        $validator= Validator::make($request->all(),['new_password'=>'required|min:8']);
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        try {
+            $boss= Boss::find($id);
+            if (!$boss) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Boss not found'
+                ]);
+            }
+            $boss->password = Hash::make($request->new_password);
+            $boss->save();
+            return response()->json([
+                'success' => true,
+                'message' => $boss->full_name.'\'password reset successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+
     }
 }

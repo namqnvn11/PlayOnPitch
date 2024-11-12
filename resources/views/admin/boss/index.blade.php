@@ -81,7 +81,7 @@
                                 @endif
 
                                 @foreach($bosses as $boss)
-                                    <tr>
+                                    <tr onclick="viewDetail(event)" data-url="{{ route('admin.boss.detail', $boss->id) }}" class="cursor-default">
                                         <td>{{ $boss->email }}</td>
                                         <td>{{ $boss->full_name }}</td>
                                         <td>{{ $boss->phone }}</td>
@@ -91,15 +91,15 @@
                                         <td>{{ $boss->status == 1 ? 'Mới' : 'Cũ' }}</td>
 
                                         <td class="text-center">
-                                            <x-detail-button role="button" class="js-on-edit" data-url="{{ route('admin.boss.detail', $boss->id) }}">
-                                                Detail
+                                            <x-detail-button role="button" class="js-on-reset-password w-[130px]" onclick="prepareResetPassword(event,{{$boss->id}})">
+                                                Reset Password
                                             </x-detail-button>
                                             @if($boss->block)
-                                                <x-unblock-button type="button" class="btn btn-secondary" onclick="showModalUnBlock({{ $boss->id }})">
+                                                <x-unblock-button type="button" class="btn btn-secondary" onclick="showModalUnBlock(event,{{ $boss->id }})">
                                                     UnBlock
                                                 </x-unblock-button>
                                             @else
-                                                <x-block-button type="button" class="btn btn-danger" onclick="showModalBlock({{ $boss->id }})">
+                                                <x-block-button type="button" class="btn btn-danger" onclick="showModalBlock(event,{{ $boss->id }})">
                                                     Block
                                                 </x-block-button>
                                             @endif
@@ -130,6 +130,7 @@
 
     @include('admin.boss.elements.modal_edit')
     @include('admin.boss.elements.modal_confirm')
+    @include('admin.boss.elements.modal_confirm_reset_password')
 
 @endsection
 
@@ -139,6 +140,7 @@
         var getDistrictsUrl = "{{ route('admin.boss.getDistricts') }}";
         const BLOCK_URL= "{{url('/admin/boss/block')}}"
         const UNBLOCK_URL= "{{url('/admin/boss/unblock')}}"
+        const RESET_PASSWORD_URL= '{{url('admin/boss/reset-password')}}'
         {{--const DELETE_URL = "{{ route('admin.boss.destroy') }}";--}}
     </script>
     <script src="{{ asset('js/admin/boss/index.js?t='.config('constants.app_version') )}}"></script>

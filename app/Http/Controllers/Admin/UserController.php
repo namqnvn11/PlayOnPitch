@@ -207,7 +207,7 @@ class UserController extends Controller
 
     function  resetPassword(request $request,$id){
 
-            $validator= Validator::make($request->all(),['new-password'=>'required|min:8']);
+            $validator= Validator::make($request->all(),['new_password'=>'required|min:8']);
             if ($validator->fails()) {
                 if ($request->ajax()) {
                     return response()->json([
@@ -226,7 +226,7 @@ class UserController extends Controller
                     'message' => 'User not found'
                 ]);
             }
-            $user->password = Hash::make($request->input('password'));
+            $user->password = Hash::make($request->new_password);
             $user->save();
             return response()->json([
                 'success' => true,

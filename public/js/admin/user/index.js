@@ -39,7 +39,7 @@ $(document).ready(function () {
         if (event.key === "Escape" || event.keyCode === 27) {
           $('#modal-confirm').modal('hide');
           $('#modal-confirm-reset-password').modal('hide');
-            $('#modal-edit').modal('hide');
+          $('#modal-edit').modal('hide');
         }
     });
     saveData();
@@ -260,6 +260,7 @@ function prepareResetPassword(event,userId){
     //chặn bubble event
     event.stopPropagation();
     document.getElementById('resetPasswordUserId').value=userId;
+    document.getElementById('new_password').value='12345678';
     var _modal = $('#modal-confirm-reset-password');
     $('.error-message').remove();
     _modal.modal('show');

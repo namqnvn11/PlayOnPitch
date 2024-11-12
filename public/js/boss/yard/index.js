@@ -8,7 +8,6 @@ $(document).ready(function () {
         _modal.find('h4').text('Add new');
         fetchDistricts($('#province_id').attr('province-id')).then(()=>{
                 $('select[name="district"]').val($('#district_id').attr('district-id'));
-                console.log( $('select[name="district"]').val());
         }
         );
 
@@ -67,7 +66,6 @@ $(document).ready(function () {
     $(document).on('click', '.js-on-edit', function () {
         var _modal = $('#modal-edit');
         var url = $(this).attr('data-url');
-        console.log(url);
         $('.error-message').remove();
         $('#form-data')[0].reset();
         _modal.find('h4').text('Edit');
@@ -78,7 +76,6 @@ $(document).ready(function () {
             dataType: "json",
             success: function (response) {
                 if (response.success) {
-                    console.log(response.data);
                     var data = response.data;
                     $('input[name="id"]').val(data.id);
                     $('select[name="yard_name"]').val(data.yard_name);
