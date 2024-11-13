@@ -40,15 +40,6 @@
                         <input type="number" name="conditions_apply" class="form-control rounded-md border-gray-400" placeholder="Enter conditions apply">
                     </div>
 
-                    <div class="form-group">
-                        <label for="">User</label>
-                        <select class="form-control rounded-md border-gray-400" name="user_id">
-                            <option value="">Select User</option>
-                            @foreach($Users as $user)
-                                <option value="{{ $user->id }}">{{ $user->full_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
                 </div>
 
                 <div class="modal-footer">

@@ -41,6 +41,11 @@ class User extends Authenticatable
         return $this->district->province();
     }
 
+    public function User_Voucher()
+    {
+        return $this->hasMany(User_voucher::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

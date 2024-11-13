@@ -5,28 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Voucher extends Model
+class User_voucher extends Model
 {
     use HasFactory;
-    protected $table = 'vouchers';
+
+    protected $table = 'user_vouchers';
 
     protected $fillable = [
-        'name',
-        'price',
-        'release_date',
-        'end_date',
-        'conditions_apply',
-        'block'
+        'user_id',
+        'voucher_id'
     ];
-
 
     public function User()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function User_Voucher()
+    public function Voucher()
     {
-        return $this->hasMany(User_voucher::class);
+        return $this->belongsTo(User::class, 'voucher_id');
     }
 }

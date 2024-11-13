@@ -92,7 +92,6 @@
                                     <th>Release date</th>
                                     <th>End Date</th>
                                     <th>Conditions Apply</th>
-                                    <th>User</th>
                                     <th class="text-center" style="width: 170px;">Action</th>
                                 </tr>
                                 </thead>
@@ -109,7 +108,6 @@
                                         <td>{{ $voucher->release_date }}</td>
                                         <td>{{ $voucher->end_date }}</td>
                                         <td>{{ $voucher->conditions_apply }}</td>
-                                        <td>{{ $voucher->User->full_name }}</td>
                                         <td class="text-center">
                                             <x-detail-button role="button" class="js-on-edit" data-url="{{ route('admin.voucher.detail', $voucher->id) }}">
                                                 Detail

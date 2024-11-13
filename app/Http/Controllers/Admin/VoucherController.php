@@ -28,7 +28,6 @@ class VoucherController extends Controller
             'release_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:release_date',
             'conditions_apply' => 'required|numeric|min:0',
-            'user_id' => 'required|exists:users,id',
         ]);
 
 
@@ -63,7 +62,6 @@ class VoucherController extends Controller
             $voucher->release_date = $request->input('release_date');
             $voucher->end_date = $request->input('end_date');
             $voucher->conditions_apply = $request->input('conditions_apply');
-            $voucher->user_id = $request->input('user_id');
 
             $voucher->save();
 

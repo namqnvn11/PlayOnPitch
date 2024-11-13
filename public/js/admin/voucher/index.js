@@ -42,7 +42,6 @@ $(document).ready(function () {
                     $('input[name="release_date"]').val(data.release_date);
                     $('input[name="end_date"]').val(data.end_date);
                     $('input[name="conditions_apply"]').val(data.conditions_apply);
-                    $('input[name="user_id"]').val(data.user_id);
                     $('#modal-edit').modal('show');
                 } else {
                     Notification.showError(response.message);
