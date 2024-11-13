@@ -28,10 +28,14 @@ class GoogleController extends Controller
             ],[
                 'full_name' => $user->name,
                 'google_id'=> $user->id,
-                'password' => bcrypt(''),
+                'phone' => '',
+                'address' => '',
+                'district_id' => 1,
+                'block' => 0,
+                'password' => bcrypt('abcd1234'),
             ]);
             Auth::login($newUser);
         }
-        return redirect()->intended('/dashboard');
+        return redirect()->intended('/user/home/index');
     }
 }

@@ -73,7 +73,7 @@
             </div>
             <div class="info-row">
                 <label>Địa chỉ:</label>
-                <span>{{ Auth::user()->address . ", " . Auth::user()->District->name . ", " . Auth::user()->District->Province->name}}</span>
+                <span>{{ Auth::user()->address?(Auth::user()->address . ", " . Auth::user()->District?->name . ", " . Auth::user()->District?->Province?->name) : ''}}</span>
             </div>
 
             <button class="edit-btn js-on-edit" data-bs-toggle="modal" data-bs-target="#editInfoModal" onclick="openEditModal()">Chỉnh sửa</button>
