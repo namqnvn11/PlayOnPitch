@@ -1,8 +1,10 @@
 <?php
+ini_set('memory_limit', '-1');
 
-use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+Artisan::command('yard-schedule:create', function () {
+    $this->info('Yard schedules have been created successfully!');
+});
+   // ->dailyAt('00:00');
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
+Artisan::call('yard-schedule:create');

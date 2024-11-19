@@ -21,7 +21,10 @@ class Boss extends Authenticatable
         'company_address',
         'status',
         'district_id',
-        'block'
+        'block',
+        'time_open',
+        'time_close',
+        'is_open_all_day'
     ];
 
     public function District()
@@ -32,5 +35,8 @@ class Boss extends Authenticatable
     public function Province()
     {
         return $this->district->province();
+    }
+    public function Yards(){
+        return $this->hasMany(Yard::class, 'boss_id');
     }
 }
