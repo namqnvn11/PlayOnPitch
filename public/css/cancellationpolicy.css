@@ -1,0 +1,262 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+}
+
+/* Header */
+header {
+    width: 100%;
+    background-color: #4CB551;
+    color: white;
+}
+
+/* Đường kẻ ngang trong Header */
+.divider {
+    border: 0;
+    border-top: 1px solid #026464;
+    margin: 0 5%;
+}
+
+.dividers {
+    border: 0;
+    border-top: 1px solid #4CB551;
+    margin: 0 5%;
+}
+
+.nav-menu {
+    width: 72%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.nav-menu ul {
+    display: flex;
+    gap: 15px;
+    list-style-type: none;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+    color: #ddd;
+}
+
+/* Authentication Button */
+.auth-button button {
+    background-color: #309C3E;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.auth-button button:hover {
+    background-color: #246A2C;
+}
+
+.top-section {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 50px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding-left: 5%;
+    width: 72%;
+    margin: 0 auto;
+}
+
+/* Registration Section */
+.registration {
+    width: 72%;
+    margin: 30px auto;
+    margin-bottom: 0px;
+    padding: 30px;
+    text-align: center;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 30px;
+}
+
+.registration .form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 55px;
+    height: 101px;
+}
+
+.registration input {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    width: 184px;
+    height: 45px;
+}
+
+.registration button {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    width: 133px;
+    height: 45px;
+    color: white;
+    background-color: #3F9C4B;
+}
+
+.registration button:hover {
+    background-color: #246A2C;
+    color: white;
+}
+
+/* Footer */
+footer {
+    background-color: #2e7d32;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 0;
+
+}
+
+.footer-section h3 {
+    margin-bottom: 10px;
+    font-size: 24px;
+
+}
+
+.footer-section p {
+    margin-bottom: 10px;
+    font-size: 16px;
+    padding-top: 35px;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    padding-top: 35px;
+}
+
+.footer-section ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-section button {
+    background-color: #309C3E;
+    color: white;
+    border: none;
+    margin-top: 20px;
+    padding: 20px;
+    cursor: pointer;
+    width: 536px;
+    height: 103px;
+    font-size: 16px;
+}
+
+.footer-section button:hover {
+    background-color: #246A2C;
+    color: white;
+}
+
+.banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.banner img {
+    border-radius: 20px;
+    width: 72%;
+    height: 140px;
+    object-fit: cover;
+}
+.policy-container {
+    max-width: 72%;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.policy-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.policy-header h1 {
+    font-size: 24px;
+    color: #309C3E;
+    margin-bottom: 10px;
+}
+
+.header-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.header-line .star {
+    font-size: 20px;
+    color: #ccc;
+}
+
+.header-line .star.active {
+    color: #f5c518;
+}
+
+.policy-content h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.policy-content h3 {
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.policy-content p {
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+.policy-content ul {
+    list-style-type: disc;
+    margin-left: 40px;
+    margin-bottom: 20px;
+}
+
+.policy-content ul li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+
+
+
+
+
+
+

@@ -37,7 +37,7 @@ $(document).ready(function () {
                 if (response.success) {
                     var data = response.data;
                     $('input[name="id"]').val(data.id);
-                    $('input[name="name"]').val(data.name);
+                    $('select[name="name"]').val(data.name);
                     $('input[name="price"]').val(data.price);
                     $('input[name="release_date"]').val(data.release_date);
                     $('input[name="end_date"]').val(data.end_date);
@@ -61,6 +61,7 @@ $(document).ready(function () {
 
     saveData();
     deleteData();
+    initializePriceAndConditionsUpdater();
 
 });
 
@@ -201,4 +202,21 @@ function blockUnBlockSubmit(event){
         contentType: false,
         processData: false
     });
+}
+
+function initializePriceAndConditionsUpdater() {
+    const selectElement = document.getElementById('name');
+    const priceInput = document.getElementById('price');
+    const conditionsApplyInput = document.getElementById('conditions_apply');
+
+    function updateValues() {
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const price = parseInt(selectedOption.getAttribute('data-price'), 10) || 0;
+
+        priceInput.value = price;
+        conditionsApplyInput.value = price / 100;
+    }
+
+    selectElement.addEventListener('change', updateValues);
+    updateValues();
 }

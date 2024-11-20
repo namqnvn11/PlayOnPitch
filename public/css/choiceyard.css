@@ -1,0 +1,361 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+}
+
+/* Header */
+header {
+    width: 100%;
+    background-color: #4CB551;
+    color: white;
+}
+
+/* Đường kẻ ngang trong Header */
+.divider {
+    border: 0;
+    border-top: 1px solid #026464;
+    margin: 0 5%;
+}
+
+.dividers {
+    border: 0;
+    border-top: 1px solid #4CB551;
+    margin: 0 5%;
+}
+
+.nav-menu {
+    width: 72%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.nav-menu ul {
+    display: flex;
+    gap: 15px;
+    list-style-type: none;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+    color: #ddd;
+}
+
+/* Authentication Button */
+.auth-button button {
+    background-color: #309C3E;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.auth-button button:hover {
+    background-color: #246A2C;
+}
+
+.top-section {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 50px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding-left: 5%;
+    width: 72%;
+    margin: 0 auto;
+}
+
+/* Registration Section */
+.registration {
+    width: 72%;
+    margin: 30px auto;
+    margin-bottom: 0px;
+    padding: 30px;
+    text-align: center;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 30px;
+}
+
+.registration .form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 55px;
+    height: 101px;
+}
+
+.registration input {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    width: 184px;
+    height: 45px;
+}
+
+.registration button {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    width: 133px;
+    height: 45px;
+    color: white;
+    background-color: #3F9C4B;
+}
+
+.registration button:hover {
+    background-color: #246A2C;
+    color: white;
+}
+
+/* Footer */
+footer {
+    background-color: #2e7d32;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 0;
+
+}
+
+.footer-section h3 {
+    margin-bottom: 10px;
+    font-size: 24px;
+
+}
+
+.footer-section p {
+    margin-bottom: 10px;
+    font-size: 16px;
+    padding-top: 35px;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    padding-top: 35px;
+}
+
+.footer-section ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-section button {
+    background-color: #309C3E;
+    color: white;
+    border: none;
+    margin-top: 20px;
+    padding: 20px;
+    cursor: pointer;
+    width: 536px;
+    height: 103px;
+    font-size: 16px;
+}
+
+.footer-section button:hover {
+    background-color: #246A2C;
+    color: white;
+}
+
+.banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.banner img {
+    border-radius: 20px;
+    width: 72%;
+    height: 140px;
+    object-fit: cover;
+}
+
+.booking-container {
+    max-width: 72%;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.booking-header {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: Arial, sans-serif;
+    padding-left: 15%;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+    color: black;
+    padding-right: 100px;
+}
+.step span {
+    padding-right: 100px;
+}
+
+.step i {
+    font-size: 24px;
+    margin-bottom: 5px;
+    padding-right: 100px;
+}
+
+.step.active i {
+    color: red;
+    padding-right: 100px;
+}
+
+.step.active span {
+    color: red;
+    padding-right: 100px;
+}
+
+.arrow {
+    font-size: 18px;
+    color: black;
+    padding-right: 100px;
+}
+
+
+.booking-header .arrow {
+    margin: 0 10px;
+    color: #333;
+}
+
+.booking-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.booking-table {
+    flex: 2;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.time-selector {
+    margin-bottom: 10px;
+}
+
+.time-selector select {
+    padding: 5px 10px;
+    font-size: 16px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table thead th {
+    background-color: #ddd;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+table tbody td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.booking-info {
+    flex: 1;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.booking-info p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.booking-info form {
+    margin-top: 10px;
+}
+
+.booking-info input {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.booking-info button {
+    width: 100%;
+    padding: 10px;
+    background-color: green;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.booking-info button:hover {
+    background-color: darkgreen;
+}
+
+.selectable {
+    cursor: pointer;
+    background-color: #f9f9f9;
+    transition: background-color 0.2s ease;
+}
+
+.selectable:hover {
+    background-color: #e0e0e0;
+}
+
+.selectable.selected {
+    background-color: #87ceeb; /* Highlight color for selected cells */
+    color: #fff;
+    font-weight: bold;
+}
+
+
+
+
+

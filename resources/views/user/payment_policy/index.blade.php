@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play On Pitch</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/policy.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
@@ -15,7 +15,7 @@
     <hr class="divider" />
     <nav class="nav-menu">
         <ul>
-            <li><a href="#"><i class="fas fa-home"></i></a></li>
+            <li><a href="{{route('user.home.index')}}"><i class="fas fa-home"></i></a></li>
             <li><a href="{{route('user.yardlist.index')}}">Danh sách sân</a></li>
             <li><a href="{{route('user.policy.index')}}">Chính sách</a></li>
             <li><a href="{{route('user.clause.index')}}">Điều khoản</a></li>
@@ -41,44 +41,24 @@
     <img src="{{asset('img/banner.jpg')}}" alt="">
 </div>
 
-<section class="search-section">
-    <div class="search-container">
-        <img src={{asset('img/360_F_355288042_An4jhyVFELBAY05m97yMQYDTDpNKeeJf.jpg')}} alt="">
-        <div class="search-bar">
-            <select name="province_id" id="province_id">
-                <option value="">Tỉnh/Thành Phố</option>
-                @foreach($Province as $province)
-                    <option value="{{ $province->id }}">{{ $province->name }}</option>
-                @endforeach
-            </select>
+<div class="policy-container">
+    <div class="policy-header">
+        <h1>Chính sách thanh toán</h1>
+    </div>
 
-            <select name="district_id" id="district_id">
-                <option>Quận/Huyện</option>
-            </select>
-            <input type="text" placeholder="Tên sân" name="name" id="name">
-            <button>Tìm kiếm</button>
-        </div>
+    <div class="policy-content">
+       <h3>1. Tiền mặt</h3>
+        <ul>
+            <li>Khách hàng sẽ thanh toán bằng tiền mặt trực tiếp khi nhận sân, sau khi hoàn tất đặt cọc.</li>
+        </ul>
+        <h3>2. Chuyển khoản</h3>
+        <ul>
+            <li>Tên TK: HUYNH KHAC HOAI NAM</li>
+            <li>STK: 0041000388044 - Ngân hàng Ngoại Thương Việt Nam (Vietcombank)</li>
+        </ul>
+        <p>Ngoài ra, quý khách có thể thanh toán qua Hệ thống thanh toán thẻ được cung cấp bởi các đối tác cổng thanh toán (“Đối Tác Cổng Thanh Toán”) đã được cấp phép hoạt động hợp pháp tại Việt Nam. Theo đó, các tiêu chuẩn bảo mật thanh toán thẻ tại Datsan247.com đảm bảo tuân thủ theo các tiêu chuẩn bảo mật ngành. </p>
     </div>
-</section>
-
-<section class="features">
-    <div class="feature">
-        <img src="{{asset('img/san.jpg')}}" alt="Tìm kiếm" style="margin-bottom: 16px">
-        <p>Tìm kiếm vị trí sân</p>
-        <span>Dữ liệu sân đấu dồi dào, liên tục cập nhật, giúp bạn dễ dàng tìm kiếm theo khu vực mong muốn.</span>
-    </div>
-    <div class="feature">
-        <img src="{{asset('img/lich.jpg')}}" alt="Đặt lịch">
-        <p>Đặt lịch Online</p>
-        <span>Không cần đến trực tiếp, không cần gọi điện đặt lịch, bạn hoàn toàn có thể đặt sân ở bất kì đâu có internet.</span>
-    </div>
-    <div class="feature">
-        <img src="{{asset('img/dabong.jpg')}}" alt="Tìm đối bắt cặp">
-        <p>Tìm đối bắt cặp đấu</p>
-        <span>Tìm kiếm, giao lưu các đội thi đấu thể thao, kết nối, xây dựng cộng đồng thể thao sôi nổi, mạnh mẽ.</span>
-    </div>
-</section>
-
+</div>
 <div style="background-color: #2e7d32">
     <form id="form-data" method="post">
         @csrf
@@ -103,7 +83,7 @@
             <li><a href="{{route('user.privacy_policy.index')}}">Chính sách bảo mật</a></li>
             <li><a href="{{route('user.cancellation_policy.index')}}">Chính sách hủy (đổi trả)</a></li>
             <li><a href="{{route('user.commodity_policy.index')}}">Chính sách kiểm hàng</a></li>
-            <li><a href="{{route('user.payment_policy.index')}}">Chính sách thanh toán</a></li>
+            <li><a href="#">Chính sách thanh toán</a></li>
         </ul>
     </div>
 
@@ -125,16 +105,12 @@
 </footer>
 </body>
 </html>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{asset('assets/libraries/toastr/toastr.min.js' ) }}"></script>
-<script src="{{asset('js/notification.js')}}"></script>
-
 <script>
-    const getDistrictsUrl = "{{ route('user.home.getDistricts') }}";
     const STORE_URL = "{{ route('user.storeRegister') }}";
 </script>
-
+<script src="{{asset('assets/libraries/toastr/toastr.min.js' ) }}"></script>
+<script src="{{asset('js/notification.js')}}"></script>
 <script src="{{asset('js/registerBoss.js?t='.config('constants.app_version'))}}"></script>
-<script src="{{ asset('js/user/home/index.js?t='.config('constants.app_version') )}}"></script>
+
 

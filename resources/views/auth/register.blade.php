@@ -43,6 +43,13 @@
             @endforeach
         </div>
 
+        <div class="mb-3">
+            <input type="text" class="form-control" id="phone" name="phone" placeholder="Nhập số điện thoại" value="{{ old('phone') }}">
+            @foreach ($errors->get('phone') as $error)
+                <p class="text-danger" style="float: left">{{ $error }}</p>
+            @endforeach
+        </div>
+
         <!-- Email Input -->
         <div class="mb-3">
             <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email" value="{{ old('email') }}" >

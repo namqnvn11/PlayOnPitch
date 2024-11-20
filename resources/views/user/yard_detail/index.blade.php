@@ -17,10 +17,10 @@
         <ul>
             <li><a href="{{route('user.home.index')}}"><i class="fas fa-home"></i></a></li>
             <li><a href="{{route('user.yardlist.index')}}">Danh sách sân</a></li>
-            <li><a href="#">Giới thiệu</a></li>
-            <li><a href="#">Điều khoản</a></li>
+            <li><a href="{{route('user.policy.index')}}">Chính sách</a></li>
+            <li><a href="{{route('user.clause.index')}}">Điều khoản</a></li>
             <li><a href="#">Lợi ích chủ sân</a></li>
-            <li><a href="#">Liên hệ</a></li>
+            <li><a href="#footer">Liên hệ</a></li>
         </ul>
 
         <div class="auth-button">
@@ -85,27 +85,30 @@
 </div>
 
 <div style="background-color: #2e7d32">
-    <section class="registration">
-        <div class="form">
-            <h2 style="margin-right: 250px">Bạn muốn đăng ký sử dụng<br> website quản lý sân bóng MIỄN PHÍ?</h2>
-            <input type="text" placeholder="Nhập họ và tên">
-            <input type="text" placeholder="Nhập số điện thoại">
-            <input type="email" placeholder="Nhập email">
-            <button>Gửi</button>
-        </div>
-    </section>
+    <form id="form-data" method="post">
+        @csrf
+        <section class="registration">
+            <div class="form">
+                <h2 style="margin-right: 250px">Bạn muốn đăng ký sử dụng<br> website quản lý sân bóng MIỄN PHÍ?</h2>
+                <input type="text" placeholder="Nhập họ và tên" name="name">
+                <input type="text" placeholder="Nhập số điện thoại" name="phone">
+                <input type="text" placeholder="Nhập email" name="email">
+                <button type="submit">Gửi</button>
+            </div>
+        </section>
+    </form>
 </div>
 
-<footer>
+<footer id="footer">
     <div class="footer-section">
         <h3>GIỚI THIỆU</h3>
         <hr class="dividers" />
         <p>Công ty Play On Pitch cung cấp nền tảng quản lý sân bóng hiệu quả.</p>
         <ul>
-            <li><a href="#">Chính sách bảo mật</a></li>
-            <li><a href="#">Chính sách hủy (đổi trả)</a></li>
-            <li><a href="#">Chính sách khách hàng</a></li>
-            <li><a href="#">Chính sách thanh toán</a></li>
+            <li><a href="{{route('user.privacy_policy.index')}}">Chính sách bảo mật</a></li>
+            <li><a href="{{route('user.cancellation_policy.index')}}">Chính sách hủy (đổi trả)</a></li>
+            <li><a href="{{route('user.commodity_policy.index')}}">Chính sách kiểm hàng</a></li>
+            <li><a href="{{route('user.payment_policy.index')}}">Chính sách thanh toán</a></li>
         </ul>
     </div>
 
@@ -131,3 +134,9 @@
 <script> const getDistrictsUrl = "{{ route('boss.yard.getDistricts') }}";</script>
 
 <script src="{{ asset('js/user/home/index.js?t='.config('constants.app_version') )}}"></script>
+<script>
+    const STORE_URL = "{{ route('user.storeRegister') }}";
+</script>
+<script src="{{asset('assets/libraries/toastr/toastr.min.js' ) }}"></script>
+<script src="{{asset('js/notification.js')}}"></script>
+<script src="{{asset('js/registerBoss.js?t='.config('constants.app_version'))}}"></script>

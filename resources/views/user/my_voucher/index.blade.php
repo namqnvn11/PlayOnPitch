@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play On Pitch</title>
-    <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/voucher.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -29,7 +29,7 @@
         <div class="auth-button">
             @auth
                 <a href="#">
-                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> {{ Auth::user()->full_name }}</button>
+                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> {{ Auth::user()->full_name . " | " . Auth::user()->score }}<i class="fa-regular fa-star"></i></button>
                 </a>
             @else
                 <a href="{{ route('login') }}">
@@ -51,36 +51,48 @@
         </div>
         <ul class="menu">
             <li><a href="#"> <i class="fa fa-history"></i>&nbsp;Lịch sử đặt sân</a></li>
-            <li style="background-color: #F4F4F4"><a href="#"  style="color: #4CAF50;"> <i class="fa fa-info-circle" style="color: #4CAF50;"></i>&nbsp;Thông tin cá nhân</a></li>
-            <li><a href="{{route("user.my_voucher.index")}}"><i class="fa-solid fa-ticket"></i>&nbsp;Voucher của bạn</a></li>
-            <li><a href="{{route("user.voucher.index")}}"><i class="fa-solid fa-retweet"></i>&nbsp;Đổi voucher</a></li>
+            <li><a href="{{route("user.profile.index")}}"> <i class="fa fa-info-circle"></i>&nbsp;Thông tin cá nhân</a></li>
+            <li style="background-color: #F4F4F4"><a href="#" style="color: #4CAF50;"><i class="fa-solid fa-ticket" style="color: #4CAF50;"></i>&nbsp;Voucher của bạn</a></li>
+            <li><a href="{{route("user.voucher.index")}}"><i class="fa-solid fa-retweet" ></i>&nbsp;Đổi voucher</a></li>
         </ul>
         <a href="{{route("user.logout")}}"><button class="logout-btn">Đăng xuất</button></a>
     </div>
 
     <div class="profile-details">
-        <h2>Thông tin cá nhân</h2>
-        <div class="details-box">
-            <div class="info-row">
-                <label>Email:</label>
-                <span>{{ Auth::user()->email}}</span>
-            </div>
-            <div class="info-row">
-                <label>Tên:</label>
-                <span>{{ Auth::user()->full_name}}</span>
-            </div>
-            <div class="info-row">
-                <label>Số điện thoại:</label>
-                <span>{{ Auth::user()->phone}}</span>
-            </div>
-            <div class="info-row">
-                <label>Địa chỉ:</label>
-                <span>{{ Auth::user()->address?(Auth::user()->address . ", " . Auth::user()->District?->name . ", " . Auth::user()->District?->Province?->name) : ''}}</span>
-            </div>
+        <h2>Voucher của bạn</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Hình ảnh</th>
+                <th>Tên voucher</th>
+                <th>Giá trị voucher</th>
+                <th>Ngày bắt đầu</th>
+                <th>Ngày kết thúc</th>
+                <th>Số lượng</th>
+            </tr>
+            </thead>
+            <tbody>
+            @php
+            $groupedVouchers = $user_vouchers->groupBy('voucher_id');
+            @endphp
+            @foreach($groupedVouchers as $voucher_id => $group)
 
-            <button class="edit-btn js-on-edit" data-bs-toggle="modal" data-bs-target="#editInfoModal" onclick="openEditModal()">Chỉnh sửa</button>
-            <button class="edit-btn js-on-edit" data-bs-toggle="modal" data-bs-target="#changePasswordModal" style="width: 20%">Đổi mật khẩu</button>
-        </div>
+                @php
+                    $voucher = $group->first()->voucher;
+                @endphp
+                @if($voucher->block == 0 && $voucher->end_date > now())
+                <tr>
+                    <td>Image</td>
+                    <td>{{ $voucher->name }}</td>
+                    <td>{{ $voucher->price }}</td>
+                    <td>{{ \Carbon\Carbon::parse($voucher->release_date)->format('d/m/Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y') }}</td>
+                    <td>{{ $group->count() }}</td>
+                </tr>
+                @endif
+            @endforeach
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -132,20 +144,7 @@
 
 </html>
 
-@include('user.profile.elements.modal_edit')
-<script>
-    function openEditModal() {
-        var myModal = new bootstrap.Modal(document.getElementById('modal-edit'));
-        myModal.show();
-    }
 
-    function closeModal() {
-        var myModal = new bootstrap.Modal(document.getElementById('modal-edit'));
-        myModal.hide();
-    }
-
-</script>
-@include('user.profile.elements.changePassword')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
