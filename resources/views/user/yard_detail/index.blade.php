@@ -45,7 +45,7 @@
         <!-- Main Image and Booking Info Section -->
         <div class="main-section">
             <div class="image-gallery">
-                <h2>Sân Phú Thọ</h2>
+                <h2>{{$yard->yard_name}}</h2>
                 <img class="main-image" src="{{asset('img/sanbong.jpg')}}" alt="Main Field Image">
 
                 <div class="thumbnails">
@@ -65,15 +65,23 @@
                 <button class="book-now">Đặt sân ngay</button>
                 </div>
 
+{{--                <div class="owner-info">--}}
+{{--                    <h3>THÔNG TIN CHỦ SÂN</h3>--}}
+{{--                    <p><i class="fa fa-user"></i> Anh Tài</p>--}}
+{{--                    <p><i class="fa fa-phone"></i> 0123456789</p>--}}
+{{--                    <p><i class="fa fa-envelope"></i> taint@vtca.edu.vn</p>--}}
+{{--                    <p><i class="fa fa-map-marker"></i> 182 lê đại hành, phường, quận 11, TP HCM</p>--}}
+{{--                    <img class="map" src="{{asset('img/sanbong.jpg')}}" alt="Map Image">--}}
+{{--                </div>--}}
+
                 <div class="owner-info">
-                    <h3>THÔNG TIN CHỦ SÂN</h3>
-                    <p><i class="fa fa-user"></i> Anh Tài</p>
-                    <p><i class="fa fa-phone"></i> 0123456789</p>
-                    <p><i class="fa fa-envelope"></i> taint@vtca.edu.vn</p>
-                    <p><i class="fa fa-map-marker"></i> 182 lê đại hành, phường, quận 11, TP HCM</p>
+                    <h3>THÔNG TIN KHÁCH HÀNG</h3>
+                    <p><i class="fa fa-user"></i> {{ $yard->boss->full_name}} </p>
+                    <p><i class="fa fa-phone"></i> {{ $yard->boss->phone}} </p>
+                    <p><i class="fa fa-envelope"></i> {{ $yard->boss->email}} </p>
+                    <p><i class="fa fa-map-marker"></i> {{ $yard->boss->company_address}} </p>
                     <img class="map" src="{{asset('img/sanbong.jpg')}}" alt="Map Image">
                 </div>
-            </div>
         </div>
 
         <!-- General Information Section -->

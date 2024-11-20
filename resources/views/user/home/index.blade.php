@@ -43,23 +43,34 @@
 
 <section class="search-section">
     <div class="search-container">
-        <img src={{asset('img/360_F_355288042_An4jhyVFELBAY05m97yMQYDTDpNKeeJf.jpg')}} alt="">
-        <div class="search-bar">
+        <img src="{{ asset('img/360_F_355288042_An4jhyVFELBAY05m97yMQYDTDpNKeeJf.jpg') }}" alt="">
+        <form action="{{ route('user.yardlist.index') }}" method="GET" class="search-bar">
             <select name="province_id" id="province_id">
                 <option value="">Tỉnh/Thành Phố</option>
                 @foreach($Province as $province)
-                    <option value="{{ $province->id }}">{{ $province->name }}</option>
+                    <option value="{{ $province->id }}" {{ request('province_id') == $province->id ? 'selected' : '' }}>
+                        {{ $province->name }}
+                    </option>
                 @endforeach
             </select>
 
             <select name="district_id" id="district_id">
-                <option>Quận/Huyện</option>
+                <option value="">Quận/Huyện</option>
+                @if(request('province_id'))
+                    @foreach($District->where('province_id', request('province_id')) as $district)
+                        <option value="{{ $district->id }}" {{ request('district_id') == $district->id ? 'selected' : '' }}>
+                            {{ $district->name }}
+                        </option>
+                    @endforeach
+                @endif
             </select>
-            <input type="text" placeholder="Tên sân" name="name" id="name">
-            <button>Tìm kiếm</button>
-        </div>
+
+            <input type="text" placeholder="Tên sân" name="yard_name" value="{{ request('yard_name') }}">
+            <button type="submit">Tìm kiếm</button>
+        </form>
     </div>
 </section>
+
 
 <section class="features">
     <div class="feature">
@@ -124,7 +135,6 @@
 </html>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 
 <script> const getDistrictsUrl = "{{ route('user.home.getDistricts') }}";</script>
 

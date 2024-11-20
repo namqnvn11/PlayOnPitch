@@ -93,6 +93,7 @@ Route::middleware(['auth:web'])->group(function () {
         Route::prefix('home')->name('home.')->group(function () {
             Route::get('/index', [HomeController::class, 'index'])->name('index');
             Route::get('/get-districts', [HomeController::class, 'getDistricts'])->name('getDistricts');
+            Route::get('/search', [HomeController::class, 'search'])->name('user.home.search');
         });
 
         Route::prefix('yardlist')->name('yardlist.')->group(function () {
@@ -101,7 +102,8 @@ Route::middleware(['auth:web'])->group(function () {
         });
 
         Route::prefix('yarddetail')->name('yarddetail.')->group(function () {
-            Route::get('/index', [YardDetailController::class, 'index'])->name('index');
+            Route::get('/index/{id}', [YardDetailController::class, 'index'])->name('index');
+            //Route::post('/yard/{yardId}/book', [YardDetailController::class, 'bookYard'])->name('user.yard.book');
         });
 
         Route::prefix('profile')->name('profile.')->group(function () {
