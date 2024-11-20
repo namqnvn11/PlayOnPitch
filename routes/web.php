@@ -101,8 +101,9 @@ Route::middleware(['auth:boss'])->group(function () {
             Route::post('/setOpenTime/{id}',[PriceTimeSettingController::class, 'setOpenTime'])->name('setOpenTime');
             Route::get('/testing/create',[PriceTimeSettingController::class, 'test'])->name('test');
             Route::get('/testing/delete',[PriceTimeSettingController::class, 'delete'])->name('delete');
-            Route::get('test',function (){
+            Route::get('test',function () {
                 return view('boss.yard.test');
+            });
         });
     });
 });
