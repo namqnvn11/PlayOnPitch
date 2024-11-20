@@ -5,15 +5,32 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\District;
 use App\Models\Province;
+use App\Models\Yard;
 use Illuminate\Http\Request;
 
 class YardListController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $District = District::all();
         $Province = Province::all();
-        return view('user.yard_list.index', compact( 'District', 'Province'));
+        $yard_name = $request->input('yard_name');
+        $yards = Yard::query();
+
+        if ($request->has('province_id') && $request->province_id) {
+            $districtIds = District::where('province_id', $request->province_id)->pluck('id');
+            $yards = $yards->whereIn('district_id', $districtIds);
+        }
+
+        if ($request->has('district_id') && $request->district_id) {
+            $yards = $yards->where('district_id', $request->district_id);
+        }
+        if ($yard_name) {
+            $yards->where('yard_name', 'LIKE', '%' . $yard_name . '%');
+       }
+
+        $yards = $yards->get();
+        return view('user.yard_list.index', compact('yards', 'District', 'Province'));
     }
 
     public function getDistricts(Request $request)
