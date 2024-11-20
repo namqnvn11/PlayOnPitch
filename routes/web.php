@@ -1,6 +1,7 @@
 <?php
 require base_path('routes/auth.php');
 
+use App\Http\Controllers\Boss\PriceTimeSettingController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Models\District;
 use Illuminate\Support\Facades\Route;
@@ -95,6 +96,13 @@ Route::middleware(['auth:boss'])->group(function () {
             Route::post('/unblock/{id}', [YardController::class, 'unblock'])->name('unblock');
             Route::get('/get-districts', [YardController::class, 'getDistricts'])->name('getDistricts');
             Route::get('/search', [YardController::class, 'search'])->name('search');
+            Route::post('/pricing/{id}', [PriceTimeSettingController::class, 'pricing'])->name('pricing');
+            Route::get('/getPricing/{id}',[PriceTimeSettingController::class, 'getPricing'])->name('getPricing');
+            Route::post('/setOpenTime/{id}',[PriceTimeSettingController::class, 'setOpenTime'])->name('setOpenTime');
+            Route::get('/testing/create',[PriceTimeSettingController::class, 'test'])->name('test');
+            Route::get('/testing/delete',[PriceTimeSettingController::class, 'delete'])->name('delete');
+            Route::get('test',function (){
+                return view('boss.yard.test');
         });
     });
 });
