@@ -4,6 +4,7 @@
  <h1> this is testing page</h1>
 <button><a href="{{url('boss/yard/testing/create')}}">create</a></button>
  <button><a href="{{url('boss/yard/testing/delete')}}">deleteAll</a></button>
+ <h1>number of row {{\App\Models\YardSchedule::all()->count()}} </h1>
  <table class="table">
      <thead>
         <tr>

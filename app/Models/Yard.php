@@ -33,4 +33,7 @@ class Yard extends Model
     {
         return $this->hasMany(PriceTimeSetting::class, 'yard_id');
     }
+    public function YardSchedules(){
+        return $this->hasMany(YardSchedule::class, 'yard_id');
+    }
 }
