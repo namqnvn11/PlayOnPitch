@@ -23,7 +23,7 @@ class VoucherFactory extends Factory
             'release_date' => $this->faker->date(),
             'end_date' => $this->faker->date(),
             'conditions_apply'=> $this->faker->numberBetween(10,100),
-            'user_id'=> User::pluck('id')->random(),
+//            'user_id'=> User::pluck('id')->random(),
             'block'=> rand(0,1),
             'created_at' => $this->faker->date(),
             'updated_at' => $this->faker->date(),

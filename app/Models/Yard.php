@@ -16,7 +16,8 @@ class Yard extends Model
         'yard_type',
         'description',
         'block',
-        'district_id'
+        'district_id',
+        'defaultPrice'
     ];
 
     public function District()
@@ -27,5 +28,12 @@ class Yard extends Model
     public function Boss()
     {
         return $this->belongsTo(Boss::class, 'boss_id');
+    }
+    public function PriceTimeSettings()
+    {
+        return $this->hasMany(PriceTimeSetting::class, 'yard_id');
+    }
+    public function YardSchedules(){
+        return $this->hasMany(YardSchedule::class, 'yard_id');
     }
 }

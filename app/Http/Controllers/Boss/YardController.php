@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Boss;
 use App\Http\Controllers\Controller;
 use App\Models\Boss;
 use App\Models\District;
+use App\Models\PriceTimeSetting;
 use App\Models\Province;
 use App\Models\User;
 use App\Models\Yard;
@@ -17,11 +18,11 @@ class YardController extends Controller
 {
     public function index()
     {
-        $currenBoss= Auth::guard('boss')->user();
+        $currenBoss = Auth::guard('boss')->user();
         $yards = Yard::where('block', 0)
-                        ->where('boss_id',$currenBoss->id)
-                        ->orderBy('yard_name', 'asc')
-                        ->paginate(10);
+            ->where('boss_id', $currenBoss->id)
+            ->orderBy('yard_name', 'asc')
+            ->paginate(10);
         $District = District::all();
         $Province = Province::all();
         return view('boss.yard.index', compact('yards', 'District', 'Province'));
@@ -101,9 +102,6 @@ class YardController extends Controller
         }
     }
 
-
-
-
     public function block($id)
     {
 
@@ -122,7 +120,7 @@ class YardController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => $yard->yard_name. ' blocked successfully'
+                'message' => $yard->yard_name . ' blocked successfully'
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -138,8 +136,8 @@ class YardController extends Controller
             $yard = Yard::find($id);
 
             //kiểm tra nếu mở khóa thì có bị trùng tên với sân hiện tại
-            $activeYardList= Yard::where('boss_id',Auth::guard('boss')->id())
-                ->where('block',0)->get();
+            $activeYardList = Yard::where('boss_id', Auth::guard('boss')->id())
+                ->where('block', 0)->get();
             foreach ($activeYardList as $activeYard) {
                 if ($activeYard->yard_name === $yard->yard_name) {
                     return response()->json([
@@ -152,10 +150,9 @@ class YardController extends Controller
             $yard->save();
             return response()->json([
                 'success' => true,
-                'message' => $yard->yard_name. ' unblocked successfully'
+                'message' => $yard->yard_name . ' unblocked successfully'
             ]);
-        }catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
@@ -168,18 +165,18 @@ class YardController extends Controller
     {
         $response = Yard::findOrFail($id);
         $district = District::findOrFail($response->district_id);
-        if($response){
+        if ($response) {
             return response()->json([
-                'success'   => true,
-                'data'      => $response,
+                'success' => true,
+                'data' => $response,
                 'district' => $district,
                 'province' => $district->province,
             ]);
         }
 
         return response()->json([
-            'success'   => false,
-            'message'   => "Saving failed.",
+            'success' => false,
+            'message' => "Saving failed.",
         ]);
 
     }
@@ -199,16 +196,17 @@ class YardController extends Controller
         return response()->json($districts);
     }
 
-    public function search(Request $request){
+    public function search(Request $request)
+    {
 
-        $currenBoss= Auth::guard('boss')->user();
-        $block= $request->input('block','active');
+        $currenBoss = Auth::guard('boss')->user();
+        $block = $request->input('block', 'active');
         $query = Yard::query();
-        $query->where('boss_id',$currenBoss->id);
+        $query->where('boss_id', $currenBoss->id);
 
         if ($request->searchText !== null) {
             $searchText = $request->input('searchText');
-            $query->where(function($q) use ($searchText) {
+            $query->where(function ($q) use ($searchText) {
                 $q->where('yard_name', 'like', '%' . $searchText . '%');
             });
         }
@@ -227,4 +225,5 @@ class YardController extends Controller
 
         return view('boss.yard.index', compact('yards', 'District', 'Province'));
     }
+
 }

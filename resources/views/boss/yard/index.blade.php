@@ -6,6 +6,19 @@ $currentBoss=\Illuminate\Support\Facades\Auth::guard('boss')->user();
 $districtId= $currentBoss->District->id;
 $provinceId= $currentBoss->Province->id;
 $districtList= $currentBoss->Province->Districts;
+$timeClose = $currentBoss->time_close
+    ? \Carbon\Carbon::createFromFormat('H:i:s', $currentBoss->time_close)->format('h:i A')
+    : 'N/A';
+$timeOpen = $currentBoss->time_close
+    ? \Carbon\Carbon::createFromFormat('H:i:s', $currentBoss->time_open)->format('h:i A')
+    : 'N/A';
+
+$timeOpenInModal = $currentBoss->time_close
+    ? \Carbon\Carbon::createFromFormat('H:i:s', $currentBoss->time_open)->format('H:i')
+    : 'N/A';
+$timeCloseInModal = $currentBoss->time_close
+    ? \Carbon\Carbon::createFromFormat('H:i:s', $currentBoss->time_close)->format('H:i')
+    : 'N/A';
 @endphp
     <section class="content-header">
         <div class="container-fluid">
@@ -45,8 +58,19 @@ $districtList= $currentBoss->Province->Districts;
                                     </div>
                                 </form>
                             </div>
-                            <div class="card-tools">
-                                <x-add-new-button role="button" class="js-on-create">
+                            <div class="card-tools flex items-center">
+                                @if($currentBoss->is_open_all_day)
+                                    <div class="text-[20px] text-bold">OPENING : ALL DAY</div>
+                                @else
+                                    <div class="text-[20px] text-bold">OPENING : {{$timeOpen}} - {{$timeClose}}</div>
+                                @endif
+                                <button class="btn js-on-open-time">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                    </svg>
+                                </button>
+                                <x-add-new-button role="button" class="js-on-create ml-3">
                                     + Add new
                                 </x-add-new-button>
                             </div>
@@ -77,7 +101,7 @@ $districtList= $currentBoss->Province->Districts;
                                         <td>{{ $yard->District->name }}</td>
                                         <td class="text-center">
 
-                                            <x-secondary-button class="">
+                                            <x-secondary-button class="js-on-setting" yard-id="{{$yard->id}}" >
                                                 Pricing
                                             </x-secondary-button>
                                             <x-detail-button role="button" class="btn btn-primary js-on-edit" data-url="{{ route('boss.yard.detail', $yard->id) }}">
@@ -118,6 +142,8 @@ $districtList= $currentBoss->Province->Districts;
 
     @include('boss.yard.elements.modal_edit')
     @include('boss.yard.elements.modal_confirm')
+    @include('boss.yard.elements.modal_time_setting')
+    @include('boss.yard.elements.modal_open_time')
 
 @endsection
 
@@ -127,7 +153,9 @@ $districtList= $currentBoss->Province->Districts;
         var getDistrictsUrl = "{{ route('boss.yard.getDistricts') }}";
         const BLOCK_URL= "{{url('/boss/yard/block')}}"
         const UNBLOCK_URL= "{{url('/boss/yard/unblock')}}"
-        {{--const DELETE_URL = "{{ route('boss.yard.destroy') }}";--}}
+        const TIME_SETTING_URL = "{{ url('/boss/yard/pricing') }}";
+        const GET_TIME_SETTING_URL= "{{url('/boss/yard/getPricing')}}";
+        const SET_OPEN_TIME_URL= "{{url('/boss/yard/setOpenTime')}}/{{$currentBoss->id}}"
     </script>
     <script src="{{ asset('js/boss/yard/index.js?t='.config('constants.app_version') )}}"></script>
 @endsection

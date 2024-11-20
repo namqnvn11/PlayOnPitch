@@ -248,6 +248,6 @@ class BossController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
-
     }
+
 }
