@@ -46,6 +46,11 @@ class User extends Authenticatable
         return $this->hasMany(User_voucher::class);
     }
 
+    public function Rating()
+    {
+        return $this->hasMany(Raiting::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -12,6 +12,13 @@
     </li>
 
     <li class="nav-item">
+        <a href="{{ route('boss.yard_schedule.index') }}" class="nav-link">
+            <i class="nav-icon far fa-circle text-warning"></i>
+            <p>Yard Schedule</p>
+        </a>
+    </li>
+
+    <li class="nav-item">
         <a href="{{ route('boss.logout') }}" class="nav-link">
             <i class="nav-icon far fa-circle text-info"></i>
             <p class="text-gray-300">Logout</p>

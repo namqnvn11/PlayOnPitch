@@ -2,6 +2,7 @@
 require base_path('routes/auth.php');
 
 use App\Http\Controllers\Boss\PriceTimeSettingController;
+use App\Http\Controllers\Boss\YardScheduleController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Models\District;
@@ -106,6 +107,9 @@ Route::middleware(['auth:boss'])->group(function () {
                 return view('boss.yard.test');
             });
         });
+        Route::prefix('yard_schedule')->name('yard_schedule.')->group(function () {
+            Route::get('/index', [YardScheduleController::class, 'index'])->name('index');
+        });
     });
 });
 
@@ -126,6 +130,9 @@ Route::middleware(['auth:web'])->group(function () {
 
         Route::prefix('yarddetail')->name('yarddetail.')->group(function () {
             Route::get('/index/{id}', [YardDetailController::class, 'index'])->name('index');
+            Route::post('/rating', [YardDetailController::class, 'rating'])->name('rating');
+            Route::post('/report', [YardDetailController::class, 'report'])->name('report');
+            Route::get('/load-more/{id}', [YardDetailController::class, 'loadMoreRatings'])->name('loadMore');
         });
 
         Route::prefix('profile')->name('profile.')->group(function () {
