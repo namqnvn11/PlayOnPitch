@@ -99,7 +99,6 @@ header {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 55px;
     height: 101px;
 }
 
@@ -109,6 +108,7 @@ header {
     border-radius: 10px;
     width: 184px;
     height: 45px;
+    margin-top: 3vh;
 }
 
 .registration button {
@@ -119,6 +119,7 @@ header {
     height: 45px;
     color: white;
     background-color: #3F9C4B;
+    margin-top: 3vh;
 }
 
 .registration button:hover {
@@ -347,6 +348,187 @@ footer {
 .general-info p {
     font-size: 14px;
     color: #333;
+}
+
+.review-section {
+    margin-top: 20px;
+    padding: 20px;
+    border-top: 1px solid #ccc;
+}
+
+.review-section h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+#review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#review-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: none;
+}
+
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 5px;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+.star:hover,
+.star:hover ~ .star {
+    color: gold; /* Màu khi hover */
+}
+
+.star {
+    color: #ccc; /* Mặc định màu xám */
+    transition: color 0.3s; /* Hiệu ứng khi đổi màu */
+}
+
+.star.selected {
+    color: gold; /* Màu vàng khi được chọn */
+}
+
+
+button#submit-rating {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button#submit-rating:hover {
+    background-color: #218838;
+}
+
+#review-form button {
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#review-form button:hover {
+    background-color: #218838;
+}
+
+#reviews {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.review-item {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.review-user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px; /* Khoảng cách giữa ảnh và tên */
+}
+
+.review-user {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+}
+
+.review-rating {
+    display: flex;
+    align-items: center;
+}
+.star1 {
+    color: #ccc; /* Mặc định màu xám */
+    transition: color 0.3s; /* Hiệu ứng khi đổi màu */
+}
+.star1.filled {
+    color: #f5c518; /* Màu vàng cho sao đã chọn */
+}
+
+.rating-point {
+    margin-left: 10px;
+    font-size: 16px;
+    color: #777;
+}
+
+.review-comment {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #555;
+}
+
+.review-comment p {
+    margin: 0;
+    line-height: 1.5;
+    font-style: italic;
+}
+
+.ellipsis-menu {
+    position: relative;
+    cursor: pointer;
+}
+
+.ellipsis {
+    font-size: 24px;
+    color: #777;
+    padding: 5px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    min-width: 150px;
+    z-index: 100;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+.dropdown-content a:hover {
+    background-color: #f5f5f5;
+}
+
+/* Hiển thị menu khi nhấn vào dấu 3 chấm */
+.ellipsis-menu.active .dropdown-content {
+    display: block;
 }
 
 

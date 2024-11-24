@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\BossController;
 
 use App\Http\Controllers\Boss\YardController;
+use App\Http\Controllers\Boss\YardScheduleController;
 
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\HomeController;
@@ -105,6 +106,10 @@ Route::middleware(['auth:boss'])->group(function () {
                 return view('boss.yard.test');
             });
         });
+
+        Route::prefix('yard_schedule')->name('yard_schedule.')->group(function () {
+            Route::get('/index', [YardScheduleController::class, 'index'])->name('index');
+        });
     });
 });
 
@@ -126,6 +131,9 @@ Route::middleware(['auth:web'])->group(function () {
         Route::prefix('yarddetail')->name('yarddetail.')->group(function () {
             Route::get('/index/{id}', [YardDetailController::class, 'index'])->name('index');
             //Route::post('/yard/{yardId}/book', [YardDetailController::class, 'bookYard'])->name('user.yard.book');
+            Route::post('/rating', [YardDetailController::class, 'rating'])->name('rating');
+            Route::post('/report', [YardDetailController::class, 'report'])->name('report');
+            Route::get('/load-more/{id}', [YardDetailController::class, 'loadMoreRatings'])->name('loadMore');
         });
 
         Route::prefix('profile')->name('profile.')->group(function () {

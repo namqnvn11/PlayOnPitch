@@ -112,8 +112,9 @@
             </div>
         @endforeach
         @endif
-    <button class="load-more">Xem thêm</button>
+
 </div>
+    <button class="load-more">Xem thêm</button>
 </div>
 
 
