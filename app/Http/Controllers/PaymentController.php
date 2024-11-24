@@ -64,7 +64,7 @@ class PaymentController extends Controller
             $payment->status = $request->resultCode == '0' ? 'Success' : 'Failed';
             $payment->save();
         }
-        return redirect()->route('user.invoice.index')->with('success', 'Payment ' . $payment->status);
+        return redirect()->route('user.payment.index')->with($request->resultCode == '0' ? 'Success' : 'error', 'Payment ' . $payment->status);
     }
 
     public function createStripePayment(Request $request){
@@ -125,7 +125,7 @@ class PaymentController extends Controller
             session()->forget('product_name');
             session()->forget('totalPrice');
 
-            return redirect()->route('user.invoice.index')->with('success', 'Payment successful!');
+            return redirect()->route('user.payment.index')->with('success', 'Payment successful!');
         } catch (ApiErrorException $e) {
             return redirect()->route('user.stripe.payment.cancel')->with('error', $e->getMessage());
         }
@@ -134,7 +134,7 @@ class PaymentController extends Controller
 
     public function cancel(Request $request)
     {
-        return redirect()->route('user.invoice.index')->with('error', 'Payment canceled!');
+        return redirect()->route('user.payment.index',)->with('error', 'Payment canceled!');
     }
 
 }
