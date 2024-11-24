@@ -27,9 +27,9 @@
                         {{-- card header--}}
                         <div class="flex justify-between p-3 border rounded-top align-middle">
                             <div class="card-tools">
-                                <x-add-new-button role="button" class="btn btn-success js-on-create">
+                                <green-button role="button" class="btn btn-success js-on-create">
                                     + Add new
-                                </x-add-new-button>
+                                </green-button>
                             </div>
                         </div>
                         {{--end card header--}}
