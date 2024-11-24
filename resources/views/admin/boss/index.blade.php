@@ -30,7 +30,7 @@
                             <div class="search-filter flex">
                                 <form action="{{url('admin/boss/search')}}" method="get" id="filterForm" class="flex">
                                     <x-text-input placeholder="Search name or email" name="searchText" value="{{ old('searchText', request('searchText')) }}"/>
-                                    <x-secondary-button type="submit" class="ml-1" data-toggle="tooltip" data-placement="bottom" title="trạng thái mới cũ">search</x-secondary-button>
+                                    <x-green-button type="submit" class="ml-1" data-toggle="tooltip" data-placement="bottom" title="trạng thái mới cũ">search</x-green-button>
 
                                     <div class="flex items-center ml-4">
                                         <label for="status" class="mt-1">Status</label>
@@ -53,9 +53,9 @@
                             </div>
 
                             <div class="add-new-user">
-                                <x-add-new-button role="button" class="js-on-create">
+                                <x-green-button role="button" class="js-on-create">
                                     + Add new
-                                </x-add-new-button>
+                                </x-green-button>
                             </div>
                         </div>
                         {{--end card header--}}
@@ -82,27 +82,44 @@
 
                                 @foreach($bosses as $boss)
                                     <tr onclick="viewDetail(event)" data-url="{{ route('admin.boss.detail', $boss->id) }}" class="cursor-default">
-                                        <td>{{ $boss->email }}</td>
+                                        <td>
+                                            @if($boss->block)
+                                                <i class="bi bi-ban mr-1"></i>
+                                            @endif
+                                            {{ $boss->email }}
+                                        </td>
                                         <td>{{ $boss->full_name }}</td>
                                         <td>{{ $boss->phone }}</td>
                                         <td>{{ $boss->company_name }}</td>
-{{--                                        <td>{{ $boss->company_address . ", " . $boss->District->name . ", " . $boss->District->Province->name }}</td>--}}
                                         <td>{{ $boss->District->name . ", " . $boss->District->Province->name }}</td>
                                         <td>{{ $boss->status == 1 ? 'Mới' : 'Cũ' }}</td>
 
-                                        <td class="text-center">
-                                            <x-detail-button role="button" class="js-on-reset-password w-[130px]" onclick="prepareResetPassword(event,{{$boss->id}})">
-                                                Reset Password
-                                            </x-detail-button>
-                                            @if($boss->block)
-                                                <x-unblock-button type="button" class="btn btn-secondary" onclick="showModalUnBlock(event,{{ $boss->id }})">
-                                                    UnBlock
-                                                </x-unblock-button>
-                                            @else
-                                                <x-block-button type="button" class="btn btn-danger" onclick="showModalBlock(event,{{ $boss->id }})">
-                                                    Block
-                                                </x-block-button>
-                                            @endif
+                                        <td class="text-center" onclick="event.stopPropagation()">
+                                            <div class="dropdown">
+                                                <button  type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu z-30" aria-labelledby="dropdownMenuButton1">
+                                                    <li>
+                                                        @if($boss->block)
+                                                            <div class="dropdown-item active:bg-green-900" onclick="showModalUnBlock(event,{{ $boss->id }})">
+                                                                UnBlock
+                                                            </div>
+                                                        @else
+                                                            <div class="dropdown-item active:bg-green-900" onclick="showModalBlock(event,{{ $boss->id }})">
+                                                                Block
+                                                            </div>
+                                                        @endif
+                                                    </li>
+                                                    <li>
+                                                        <div class="js-on-reset-password dropdown-item active:bg-green-900" onclick="prepareResetPassword(event,{{$boss->id}})">
+                                                            Reset Password
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+
                                         </td>
                                     </tr>
                                 @endforeach
@@ -144,6 +161,8 @@
         {{--const DELETE_URL = "{{ route('admin.boss.destroy') }}";--}}
     </script>
     <script src="{{ asset('js/admin/boss/index.js?t='.config('constants.app_version') )}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 @endsection
 
 

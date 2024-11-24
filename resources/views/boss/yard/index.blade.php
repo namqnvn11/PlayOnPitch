@@ -48,7 +48,7 @@ $timeCloseInModal = $currentBoss->time_close
                             <div class="search-filter flex">
                                 <form action="{{url('boss/yard/search')}}" method="get" id="filterForm" class="flex">
                                     <x-text-input placeholder="Search yard name" name="searchText" value="{{ old('searchText', request('searchText')) }}"/>
-                                    <x-secondary-button type="submit" class="ml-1">search</x-secondary-button>
+                                    <x-green-button type="submit" class="ml-1">search</x-green-button>
                                     <div class="flex items-center ml-4">
                                         <x-select name="block" id="" onchange="filter()">
                                             <option value="active" {{ old('block', request('block')) == 'active' ? 'selected' : '' }}>Active</option>
@@ -70,9 +70,9 @@ $timeCloseInModal = $currentBoss->time_close
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                                     </svg>
                                 </button>
-                                <x-add-new-button role="button" class="js-on-create ml-3">
+                                <x-green-button role="button" class="js-on-create ml-3">
                                     + Add new
-                                </x-add-new-button>
+                                </x-green-button>
                             </div>
                         </div>
 
@@ -94,29 +94,35 @@ $timeCloseInModal = $currentBoss->time_close
                                 @endif
 
                                 @foreach($yards as $yard)
-                                    <tr>
+                                    <tr onclick="viewDetail(event)" data-url="{{ route('boss.yard.detail', $yard->id) }}" class="cursor-default">
                                         <td>{{ $yard->Boss->company_name }}</td>
                                         <td>{{ $yard->yard_name }}</td>
                                         <td>{{ $yard->yard_type }}</td>
                                         <td>{{ $yard->District->name }}</td>
-                                        <td class="text-center">
-
-                                            <x-secondary-button class="js-on-setting" yard-id="{{$yard->id}}" >
-                                                Pricing
-                                            </x-secondary-button>
-                                            <x-detail-button role="button" class="btn btn-primary js-on-edit" data-url="{{ route('boss.yard.detail', $yard->id) }}">
-                                                Detail
-                                            </x-detail-button>
-
-                                            @if($yard->block)
-                                                <x-unblock-button type="button" class="btn btn-danger" onclick="showModalUnBlock({{ $yard->id }})">
-                                                    Unblock
-                                                </x-unblock-button>
-                                            @else
-                                                <x-block-button type="button" class="btn btn-danger" onclick="showModalBlock({{ $yard->id }})">
-                                                    Block
-                                                </x-block-button>
-                                            @endif
+                                        <td class="text-center" onclick="event.stopPropagation()">
+                                            <div class="dropdown">
+                                                <button  type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                    <li>
+                                                        @if($yard->block)
+                                                            <div type="button" class="dropdown-item active:bg-green-900" onclick="showModalUnBlock({{ $yard->id }})">
+                                                                Unblock
+                                                            </div>
+                                                        @else
+                                                            <div type="button" class="dropdown-item active:bg-green-900" onclick="showModalBlock({{ $yard->id }})">
+                                                                Block
+                                                            </div>
+                                                        @endif
+                                                    </li>
+                                                    <li>
+                                                        <button class="dropdown-item active:bg-green-900" yard-id="{{$yard->id}}" onclick="showModalPricing({{$yard->id}})" >
+                                                            Pricing
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
 
                                         </td>
                                     </tr>
@@ -158,6 +164,9 @@ $timeCloseInModal = $currentBoss->time_close
         const SET_OPEN_TIME_URL= "{{url('/boss/yard/setOpenTime')}}/{{$currentBoss->id}}"
     </script>
     <script src="{{ asset('js/boss/yard/index.js?t='.config('constants.app_version') )}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
 @endsection
 
 

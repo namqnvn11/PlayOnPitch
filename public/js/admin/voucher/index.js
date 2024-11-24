@@ -22,42 +22,7 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on('click', '.js-on-edit', function () {
-        var _modal = $('#modal-edit');
-        var url = $(this).attr('data-url');
-        $('.error-message').remove();
-        $('#form-data')[0].reset();
-        _modal.find('h4').text('Edit');
 
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: "json",
-            success: function (response) {
-                if (response.success) {
-                    var data = response.data;
-                    $('input[name="id"]').val(data.id);
-                    $('select[name="name"]').val(data.name);
-                    $('input[name="price"]').val(data.price);
-                    $('input[name="release_date"]').val(data.release_date);
-                    $('input[name="end_date"]').val(data.end_date);
-                    $('input[name="conditions_apply"]').val(data.conditions_apply);
-                    $('#modal-edit').modal('show');
-                } else {
-                    Notification.showError(response.message);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error("AJAX error:", error); // Log lỗi vào console để xem chi tiết
-                Notification.showError("An error occurred while fetching data: " + error);
-            },
-            cache: false,
-            contentType: false,
-            processData: false
-        });
-
-        _modal.modal('show');
-    });
 
     saveData();
     deleteData();
@@ -65,6 +30,42 @@ $(document).ready(function () {
 
 });
 
+function viewDetail(event){
+    var _modal = $('#modal-edit');
+    var url = event.currentTarget.getAttribute('data-url');
+    $('.error-message').remove();
+    $('#form-data')[0].reset();
+    _modal.find('h4').text('Edit');
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: "json",
+        success: function (response) {
+            if (response.success) {
+                var data = response.data;
+                $('input[name="id"]').val(data.id);
+                $('select[name="name"]').val(data.name);
+                $('input[name="price"]').val(data.price);
+                $('input[name="release_date"]').val(data.release_date);
+                $('input[name="end_date"]').val(data.end_date);
+                $('input[name="conditions_apply"]').val(data.conditions_apply);
+                $('#modal-edit').modal('show');
+            } else {
+                Notification.showError(response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("AJAX error:", error); // Log lỗi vào console để xem chi tiết
+            Notification.showError("An error occurred while fetching data: " + error);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    _modal.modal('show');
+};
 function deleteData() {
 
     $("form#form-delete").submit(function(e) {

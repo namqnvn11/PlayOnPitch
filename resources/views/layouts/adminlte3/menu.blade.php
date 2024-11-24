@@ -1,5 +1,5 @@
 
-<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+<ul class="nav nav-pills nav-sidebar flex-column " data-widget="treeview" role="menu" data-accordion="false">
 
     {{--    <li class="nav-header">MULTI LEVEL EXAMPLE</li>--}}
 
@@ -7,31 +7,28 @@
     <li class="nav-item">
         <a href="{{ route('admin.boss.index') }}" class="nav-link">
             <i class="nav-icon far fa-circle text-warning"></i>
-            <p>Boss</p>
+            <p class="text-gray-300">Boss</p>
         </a>
     </li>
 
     <li class="nav-item">
         <a href="{{ route('admin.user.index') }}" class="nav-link">
             <i class="nav-icon far fa-circle text-warning"></i>
-            <p>User</p>
+            <p class="text-gray-300">User</p>
         </a>
     </li>
 
     <li class="nav-item">
         <a href="{{ route('admin.voucher.index') }}" class="nav-link">
             <i class="nav-icon far fa-circle text-warning"></i>
-            <p>Voucher</p>
+            <p class="text-gray-300">Voucher</p>
         </a>
     </li>
-
-
-
 
     <li class="nav-item">
         <a href="{{ route('admin.logout') }}" class="nav-link">
             <i class="nav-icon far fa-circle text-info"></i>
-            <p>Logout</p>
+            <p class="text-gray-300">Logout</p>
         </a>
     </li>
 </ul>

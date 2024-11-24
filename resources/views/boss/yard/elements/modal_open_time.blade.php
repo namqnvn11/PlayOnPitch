@@ -4,7 +4,7 @@
             <div class="modal-header">
                 <h4 class="modal-title" id="modalTitle">Setting Your Yard's Opening Time</h4>
 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$(`#${'modal-open-time'}`).modal('hide')">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -26,10 +26,10 @@
                     </div>
 
                     <label for="" id="pricing-label" class="m-2 mt-4">Open All Day</label>
-                    <input class="ml-2" type="checkbox" name="is_open_all_day" onchange="openAllDay(event)" {{$currentBoss->is_open_all_day?'checked':''}}/>
+                    <input class="ml-2 text-green-700 border-green-900 rounded focus:ring-2 focus:ring-green-600 " type="checkbox" name="is_open_all_day" onchange="openAllDay(event)" {{$currentBoss->is_open_all_day?'checked':''}}/>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default mr-1" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default mr-1" data-dismiss="modal" onclick="$(`#${'modal-open-time'}`).modal('hide')">Close</button>
                     <button type="submit" class="btn btn-danger">Confirm</button>
                 </div>
             </form>

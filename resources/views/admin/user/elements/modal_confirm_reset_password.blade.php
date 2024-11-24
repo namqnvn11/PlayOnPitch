@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="modalTitle">Reset Password</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$(`#${'modal-confirm-reset-password'}`).modal('hide')">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default mr-1" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default mr-1" data-dismiss="modal" onclick="$(`#${'modal-confirm-reset-password'}`).modal('hide')">Close</button>
                     <button type="submit" class="btn btn-danger" onclick="resetPassword(event)">Confirm</button>
                 </div>
             </form>

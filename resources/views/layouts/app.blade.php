@@ -28,18 +28,19 @@
 
     <link rel="stylesheet" href="{{  asset('assets/libraries/toastr/toastr.min.css' ) }}">
     <link rel="stylesheet" href="{{  asset('css/custom.css?v='.config('constant.app_version') ) }}">
+    <link rel="stylesheet" href="{{  asset('css/admin/admin.css?v='.config('constant.app_version') ) }}">
 
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
     <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <aside class="main-sidebar elevation-4 bg-green-900">
         <!-- Brand Logo -->
         <a href="/" class="brand-link">
             <img src="{{  asset('assets/templates/adminlte3/dist/img/AdminLTELogo.png' ) }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-            <span class="brand-text font-weight-light">PlayOnPitch</span>
+            <span class="brand-text font-weight-bold text-gray-300">PlayOnPitch</span>
         </a>
 
         <!-- Sidebar -->
