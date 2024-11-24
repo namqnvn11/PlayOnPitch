@@ -1,0 +1,311 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+}
+
+/* Header */
+header {
+    width: 100%;
+    background-color: #4CB551;
+    color: white;
+}
+
+/* Đường kẻ ngang trong Header */
+.divider {
+    border: 0;
+    border-top: 1px solid #026464;
+    margin: 0 5%;
+}
+
+.dividers {
+    border: 0;
+    border-top: 1px solid #4CB551;
+    margin: 0 5%;
+}
+
+.nav-menu {
+    width: 72%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.nav-menu ul {
+    display: flex;
+    gap: 15px;
+    list-style-type: none;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+    color: #ddd;
+}
+
+/* Authentication Button */
+.auth-button button {
+    background-color: #309C3E;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.auth-button button:hover {
+    background-color: #246A2C;
+}
+
+.top-section {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 50px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding-left: 5%;
+    width: 72%;
+    margin: 0 auto;
+}
+
+/* Registration Section */
+.registration {
+    width: 72%;
+    margin: 30px auto;
+    margin-bottom: 0px;
+    padding: 30px;
+    text-align: center;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 30px;
+}
+
+.registration .form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 55px;
+    height: 101px;
+}
+
+.registration input {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    width: 184px;
+    height: 45px;
+}
+
+.registration button {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    width: 133px;
+    height: 45px;
+    color: white;
+    background-color: #3F9C4B;
+}
+
+.registration button:hover {
+    background-color: #246A2C;
+    color: white;
+}
+
+/* Footer */
+footer {
+    background-color: #2e7d32;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 0;
+
+}
+
+.footer-section h3 {
+    margin-bottom: 10px;
+    font-size: 24px;
+
+}
+
+.footer-section p {
+    margin-bottom: 10px;
+    font-size: 16px;
+    padding-top: 35px;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    padding-top: 35px;
+}
+
+.footer-section ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-section button {
+    background-color: #309C3E;
+    color: white;
+    border: none;
+    margin-top: 20px;
+    padding: 20px;
+    cursor: pointer;
+    width: 536px;
+    height: 103px;
+    font-size: 16px;
+}
+
+.footer-section button:hover {
+    background-color: #246A2C;
+    color: white;
+}
+
+.banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.banner img {
+    border-radius: 20px;
+    width: 72%;
+    height: 140px;
+    object-fit: cover;
+}
+.payment-container {
+    max-width: 72%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-left: 15%;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 16px;
+    color: black;
+    margin: 0 10px;
+    padding-right: 100px;
+}
+.step span {
+    padding-right: 100px;
+}
+
+.step i {
+    font-size: 24px;
+    margin-bottom: 5px;
+    color: black;
+    padding-right: 100px;
+}
+
+.step.active i {
+    color: red;
+    padding-right: 100px;
+}
+
+.step.active span {
+    color: red;
+    padding-right: 100px;
+}
+
+.payment {
+    max-width: 72%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.payment h2 {
+    text-align: left;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.payment-info,
+.customer-info,
+.total-info {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+
+.payment-info p,
+.customer-info p,
+.total-info p {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 25px 0;
+}
+
+.payment-info p strong,
+.customer-info p strong,
+.total-info p strong {
+    width: 35%; /* Độ rộng cố định cho tiêu đề */
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.payment-info p span,
+.customer-info p span,
+.total-info p span {
+    flex: 1; /* Cho phép nội dung tự động co giãn */
+}
+
+.total-info p {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.total-info p span {
+    font-size: 16px;
+    font-weight: normal;
+    color: black;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
+}
+
+
+
+
+
+
+

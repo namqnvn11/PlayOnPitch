@@ -16,8 +16,6 @@ use function Pest\Laravel\delete;
 
 class PriceTimeSettingController extends Controller
 {
-
-
     //id là id của sân
     function getPricing($id)
     {
@@ -364,14 +362,8 @@ class PriceTimeSettingController extends Controller
 
         //tạo lịch cho từng sân
         foreach ($yards as $yard) {
-
             //kiểm tra sân và xác định số ngày cần tạo lịch
-            //thời gian xa nhất của lịch đã tạo
-//            $lastedTimeCreateSchedule = Carbon::parse($yard->YardSchedules->max('date'));
-//            $maxDate=Carbon::now()->addDays(7);
-//
-//            //sẽ tạo lịch cách 7 ngày so với hiện tại
-//            $numberOfDateStart=7-round($lastedTimeCreateSchedule->diffInDays($maxDate));
+
             $maxDate = Carbon::now()->addDays(7);
             $lastedDate = $yard->YardSchedules->max('date');
 
@@ -399,7 +391,7 @@ class PriceTimeSettingController extends Controller
                     ->where('day_of_week',$currentDayOfWeekNumber<6?'MonFri':'Weekend')
                     ->get();
                 while ($currentTime->lt($closeTime)) {
-                    $price= $this->getPriceInTime($priceTimeSettings,$currentTime)??$yard->defaultPrice;
+                    $price= $this->getPriceInTime($priceTimeSettings,$currentTime)??$yard->defaultPrice/2;
                     YardSchedule::create([
                         'yard_id' => $yard->id,
                         'date' => $currentDate->format('Y-m-d'),
@@ -426,15 +418,15 @@ class PriceTimeSettingController extends Controller
             if ($startTime->gt($endTime)) {
                 //start to 24:00
                 if ($time->gte($startTime) && $time->lt(Carbon::createFromFormat('H:i','24:00' ))) {
-                    return $schedule['price_per_hour'];
+                    return $schedule['price_per_hour']/2;
                 }
                 //00:00 đến end
                 if ($time->gte(Carbon::createFromFormat('H:i','00:00' )) && $time->lt($endTime)) {
-                    return $schedule['price_per_hour'];
+                    return $schedule['price_per_hour']/2;
                 }
             }
             if ($time->gte($startTime) && $time->lt($endTime)) {
-                return $schedule['price_per_hour'];
+                return $schedule['price_per_hour']/2;
             }
         }
         return null;

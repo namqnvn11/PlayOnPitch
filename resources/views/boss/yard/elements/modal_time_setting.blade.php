@@ -4,7 +4,7 @@
             <div class="modal-header">
                 <h4 class="modal-title" id="modalTitle">Setting Your Yard's Price</h4>
 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$(`#${'modal-pricing'}`).modal('hide')">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -24,9 +24,8 @@
                         <div>
                             <div class="mb-1">Default</div>
                             <label for="" id="pricing-label" class="m-2">Price</label>
-                            <x-text-input class="w-16" type="" name="defaultPrice"/>&nbsp;VND
+                            <input class="w-[65px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" name="defaultPrice"/>&nbsp;VND
                         </div>
-
 
                         @if($currentBoss->is_open_all_day)
                             <div class="text-[16px] absolute right-0">OPENING : ALL DAY</div>
@@ -51,7 +50,7 @@
                             <label for="" id="pricing-label" class="mx-2">To</label>
                             <x-time-input name="mon-fri-to-time-1" />
                             <label for="" id="pricing-label" class="mx-2">Price</label>
-                            <x-text-input class="w-16" type="" placeholder="000000" name="mon-fri-price-1"/>&nbsp;VND
+                            <input class="w-[65px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" placeholder="000000" name="mon-fri-price-1"/>&nbsp;VND
                             <x-circle-minus-button class="absolute right-2" onclick="monToFriMinus(this)" type="button"></x-circle-minus-button>
                         </div>
                     </div>
@@ -70,7 +69,7 @@
                             <label for="" id="pricing-label" class="mx-2">To</label>
                             <x-time-input name="weekend-to-time-1"/>
                             <label for="" id="pricing-label" class="mx-2">Price</label>
-                            <x-text-input class="w-16" type="" placeholder="000000" name="weekend-price-1"/>&nbsp;VND
+                            <input class="w-[65px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" placeholder="000000" name="weekend-price-1"/>&nbsp;VND
                             <x-circle-minus-button class="absolute right-2" onclick="weekendMinus(this)" type="button"></x-circle-minus-button>
                         </div>
                     </div>
@@ -79,7 +78,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default mr-1" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default mr-1" data-dismiss="modal" onclick="$(`#${'modal-pricing'}`).modal('hide')">Close</button>
                     <button type="submit" class="btn btn-danger" onclick="">Confirm</button>
                 </div>
             </form>
@@ -104,7 +103,7 @@
             <label for="" id="pricing-label" class="mx-2">To</label>
             <x-time-input name="mon-fri-to-time-" />
             <label for="" id="pricing-label" class="mx-2">Price</label>
-            <x-text-input class="w-16" type="" placeholder="000000" name="mon-fri-price-"/>&nbsp;VND
+            <x-text-input class="w-[65px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" placeholder="000000" name="mon-fri-price-"/>&nbsp;VND
             <x-circle-minus-button class="absolute right-2" onclick="monToFriMinus(this)" type="button"></x-circle-minus-button>
         </div>
     </template>
@@ -115,7 +114,7 @@
             <label for="" id="pricing-label" class="mx-2">To</label>
             <x-time-input name="weekend-to-time-"/>
             <label for="" id="pricing-label" class="mx-2">Price</label>
-            <x-text-input class="w-16" type="" placeholder="000000" name="weekend-price-"/>&nbsp;VND
+            <x-text-input class="w-[65px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" placeholder="000000" name="weekend-price-"/>&nbsp;VND
             <x-circle-minus-button class="absolute right-2" onclick="weekendMinus(this)" type="button"></x-circle-minus-button>
         </div>
     </template>

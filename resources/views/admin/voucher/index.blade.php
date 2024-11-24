@@ -32,16 +32,16 @@
                                     <div class="">
                                         <div>
                                             <x-text-input placeholder="Search voucher name" name="searchText" value="{{ old('searchText', request('searchText')) }}"/>
-                                            <x-secondary-button type="submit" class="ml-1">search</x-secondary-button>
+                                            <x-green-button type="submit" class="ml-1">search</x-green-button>
                                         </div>
 
-                                        <div class="mt-2">
+                                        <div class="mt-2 flex ">
                                             <x-select name="block" id="" onchange="filter()" >
                                                 <option value="active" {{ old('block', request('block')) == 'active' ? 'selected' : '' }}>Active</option>
                                                 <option value="blocked" {{ old('block', request('block')) == 'blocked' ? 'selected' : '' }}>Blocked</option>
                                                 <option value="all" {{ old('block', request('block')) == 'all' ? 'selected' : '' }}>All</option>
                                             </x-select>
-                                            <x-secondary-button type="submit" class="ml-1"><a href="{{url('admin/voucher/index')}}">clear search</a></x-secondary-button>
+                                            <x-green-button type="submit" class="ml-1 w-[150px]"><a href="{{url('admin/voucher/index')}}" class="hover:text-white">clear search</a></x-green-button>
                                         </div>
                                     </div>
                                     <div class="">
@@ -76,9 +76,9 @@
                             </div>
 
                             <div class="card-tools">
-                                <x-add-new-button role="button" class="btn btn-success js-on-create">
+                                <x-green-button role="button" class="btn btn-success js-on-create">
                                     + Add new
-                                </x-add-new-button>
+                                </x-green-button>
                             </div>
                         </div>
                         {{--end card header--}}
@@ -102,25 +102,36 @@
                                 @endif
 
                                 @foreach($vouchers as $voucher)
-                                    <tr>
-                                        <td>{{ $voucher->name }}</td>
+                                    <tr onclick="viewDetail(event)" data-url="{{ route('admin.voucher.detail', $voucher->id) }}" class="cursor-default">
+                                        <td>
+                                            @if($voucher->block)
+                                                <i class="bi bi-ban mr-1"></i>
+                                            @endif
+                                            {{ $voucher->name }}
+                                        </td>
                                         <td>{{ $voucher->price }}</td>
                                         <td>{{ $voucher->release_date }}</td>
                                         <td>{{ $voucher->end_date }}</td>
                                         <td>{{ $voucher->conditions_apply }}</td>
-                                        <td class="text-center">
-                                            <x-detail-button role="button" class="js-on-edit" data-url="{{ route('admin.voucher.detail', $voucher->id) }}">
-                                                Detail
-                                            </x-detail-button>
-                                            @if($voucher->block)
-                                                <x-unblock-button type="button" class="" onclick="showModalUnBlock({{ $voucher->id }})">
-                                                    UnBlock
-                                                </x-unblock-button>
-                                            @else
-                                                <x-block-button type="button" class="" onclick="showModalBlock({{ $voucher->id }})">
-                                                    Block
-                                                </x-block-button>
-                                            @endif
+                                        <td class="text-center" onclick="event.stopPropagation()">
+                                            <div class="dropdown">
+                                                <button  type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                    <li>
+                                                        @if($voucher->block)
+                                                            <div type="button" class="dropdown-item active:bg-green-900" onclick="showModalUnBlock({{ $voucher->id }})">
+                                                                UnBlock
+                                                            </div>
+                                                        @else
+                                                            <div type="button" class="dropdown-item active:bg-green-900" onclick="showModalBlock({{ $voucher->id }})">
+                                                                Block
+                                                            </div>
+                                                        @endif
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -157,6 +168,9 @@
         {{--const DELETE_URL = "{{ route('admin.voucher.destroy') }}";--}}
     </script>
     <script src="{{ asset('js/admin/voucher/index.js?t='.config('constants.app_version') )}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
 @endsection
 
 

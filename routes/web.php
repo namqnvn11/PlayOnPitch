@@ -2,6 +2,7 @@
 require base_path('routes/auth.php');
 
 use App\Http\Controllers\Boss\PriceTimeSettingController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Models\District;
 use Illuminate\Support\Facades\Route;
@@ -178,5 +179,17 @@ Route::middleware(['auth:web'])->group(function () {
         Route::prefix('my_voucher')->name('my_voucher.')->group(function () {
             Route::get('/index', [MyVoucherController::class, 'index'])->name('index');
         });
+
+        Route::prefix('payment')->name('payment.')->group(function () {
+            Route::get('/index', [PaymentController::class, 'index'])->name('index');
+        });
+
+        // MOMO
+        Route::post('momo/payment', [PaymentController::class, 'createMoMoPayment'])->name('momo.payment.create');
+        Route::get('momo/payment/callback', [PaymentController::class, 'handleMoMoPaymentCallback'])->name('momo.payment.callback');
+        //STRIPE
+        Route::post('stripe/payment', [PaymentController::class, 'createStripePayment'])->name('stripe.payment.create');
+        Route::get('stripe/payment/callback', [PaymentController::class, 'handleStripePaymentCallback'])->name('stripe.payment.success');
+        Route::get('stripe/payment/cancel',[PaymentController::class,'cancel'])->name('stripe.payment.cancel');
     });
 });

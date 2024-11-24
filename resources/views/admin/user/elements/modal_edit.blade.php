@@ -4,11 +4,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">{{ 'Add new' }}</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$(`#${'modal-edit'}`).modal('hide')">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
 
             <form method="post" id="form-data" enctype="multipart/form-data">
                 @csrf
@@ -60,8 +59,8 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default mr-1" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="submitAddNewUser">Save</button>
+                    <button type="button" class="btn btn-default mr-1" data-dismiss="modal" onclick="$(`#${'modal-edit'}`).modal('hide')" >Close</button>
+                    <x-green-button type="submit" class="btn btn-primary" id="submitAddNewUser">Save</x-green-button>
                 </div>
             </form>
         </div>

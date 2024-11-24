@@ -17,95 +17,6 @@ $(document).ready(function () {
         _modal.modal('show');
     });
 
-    $(document).on('click', '.js-on-setting', function () {
-        var _modal = $('#modal-pricing');
-        var _form =$('#form-pricing');
-        _form.find('input').not('[name="_token"]').val('');
-        var id = $(this).attr('yard-id');
-
-        _form.find('input[name="yardId"]').val(id);
-
-        //reset form
-        console.log(_form.children());
-
-        //load old data
-        var url= GET_TIME_SETTING_URL+'/'+id;
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: "json",
-            success: function (response) {
-                if (response.isTimeSet){
-                    let monFri= response.MonFri;
-                    let weekend= response.Weekend;//=> array of date time setting
-
-                    if (monFri.length!==0){
-                        loadOldTimeSetting(monFri, 'mon-fri-time-container',"mon-fri-template");
-                    }
-                    if (weekend.length!==0){
-                        loadOldTimeSetting(weekend,'weekend-time-container',"weekend-template");
-                    }
-                }else {
-                    makeFormEmpty()
-                }
-                _form.find('input[name="defaultPrice"]').val(response.defaultPrice);
-            },
-
-            cache: false,
-            contentType: false,
-            processData: false
-        });
-
-        _modal.modal('show');
-    });
-
-    function makeFormEmpty(){
-        emptydata=[
-            {
-                id:'',
-                start_time:'',
-                end_time:'',
-                price_per_hour:'',
-            }
-        ]
-        loadOldTimeSetting(emptydata,"mon-fri-time-container","mon-fri-template");
-        loadOldTimeSetting(emptydata,"weekend-time-container","weekend-template");
-    }
-    function loadOldTimeSetting(timeSlots,containerId,templateId){
-        const container = document.getElementById(containerId);
-        container.innerHTML='';
-        const template = document.getElementById(templateId);
-        timeSlots.forEach((timesLot,index)=>{
-            const newGroup = template.content.cloneNode(true);
-
-            // tạo name cho các input
-            ['1', '3', '5'].forEach(i => {
-                newGroup.children[0].children[i].name += index;
-            });
-
-            //thêm trường id để lưu giá trị của timeslot id
-            timesLotIdElement=document.createElement('input');
-            timesLotIdElement.setAttribute('type','hidden');
-            idInputName=(containerId==="weekend-time-container")? 'weekend-time-slot-id-'+index:'mon-fri-time-slot-id-'+index
-            timesLotIdElement.setAttribute('name',idInputName)
-            timesLotIdElement.setAttribute('value',timesLot.id);
-            newGroup.children[0].appendChild(timesLotIdElement);
-
-            //gắn dữ liệu cũ vào các input
-            //truường From
-            newGroup.children[0].children[1].value = removeSeconds(timesLot.start_time);
-            //trường To
-            newGroup.children[0].children[3].value = removeSeconds(timesLot.end_time);
-            //Price
-            newGroup.children[0].children[5].value = timesLot.price_per_hour;
-
-            container.appendChild(newGroup);
-        })
-    }
-    function removeSeconds(timeString) {
-        return timeString.replace(/:00$/, '');
-    }
-
     $(document).on('keydown', function(event) {
         if (event.key === "Escape" || event.keyCode === 27) {
             $('#modal-confirm').modal('hide');
@@ -114,83 +25,162 @@ $(document).ready(function () {
         }
     });
 
-    $(document).ready(function () {
-        $('#province_id').on('change', function () {
-            var provinceId = $(this).val();
-            fetchDistricts(provinceId);
-        });
-    });
-
-    function fetchDistricts(provinceId) {
-        return new Promise((resolve,reject)=>{
-            if (provinceId) {
-                $.ajax({
-                    url: getDistrictsUrl,
-                    type: 'GET',
-                    data: { province_id: provinceId },
-                    success: function (data) {
-                        $('#district_id').empty();
-                        $('#district_id').append('<option value="">Select District</option>');
-                        $.each(data, function (key, district) {
-                            $('#district_id').append('<option value="' + district.id + '">' + district.name + '</option>');
-                        });
-                        resolve();
-                    },
-                    error: function () {
-                        Notification.showError('Error when retrieving district data.');
-                        reject();
-                    }
-                });
-            } else {
-                $('#district_id').empty();
-                $('#district_id').append('<option value="">Select District</option>');
-            }
-        })
-    }
-
-    $(document).on('click', '.js-on-edit', function () {
-        var _modal = $('#modal-edit');
-        var url = $(this).attr('data-url');
-        $('.error-message').remove();
-        $('#form-data')[0].reset();
-        _modal.find('h4').text('Edit');
-
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: "json",
-            success: function (response) {
-                if (response.success) {
-                    var data = response.data;
-                    $('input[name="id"]').val(data.id);
-                    $('select[name="yard_name"]').val(data.yard_name);
-                    $('select[name="yard_type"]').val(data.yard_type);
-                    $('textarea[name="description"]').val(data.description);
-                    $('select[name="province"]').val(response.province.id);
-                    fetchDistricts($('#province_id').val())
-                        .then(()=>{
-                            $('select[name="district"]').val(response.district.id);
-                            $('#modal-edit').modal('show');
-                        }).catch(()=>{
-                        Notification.showError('Error when retrieving district data.');
-                    })
-                } else {
-                    Notification.showError(response.message);
-                }
-            },
-
-            cache: false,
-            contentType: false,
-            processData: false
-        });
-
-        _modal.modal('show');
-    });
-
     saveData();
     pricing();
     setOpenTime()
 });
+$(document).ready(function () {
+    $('#province_id').on('change', function () {
+        var provinceId = $(this).val();
+        fetchDistricts(provinceId);
+    });
+});
+function fetchDistricts(provinceId) {
+    return new Promise((resolve,reject)=>{
+        if (provinceId) {
+            $.ajax({
+                url: getDistrictsUrl,
+                type: 'GET',
+                data: { province_id: provinceId },
+                success: function (data) {
+                    $('#district_id').empty();
+                    $('#district_id').append('<option value="">Select District</option>');
+                    $.each(data, function (key, district) {
+                        $('#district_id').append('<option value="' + district.id + '">' + district.name + '</option>');
+                    });
+                    resolve();
+                },
+                error: function () {
+                    Notification.showError('Error when retrieving district data.');
+                    reject();
+                }
+            });
+        } else {
+            $('#district_id').empty();
+            $('#district_id').append('<option value="">Select District</option>');
+        }
+    })
+}
+
+function showModalPricing(id) {
+    var _modal = $('#modal-pricing');
+    var _form =$('#form-pricing');
+    _form.find('input').not('[name="_token"]').val('');
+    _form.find('input[name="yardId"]').val(id);
+
+    //load old data
+    var url= GET_TIME_SETTING_URL+'/'+id;
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: "json",
+        success: function (response) {
+            if (response.isTimeSet){
+                let monFri= response.MonFri;
+                let weekend= response.Weekend;//=> array of date time setting
+
+                if (monFri.length!==0){
+                    loadOldTimeSetting(monFri, 'mon-fri-time-container',"mon-fri-template");
+                }
+                if (weekend.length!==0){
+                    loadOldTimeSetting(weekend,'weekend-time-container',"weekend-template");
+                }
+            }else {
+                makeFormEmpty()
+            }
+            _form.find('input[name="defaultPrice"]').val(response.defaultPrice);
+        },
+
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    _modal.modal('show');
+}
+function makeFormEmpty(){
+    emptydata=[
+        {
+            id:'',
+            start_time:'',
+            end_time:'',
+            price_per_hour:'',
+        }
+    ]
+    loadOldTimeSetting(emptydata,"mon-fri-time-container","mon-fri-template");
+    loadOldTimeSetting(emptydata,"weekend-time-container","weekend-template");
+}
+function loadOldTimeSetting(timeSlots,containerId,templateId){
+    const container = document.getElementById(containerId);
+    container.innerHTML='';
+    const template = document.getElementById(templateId);
+    timeSlots.forEach((timesLot,index)=>{
+        const newGroup = template.content.cloneNode(true);
+
+        // tạo name cho các input
+        ['1', '3', '5'].forEach(i => {
+            newGroup.children[0].children[i].name += index;
+        });
+
+        //thêm trường id để lưu giá trị của timeslot id
+        timesLotIdElement=document.createElement('input');
+        timesLotIdElement.setAttribute('type','hidden');
+        idInputName=(containerId==="weekend-time-container")? 'weekend-time-slot-id-'+index:'mon-fri-time-slot-id-'+index
+        timesLotIdElement.setAttribute('name',idInputName)
+        timesLotIdElement.setAttribute('value',timesLot.id);
+        newGroup.children[0].appendChild(timesLotIdElement);
+
+        //gắn dữ liệu cũ vào các input
+        //trường From
+        newGroup.children[0].children[1].value = removeSeconds(timesLot.start_time);
+        //trường To
+        newGroup.children[0].children[3].value = removeSeconds(timesLot.end_time);
+        //Price
+        newGroup.children[0].children[5].value = timesLot.price_per_hour;
+
+        container.appendChild(newGroup);
+    })
+}
+function removeSeconds(timeString) {
+    return timeString.replace(/:00$/, '');
+}
+ function viewDetail(event) {
+    var _modal = $('#modal-edit');
+    var url = event.currentTarget.getAttribute('data-url');
+    $('.error-message').remove();
+    $('#form-data')[0].reset();
+    _modal.find('h4').text('Edit');
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: "json",
+        success: function (response) {
+            if (response.success) {
+                var data = response.data;
+                $('input[name="id"]').val(data.id);
+                $('select[name="yard_name"]').val(data.yard_name);
+                $('select[name="yard_type"]').val(data.yard_type);
+                $('textarea[name="description"]').val(data.description);
+                $('select[name="province"]').val(response.province.id);
+                fetchDistricts($('#province_id').val())
+                    .then(()=>{
+                        $('select[name="district"]').val(response.district.id);
+                        $('#modal-edit').modal('show');
+                    }).catch(()=>{
+                    Notification.showError('Error when retrieving district data.');
+                })
+            } else {
+                Notification.showError(response.message);
+            }
+        },
+
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    _modal.modal('show');
+}
 
 function setOpenTime(){
     $('form#form-open-time').submit(function (e){
@@ -201,8 +191,7 @@ function setOpenTime(){
             type: 'POST',
             dataType:"json",
             data: formData,
-            success: function (response,status) {
-                console.log(response)
+            success: function (response) {
                 if (response.success) {
                     Notification.showSuccess(response.message);
                     // Reset form
@@ -251,8 +240,7 @@ function pricing() {
             type: 'POST',
             dataType:"json",
             data: formData,
-            success: function (response,status) {
-                console.log(response)
+            success: function (response) {
                 if (response.success) {
                     Notification.showSuccess(response.message);
                     // Reset form
@@ -291,7 +279,6 @@ function pricing() {
 function saveData() {
     $("form#form-data").submit(function(e) {
         e.preventDefault();
-        console.log("Submit save");
         var formData = new FormData(this);
 
         $.ajax({
@@ -478,6 +465,5 @@ function openAllDay(event) {
         open.value=open.getAttribute('time');
         close.value=close.getAttribute('time');
     }
-
 }
 

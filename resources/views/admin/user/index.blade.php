@@ -30,7 +30,7 @@
                             <div class="search-filter flex">
                                 <form action="{{url('admin/user/search')}}" method="get" id="filterForm" class="flex">
                                     <x-text-input placeholder="Search name or email" name="searchText" value="{{ old('searchText', request('searchText')) }}"/>
-                                    <x-secondary-button type="submit" class="ml-1">search</x-secondary-button>
+                                    <x-green-button type="submit" class="ml-1">search</x-green-button>
                                     <div class="flex items-center ml-4">
                                         <x-select name="block" id="" onchange="filter()" >
                                             <option value="active" {{ old('block', request('block')) == 'active' ? 'selected' : '' }}>Active</option>
@@ -42,18 +42,32 @@
                             </div>
 
                             <div class="add-new-user">
-                                <x-add-new-button role="button" class="js-on-create">
+                                <x-green-button role="button" class="js-on-create">
                                     + Add new
-                                </x-add-new-button>
+                                </x-green-button>
                             </div>
+
                         </div>
                         {{--end card header--}}
 
-                        <div class="card-body table-responsive p-0">
+                        <div class="table-responsive">
                             <table class="table table-hover text-nowrap">
                                 <thead>
-                                <tr>
-                                    <th>Full Name</th>
+                                <tr class="p-2">
+                                    <th>
+                                        Full Name
+                                        @if (request('asc') === 'false')
+                                            <a type="submit" class="hover:text-gray-300"
+                                               href="{{ url('admin/user/search') . '?' . http_build_query(array_merge(request()->query(), ['asc' => 'true'])) }}">
+                                                <i class="bi bi-arrow-down"></i>
+                                            </a>
+                                        @else
+                                            <a type="submit" class="hover:text-gray-300"
+                                               href="{{ url('admin/user/search') . '?' . http_build_query(array_merge(request()->query(), ['asc' => 'false'])) }}">
+                                                <i class="bi bi-arrow-up"></i>
+                                            </a>
+                                        @endif
+                                    </th>
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Address</th>
@@ -68,32 +82,47 @@
 
                                 @foreach($users as $user)
                                     <tr onclick="viewDetail(event)" data-url="{{ route('admin.user.detail', $user->id) }}" class="cursor-default">
-                                        <td>{{ $user->full_name }}</td>
+                                        <td class="">
+                                            @if($user->block)
+                                                <i class="bi bi-ban mr-1"></i>
+                                            @endif
+                                            {{ $user->full_name }}
+
+                                        </td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->phone }}</td>
                                         @if($user->address)
-{{--                                        <td>{{ $user->address . ", " . $user->District->name . ", " . $user->District->Province->name }}</td>--}}
                                         <td>{{$user->District->name . ", " . $user->District->Province->name }}</td>
                                         @else
                                             <td></td>
                                         @endif
-                                        <td class="text-center">
-                                            <x-detail-button role="button" class="js-on-reset-password w-[130px]" onclick="prepareResetPassword(event,{{$user->id}})">
-                                                Reset Password
-                                            </x-detail-button>
-                                            @if($user->block)
-                                                <x-unblock-button type="button" onclick="showModalUnBlock({{ $user->id }},event)">
-                                                    Unblock
-                                                </x-unblock-button>
-                                            @else
-                                                <x-block-button type="button" onclick="showModalBlock({{ $user->id }},event)">
-                                                    Block
-                                                </x-block-button>
-                                            @endif
+                                        <td class="text-center" onclick="event.stopPropagation()">
+                                            <div class="dropdown">
+                                                <button  type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                    <li>
+                                                        @if($user->block)
+                                                            <div class="dropdown-item active:bg-green-900" type="" onclick="showModalUnBlock({{ $user->id }},event)">
+                                                                Unblock
+                                                            </div>
+                                                        @else
+                                                            <div class="dropdown-item active:bg-green-900" type="button" onclick="showModalBlock({{ $user->id }},event)">
+                                                                Block
+                                                            </div>
+                                                        @endif
+                                                    </li>
+                                                    <li>
+                                                        <div role="button" class="dropdown-item js-on-reset-password active:bg-green-900" onclick="prepareResetPassword(event,{{$user->id}})">
+                                                            Reset Password
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
-
 
                                 </tbody>
                             </table>
@@ -124,9 +153,12 @@
         const BLOCK_URL= "{{url('/admin/user/block')}}"
         const UNBLOCK_URL= "{{url('/admin/user/unblock')}}"
         const RESET_PASSWORD_URL= '{{url('admin/user/reset-password')}}'
-        {{--const DELETE_URL = "{{ route('admin.user.destroy') }}";--}}
     </script>
     <script src="{{ asset('js/admin/user/index.js?t='.config('constants.app_version') )}}"></script>
+    <script src="{{ asset('js/admin/admin.js?t='.config('constants.app_version'))}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
 @endsection
 
 

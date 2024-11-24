@@ -195,10 +195,13 @@ class UserController extends Controller
         } elseif ($block === 'blocked') {
             $query->where('block', true);
         }
+        if ($request->asc!==null && $request->asc === 'false') {
+            $query->orderByRaw("SUBSTRING_INDEX(full_name, ' ', -1) DESC");
+        }
 
-        $users = $query->orderByDesc('created_at')
-            ->paginate(10)
-            ->appends($request->input());
+        $query->orderByRaw("SUBSTRING_INDEX(full_name, ' ', -1) ASC");
+
+        $users = $query->paginate(10)->appends($request->input());
         $District = District::all();
         $Province = Province::all();
 

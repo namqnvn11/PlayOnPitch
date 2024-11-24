@@ -63,7 +63,7 @@ class CreateYardSchedules extends Command
                     ->get();
 
                 while ($currentTime->lt($closeTime)) {
-                    $price = $this->getPriceInTime($priceTimeSettings, $currentTime) ?? $yard->defaultPrice;
+                    $price = $this->getPriceInTime($priceTimeSettings, $currentTime) ?? $yard->defaultPrice/2;
                     YardSchedule::create([
                         'yard_id' => $yard->id,
                         'date' => $currentDate->format('Y-m-d'),
@@ -89,16 +89,16 @@ class CreateYardSchedules extends Command
             if ($startTime->gt($endTime)) {
                 //start to 24:00
                 if ($time->gte($startTime) && $time->lt(Carbon::createFromFormat('H:i','24:00' ))) {
-                    return $schedule['price_per_hour'];
+                    return $schedule['price_per_hour']/2;
                 }
                 //00:00 đến end
                 if ($time->gte(Carbon::createFromFormat('H:i','00:00' )) && $time->lt($endTime)) {
-                    return $schedule['price_per_hour'];
+                    return $schedule['price_per_hour']/2;
                 }
             }
 
             if ($time->gte($startTime) && $time->lt($endTime)) {
-                return $schedule['price_per_hour'];
+                return $schedule['price_per_hour']/2;
             }
         }
         return null;
