@@ -62,17 +62,17 @@
     <div class="invoice">
         <h2>Hóa đơn</h2>
         <div class="invoice-info">
-            <p><strong>Sân:</strong> <span>Sân Phú Thọ</span></p>
-            <p><strong>Địa chỉ:</strong> <span>182 Lê Đại Hành, Phường, Quận 11, TP HCM</span></p>
-            <p><strong>Vị trí:</strong> <span>Sân số 1</span></p>
+            <p><strong>Sân:</strong> <span>{{ $yard->boss->company_name}}</span></p>
+            <p><strong>Địa chỉ:</strong> <span>{{ $yard->boss->company_address}}</span></p>
+            <p><strong>Vị trí:</strong> <span>{{$yard->yard_name}}</span></p>
             <p><strong>Thời gian:</strong> <span>18h00 ngày 21 tháng 10 năm 2024</span></p>
             <p><strong>Trạng thái:</strong> <span>Đã cọc 20%</span></p>
         </div>
         <hr>
         <div class="customer-info">
-            <p><strong>Người đặt:</strong> <span>Huỳnh Khắc Hoài Nam</span></p>
-            <p><strong>Số điện thoại:</strong> <span>0868.988.143</span></p>
-            <p><strong>Email:</strong> <span>namhuynhkhachaoai@gmail.com</span></p>
+            <p><strong>Người đặt:</strong> <span>{{ Auth::user()->full_name}}</span></p>
+            <p><strong>Số điện thoại:</strong> <span>{{ Auth::user()->phone}}</span></p>
+            <p><strong>Email:</strong> <span>{{ Auth::user()->email}}</span></p>
         </div>
         <hr>
         <div class="total-info">
@@ -81,7 +81,6 @@
         </div>
     </div>
 </div>
-
 
 <div style="background-color: #2e7d32">
     <form id="form-data" method="post">

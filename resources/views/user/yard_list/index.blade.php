@@ -42,19 +42,7 @@
 </div>
 <div class="content-wrapper">
 <div class="content">
-{{--    <div class="filters-container">--}}
-{{--    <div class="filters">--}}
-{{--        <select name="province_id" id="province_id">--}}
-{{--            <option value="">Tỉnh/Thành Phố</option>--}}
-{{--            @foreach($Province as $province)--}}
-{{--                <option value="{{ $province->id }}">{{ $province->name }}</option>--}}
-{{--            @endforeach--}}
-{{--        </select>--}}
 
-{{--        <select name="district_id" id="district_id">--}}
-{{--            <option>Quận/Huyện</option>--}}
-{{--        </select>--}}
-{{--    </div>--}}
     <h1 class="title">Danh sách sân</h1>
 
         <form method="GET" action="{{ route('user.yardlist.index') }}">
@@ -86,16 +74,7 @@
     </div>
 
     <div class="grid">
-{{--        <div class="card">--}}
-{{--            <img src="{{asset('img/sanbong.jpg')}}" alt="Football Field">--}}
-{{--            <div class="card-content">--}}
-{{--                <h3>Sân bóng đá Phú Thọ</h3>--}}
-{{--                <p>Khu vực: Quận 10 - HCM</p>--}}
-{{--                <p>Sân số: 5</p>--}}
-{{--                <p class="time-slots">Sân trống: 15h00 16h30 18h00</p>--}}
-{{--                <a href="#" class="book-button">Đặt sân</a>--}}
-{{--            </div>--}}
-{{--        </div>--}}
+
         @if($yards->isEmpty())
             <p>Không có sân nào phù hợp với tiêu chí tìm kiếm.</p>
         @else
@@ -103,9 +82,10 @@
             <div class="card">
                 <img src="{{asset('img/sanbong.jpg')}}" alt="Football Field">
                 <div class="card-content">
-                    <h3>{{ $yard->yard_name }}</h3>
+                    <h3>{{ $yard->Boss->company_name }}</h3>
                     <p>Khu vực: {{ $yard->district->name }} - {{ $yard->district->province->name }}</p>
-                    <p>Sân số: {{ $yard->yard_type }}</p>
+                    <p>{{ $yard->yard_name }}</p>
+                    <p>{{ $yard->yard_type }}</p>
                     <p class="time-slots">Sân trống: </p>
                     <a href="{{ url('user/yarddetail/index') }}/{{$yard->id}}" class="book-button">Đặt sân</a>
                 </div>

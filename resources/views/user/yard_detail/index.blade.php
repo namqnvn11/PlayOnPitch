@@ -45,7 +45,7 @@
         <!-- Main Image and Booking Info Section -->
         <div class="main-section">
             <div class="image-gallery">
-                <h2>{{$yard->yard_name}}</h2>
+                <h2>{{$yard->boss->company_name}}</h2>
                 <img class="main-image" src="{{asset('img/sanbong.jpg')}}" alt="Main Field Image">
 
                 <div class="thumbnails">
@@ -62,20 +62,11 @@
                 <select class="time-select">
                     <option value="">Chọn giờ</option>
                 </select>
-                <button class="book-now">Đặt sân ngay</button>
+                    <a href="{{ url('user/choice_yard/index') }}/{{$yard->Boss->id}}" class="book-now">Đặt sân ngay</a>
                 </div>
 
-{{--                <div class="owner-info">--}}
-{{--                    <h3>THÔNG TIN CHỦ SÂN</h3>--}}
-{{--                    <p><i class="fa fa-user"></i> Anh Tài</p>--}}
-{{--                    <p><i class="fa fa-phone"></i> 0123456789</p>--}}
-{{--                    <p><i class="fa fa-envelope"></i> taint@vtca.edu.vn</p>--}}
-{{--                    <p><i class="fa fa-map-marker"></i> 182 lê đại hành, phường, quận 11, TP HCM</p>--}}
-{{--                    <img class="map" src="{{asset('img/sanbong.jpg')}}" alt="Map Image">--}}
-{{--                </div>--}}
-
                 <div class="owner-info">
-                    <h3>THÔNG TIN KHÁCH HÀNG</h3>
+                    <h3>THÔNG TIN CHỦ SÂN</h3>
                     <p><i class="fa fa-user"></i> {{ $yard->boss->full_name}} </p>
                     <p><i class="fa fa-phone"></i> {{ $yard->boss->phone}} </p>
                     <p><i class="fa fa-envelope"></i> {{ $yard->boss->email}} </p>

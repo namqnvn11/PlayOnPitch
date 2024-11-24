@@ -269,6 +269,10 @@ footer {
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    max-width: 100%; /* Giới hạn chiều rộng bảng trong phần tử cha */
+    overflow-x: auto; /* Tạo thanh cuộn ngang nếu nội dung quá rộng */
+    white-space: nowrap; /* Giữ các cột không bị xuống dòng */
+    border: 1px solid #ddd; /* Đường viền để làm nổi bật bảng */
 }
 
 .time-selector {
@@ -283,6 +287,7 @@ footer {
 table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
 table thead th {
@@ -296,6 +301,14 @@ table tbody td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
+}
+.sticky{
+    position: sticky;
+    background-color: #f9f9f9;
+    z-index: 10;
+}
+.left-0{
+    left: 0;
 }
 
 .booking-info {
@@ -355,7 +368,16 @@ table tbody td {
     font-weight: bold;
 }
 
+table {
+    width: max-content; /* Tự động mở rộng theo nội dung */
+    border-collapse: collapse; /* Loại bỏ khoảng cách giữa các ô */
+}
 
-
+th, td {
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #ddd; /* Đường viền nhẹ */
+    white-space: nowrap; /* Tránh xuống dòng trong các ô */
+}
 
 

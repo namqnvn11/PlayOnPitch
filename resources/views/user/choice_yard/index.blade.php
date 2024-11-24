@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play On Pitch</title>
@@ -40,7 +41,8 @@
 <div class="banner">
     <img src="{{asset('img/banner.jpg')}}" alt="">
 </div>
-
+<form id="bookingForm" action="{{ route('user.choice_yard.store.Reservation') }}" method="POST">
+    @csrf
 <div class="booking-container">
     <div class="step-indicator">
         <div class="step active">
@@ -58,66 +60,58 @@
             <span>Thông tin đặt sân</span>
         </div>
     </div>
+
+    <div class="time-selector">
+        <select id="dateSelector" name="reservation_date">
+            <option value="">Chọn ngày</option>
+            @foreach ($dates as $date)
+                <option value="{{ $date->date }}">{{ \Carbon\Carbon::parse($date->date)->translatedFormat('D d/m') }}</option>
+            @endforeach
+        </select>
+    </div>
     <div class="booking-content">
         <div class="booking-table">
-            <div class="time-selector">
-                <select>
-                    <option value="18h00">18h00</option>
-                    <!-- Add more time slots here -->
-                </select>
-            </div>
-            <table>
+            <table class="booking-table1">
                 <thead>
                 <tr>
-                    <th>Sân</th>
-                    <th>Th2 21/10</th>
-                    <th>Th3 22/10</th>
-                    <th>Th4 23/10</th>
-                    <th>Th5 24/10</th>
-                    <th>Th6 25/10</th>
-                    <th>Th7 26/10</th>
-                    <th>CN 27/10</th>
+                    <th></th>
+                    @foreach ($timeSlots as $slot)
+                        <th>{{ $slot->time_slot }}</th>
+                    @endforeach
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>Sân số 1</td>
-                    <td class="selectable"></td>
-                    <td class="selectable"></td>
-                    <td class="selectable"></td>
-                    <td class="selectable"></td>
-                    <td class="selectable"></td>
-                    <td class="selectable"></td>
-                    <td class="selectable"></td>
-                </tr>
-                <tr>
-                    <td>Sân số 2</td>
-                    <td class="selectable"></td>
-                    <td class="selectable"></td>
-                    <td class="selectable"></td>
-                    <td class="selectable"></td>
-                    <td class="selectable"></td>
-                    <td class="selectable"></td>
-                    <td class="selectable"></td>
-                </tr>
-                <!-- Add more rows for other fields -->
+                @foreach($yards as $yard)
+                    <tr>
+                        <td class="sticky left-0">{{ $yard->yard_name }}</td>
+                        @foreach($timeSlots as $slot)
+                            <td class="selectable"></td>
+                        @endforeach
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
         </div>
+
         <div class="booking-info">
-            <p><strong>Sân Phú Thọ</strong></p>
-            <p>182 Lê Đại Hành, phường, quận 11, TP HCM</p>
-            <p>18h00 26/10/2024</p>
-            <p id="selected-field"></p>
-            <form>
-                <input type="text" placeholder="Họ và tên" required>
-                <input type="tel" placeholder="Số điện thoại" required>
-                <p>Tổng tiền: <strong>450.000 đ</strong></p>
-                <button type="submit">Tiếp tục</button>
-            </form>
+            <p><strong>{{$yard->boss->company_name}}</strong></p>
+            <p>{{ $yard->boss->company_address}}</p>
+            <p id="selectedDate"></p>
+{{--            <p id="selected-field"></p>--}}
+            <p id="selected-yard"></p>
+            <p id="selected-timeslot"></p>
+            <input type="hidden" name="reservation_time_slot[]" id="selected-timeslot-input">
+            <input type="hidden" name="yard_id[]" value="{{$yard->id}}">
+            <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
+            <input type="text" placeholder="Họ và tên" value="{{Auth::user()->full_name}}">
+                <input type="tel" placeholder="Số điện thoại" value="{{Auth::user()->phone}}">
+                <p>Tổng tiền: <strong id="totalPrice">0 đ</strong></p>
+                <input type="hidden" name="total_price" id="totalPrice-hidden">
+                <button type="submit" >Tiếp tục</button>
         </div>
     </div>
 </div>
+</form>
 
 <div style="background-color: #2e7d32">
     <form id="form-data" method="post">

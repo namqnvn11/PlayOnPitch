@@ -125,7 +125,6 @@ Route::middleware(['auth:web'])->group(function () {
 
         Route::prefix('yarddetail')->name('yarddetail.')->group(function () {
             Route::get('/index/{id}', [YardDetailController::class, 'index'])->name('index');
-            //Route::post('/yard/{yardId}/book', [YardDetailController::class, 'bookYard'])->name('user.yard.book');
         });
 
         Route::prefix('profile')->name('profile.')->group(function () {
@@ -138,11 +137,13 @@ Route::middleware(['auth:web'])->group(function () {
         });
 
         Route::prefix('choice_yard')->name('choice_yard.')->group(function () {
-            Route::get('/index', [ChoiceYardController::class, 'index'])->name('index');
+            Route::get('/index/{id}', [ChoiceYardController::class, 'index'])->name('index');
+            Route::post('/calculate-price', [\App\Http\Controllers\User\ReservationController::class, 'calculatePrice'])->name('calculate.Price');
+            Route::post('/store', [\App\Http\Controllers\User\ReservationController::class, 'storeReservation'])->name('store.Reservation');
         });
 
         Route::prefix('invoice')->name('invoice.')->group(function () {
-            Route::get('/index', [InvoiceController::class, 'index'])->name('index');
+            Route::get('/index/{id}', [InvoiceController::class, 'index'])->name('index');
         });
 
         Route::prefix('policy')->name('policy.')->group(function () {
