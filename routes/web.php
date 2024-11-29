@@ -1,35 +1,35 @@
 <?php
 require base_path('routes/auth.php');
 
-use App\Http\Controllers\Boss\PriceTimeSettingController;
-use App\Http\Controllers\Boss\YardScheduleController;
-use App\Http\Controllers\PaymentController;
-use App\Http\Middleware\RedirectIfAuthenticated;
-use App\Models\District;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\RegisterBossController;
-
+use App\Http\Controllers\Admin\BossController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
-use App\Http\Controllers\Admin\BossController;
-
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Boss\BossImageController;
+use App\Http\Controllers\Boss\PriceTimeSettingController;
 use App\Http\Controllers\Boss\YardController;
-
-use App\Http\Controllers\User\ProfileController;
-use App\Http\Controllers\User\HomeController;
-use App\Http\Controllers\User\YardListController;
-use App\Http\Controllers\User\YardDetailController;
-use App\Http\Controllers\User\ChoiceYardController;
-use App\Http\Controllers\User\InvoiceController;
-use App\Http\Controllers\User\PolicyController;
-use App\Http\Controllers\User\ClauseController;
-use App\Http\Controllers\User\PrivacyPolicyController;
+use App\Http\Controllers\Boss\YardImageController;
+use App\Http\Controllers\Boss\YardScheduleController;
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\RegisterBossController;
 use App\Http\Controllers\User\CancellationPolicyController;
+use App\Http\Controllers\User\ChoiceYardController;
+use App\Http\Controllers\User\ClauseController;
 use App\Http\Controllers\User\CommodityPolicyController;
-use App\Http\Controllers\User\PaymentPolicyController;
-use App\Http\Controllers\User\VoucherController as UserVoucherController;
+use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\InvoiceController;
 use App\Http\Controllers\User\MyVoucherController;
+use App\Http\Controllers\User\PaymentPolicyController;
+use App\Http\Controllers\User\PolicyController;
+use App\Http\Controllers\User\PrivacyPolicyController;
+use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\User\ReservationController;
+use App\Http\Controllers\User\VoucherController as UserVoucherController;
+use App\Http\Controllers\User\YardDetailController;
+use App\Http\Controllers\User\YardListController;
+use App\Http\Middleware\RedirectIfAuthenticated;
+use Illuminate\Support\Facades\Route;
 
 
 //Route::get('/', function () {
@@ -71,6 +71,8 @@ Route::middleware(['auth:admin'])->group(function () {
             Route::post('/block/{id}', [VoucherController::class, 'block'])->name('block');
             Route::post('/unblock/{id}', [VoucherController::class, 'unblock'])->name('unblock');
             Route::get('/search', [VoucherController::class, 'search'])->name('search');
+            Route::post('/image/save/{id}',[VoucherController::class,'saveImage'])->name('image.save');
+            Route::get('/image/get/{id}',[VoucherController::class,'getImage'])->name('image.get');
         });
 
         Route::prefix('boss')->name('boss.')->group(function () {
@@ -102,13 +104,21 @@ Route::middleware(['auth:boss'])->group(function () {
             Route::get('/getPricing/{id}',[PriceTimeSettingController::class, 'getPricing'])->name('getPricing');
             Route::post('/setOpenTime/{id}',[PriceTimeSettingController::class, 'setOpenTime'])->name('setOpenTime');
             Route::get('/testing/create',[PriceTimeSettingController::class, 'test'])->name('test');
-            Route::get('/testing/delete',[PriceTimeSettingController::class, 'delete'])->name('delete');
-            Route::get('test',function () {
-                return view('boss.yard.test');
-            });
+            // image
+            Route::get('/image/index',[YardImageController::class, 'index'])->name('image.index');
+            Route::post('/image/save/{id}',[YardImageController::class,'save'])->name('image.save');
+            Route::post('/image/delete/{id}',[YardImageController::class,'delete'])->name('image.delete');
+            Route::post('image/update/{id}',[YardImageController::class,'update'])->name('image.update');
         });
         Route::prefix('yard_schedule')->name('yard_schedule.')->group(function () {
             Route::get('/index', [YardScheduleController::class, 'index'])->name('index');
+        });
+
+        Route::prefix('image')->name('image.')->group(function () {
+            Route::get('/index', [BossImageController::class, 'index'])->name('index');
+            Route::post('/save', [BossImageController::class, 'saveImage'])->name('save');
+            Route::post('/update/{id}', [BossImageController::class, 'updateImage'])->name('update');
+            Route::post('/delete/{id}', [BossImageController::class, 'deleteImage'])->name('delete');
         });
     });
 });
@@ -142,12 +152,13 @@ Route::middleware(['auth:web'])->group(function () {
             Route::get('/detail/{id}', [ProfileController::class, 'detail'])->name('detail');
             Route::get('/get-provinces', [ProfileController::class, 'getProvinces'])->name('getProvinces');
             Route::get('/get-districts', [ProfileController::class, 'getDistricts'])->name('getDistricts');
+            Route::post('/image-upload', [ProfileController::class, 'imageUpload'])->name('image.upload');
         });
 
         Route::prefix('choice_yard')->name('choice_yard.')->group(function () {
             Route::get('/index/{id}', [ChoiceYardController::class, 'index'])->name('index');
-            Route::post('/calculate-price', [\App\Http\Controllers\User\ReservationController::class, 'calculatePrice'])->name('calculate.Price');
-            Route::post('/store', [\App\Http\Controllers\User\ReservationController::class, 'storeReservation'])->name('store.Reservation');
+            Route::post('/calculate-price', [ReservationController::class, 'calculatePrice'])->name('calculate.Price');
+            Route::post('/store', [ReservationController::class, 'storeReservation'])->name('store.Reservation');
         });
 
         Route::prefix('invoice')->name('invoice.')->group(function () {
@@ -200,3 +211,4 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('stripe/payment/cancel',[PaymentController::class,'cancel'])->name('stripe.payment.cancel');
     });
 });
+

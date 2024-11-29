@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
 <header>
@@ -77,7 +78,7 @@
             @if($voucher->end_date > now())
             <tr>
 
-                <td>Image</td>
+                <td class=""><img class="max-w-[200px]" src="{{$voucher->image->img??'asdas'}}"></td>
                 <td>{{$voucher->name}}</td>
                 <td>{{$voucher->price}}</td>
                 <td>{{ \Carbon\Carbon::parse($voucher->release_date)->format('d/m/Y') }}</td>

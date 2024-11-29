@@ -14,7 +14,22 @@
     <li class="nav-item">
         <a href="{{ route('boss.yard_schedule.index') }}" class="nav-link">
             <i class="nav-icon far fa-circle text-warning"></i>
-            <p>Yard Schedule</p>
+            <p class="text-gray-300">Yard Schedule</p>
+        </a>
+    </li>
+
+
+    <li class="nav-item">
+        <a href="{{ route('boss.image.index') }}" class="nav-link">
+            <i class="nav-icon far fa-circle text-warning"></i>
+            <p class="text-gray-300">General Images</p>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a href="{{ route('boss.yard.image.index') }}" class="nav-link">
+            <i class="nav-icon far fa-circle text-warning"></i>
+            <p class="text-gray-300">Yards Images</p>
         </a>
     </li>
 

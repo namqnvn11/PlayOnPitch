@@ -4,8 +4,10 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\District;
+use App\Models\Image;
 use App\Models\Province;
 use App\Models\User;
+use App\Services\Base64FileServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -13,6 +15,10 @@ use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
+    public function __construct(Base64FileServiceProvider $base64Service)
+    {
+        $this->base64Service = $base64Service;
+    }
     public function index()
     {
         $user = Auth::user();
@@ -142,6 +148,26 @@ class ProfileController extends Controller
                 'success' => false,
                 'message' => $e->getMessage(),
             ]);
+        }
+    }
+
+    public function imageUpload(Request $request){
+        $filePath = $request->file('image')->getPathname();
+        $ownerId =Auth::guard('web')->user()->id;
+        $owner= 'user';
+        try {
+            $images= Image::where('user_id',$ownerId)->get();
+            if ($images->count() == 0) {
+                // chuưa có hình thì tạo mới
+                $this->base64Service->saveFileToDb($filePath,$owner,$ownerId);
+            }else{
+                // có hình thì cập nhật
+                $this->base64Service->updateById($filePath,$images->first()->id);
+            }
+            return back()->with('success','Your Avatar uploaded successfully.');
+        }
+        catch (\Exception $e) {
+            return back()->with('error', 'Failed to update image: ' . $e->getMessage());
         }
     }
 }

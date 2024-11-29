@@ -129,6 +129,9 @@
                                                                 Block
                                                             </div>
                                                         @endif
+                                                            <div type="button" class="dropdown-item active:bg-green-900" onclick="showModalImage({{ $voucher->id }})">
+                                                                Image
+                                                            </div>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -157,6 +160,7 @@
 
     @include('admin.voucher.elements.modal_edit')
     @include('admin.voucher.elements.modal_confirm')
+    @include('admin.voucher.elements.modal_image')
 
 @endsection
 
@@ -165,7 +169,8 @@
         const STORE_URL = "{{ route('admin.voucher.store') }}";
         const BLOCK_URL= "{{url('/admin/voucher/block')}}"
         const UNBLOCK_URL= "{{url('/admin/voucher/unblock')}}"
-        {{--const DELETE_URL = "{{ route('admin.voucher.destroy') }}";--}}
+        const GET_IMAGE_URL="{{url('/admin/voucher/image/get')}}"
+        const SAVE_IMAGE_URL="{{url('/admin/voucher/image/save')}}"
     </script>
     <script src="{{ asset('js/admin/voucher/index.js?t='.config('constants.app_version') )}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>

@@ -221,3 +221,98 @@ function initializePriceAndConditionsUpdater() {
     selectElement.addEventListener('change', updateValues);
     updateValues();
 }
+
+
+//phần xử lý hình ảnh
+function  showModalImage(voucherId){
+    $('#imageInput').val('');
+    $('#oldImg').attr('src','');
+    $('input#voucherId').val(voucherId);
+    $.ajax({
+        url: GET_IMAGE_URL+'/'+voucherId,
+        type: 'get',
+        success: function(response) {
+            $('#oldImg').attr('src',response.data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    $('#modal-image').modal('show');
+}
+
+function imageOnchange(event) {
+    const file = event.target.files[0]; // Lấy tệp đầu tiên được chọn
+    // Kiểm tra nếu file không rỗng và MIME type là hình ảnh
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            $('#oldImg').attr('src', e.target.result); // Cập nhật src của thẻ img
+        };
+
+        reader.readAsDataURL(file); // Đọc file dưới dạng Data URL
+    } else {
+        Notification.showError('Please upload an valid Image')
+        $('#imageInput').val('');
+    }
+}
+
+//xử lý kéo file
+function handleDragOver(event) {
+    event.preventDefault();
+    event.currentTarget.style.backgroundColor = '#ececec';
+}
+
+//thả file
+function handleDrop(event) {
+    event.preventDefault();
+    const dropZone = event.currentTarget;
+    dropZone.style.backgroundColor = 'white';
+
+    const file = event.dataTransfer.files[0];
+    const fileInput = $('#imageInput')[0];
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            $('#oldImg').attr('src', e.target.result);
+        };
+        reader.readAsDataURL(file);
+        // Gắn file vào input để chuẩn bị submit
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        fileInput.files = dataTransfer.files;
+    } else {
+        Notification.showError('Please upload an valid Image')
+        $('#imageInput').val('');
+    }
+}
+
+function prepareSubmit(event){
+    event.preventDefault();
+    const file = $('#oldImg').attr('src');
+    const imageInput = $('#imageInput').val();
+    const voucherId = $('#voucherId').val();
+    const MAX_FILE_SIZE = 2 * 1024 * 1024; // Giới hạn dung lượng: 2MB
+    if (file!=='') {
+        //đã có hình cũ => can submit
+        //kiểm tra có cập nhật hình mới
+        if (imageInput!==''){
+            // Kiểm tra dung lượng hình ảnh mới
+            if ($('#imageInput')[0].files[0].size > MAX_FILE_SIZE) {
+                Notification.showError('File size exceeds 2MB. Please upload a smaller file.');
+                return;
+            }
+            if (voucherId) {
+                $(event.target).attr('action', SAVE_IMAGE_URL + '/' + voucherId);
+                event.target.submit();
+            }
+        }else {
+            Notification.showError('Nothing Change')
+        }
+    } else {
+        // chưa có hình
+        Notification.showError('Please upload an Image')
+    }
+}

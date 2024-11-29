@@ -9,6 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 <body>
 <header>
@@ -58,7 +60,18 @@
         <a href="{{route("user.logout")}}"><button class="logout-btn">Đăng xuất</button></a>
     </div>
 
-    <div class="profile-details">
+    <div class="profile-details relative bg-gray-200">
+        <div class="absolute top-10 right-[100px]">
+            <div class="">
+                <img src="{{Auth::user()->image->img??"https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg"}}" class="rounded-full w-[100px] h-[100px]" width="100px">
+                <div
+                    class="bg-black absolute bottom-[4px] right-0 rounded-full w-[28px] h-[28px] hover:bg-gray-700 hover:scale-110 transition-all duration-300 cursor-pointer flex items-center justify-center"
+                    onclick="showModalUpdateImage()"
+                >
+                    <i class="bi bi-pencil text-[20px] text-white hover:text-yellow-500 transition-colors duration-300"></i>
+                </div>
+            </div>
+        </div>
         <h2>Thông tin cá nhân</h2>
         <div class="details-box">
             <div class="info-row">
@@ -146,19 +159,20 @@
 
 </script>
 @include('user.profile.elements.changePassword')
+@include('user.profile.elements.modal_image')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const STORE_URL = "{{ route('user.storeRegister') }}";
 </script>
 <!-- jQuery -->
-<script src="{{  asset('assets/templates/adminlte3/plugins/jquery/jquery.min.js' ) }}"></script>
+<script src="{{asset('assets/templates/adminlte3/plugins/jquery/jquery.min.js' ) }}"></script>
 <!-- jQuery UI 1.11.4 -->
-<script src="{{  asset('assets/templates/adminlte3/plugins/jquery-ui/jquery-ui.min.js' ) }}"></script>
+<script src="{{asset('assets/templates/adminlte3/plugins/jquery-ui/jquery-ui.min.js' ) }}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script src="{{  asset('assets/libraries/toastr/toastr.min.js' ) }}"></script>
-<script src="{{  asset('js/notification.js' ) }}"></script>
-<script src="{{  asset('js/common.js' ) }}"></script>
+<script src="{{asset('assets/libraries/toastr/toastr.min.js' ) }}"></script>
+<script src="{{asset('js/notification.js' ) }}"></script>
+<script src="{{asset('js/common.js' ) }}"></script>
 <script src="{{asset('js/registerBoss.js?t='.config('constants.app_version'))}}"></script>
 
 <script src="{{ asset('js/user/profile/index.js?t='.config('constants.app_version') )}}"></script>

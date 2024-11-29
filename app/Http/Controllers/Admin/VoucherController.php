@@ -3,16 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\District;
-use App\Models\Province;
+use App\Models\Image;
 use App\Models\User;
 use App\Models\Voucher;
+use App\Services\Base64FileServiceProvider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class VoucherController extends Controller
 {
+
+    public function __construct(Base64FileServiceProvider $base64Service)
+    {
+        $this->base64Service = $base64Service;
+    }
     public function index()
     {
         $vouchers = Voucher::where('block', 0)->paginate(10);
@@ -192,4 +196,43 @@ class VoucherController extends Controller
         $Users = User::all();
         return view('admin.voucher.index', compact('vouchers', 'Users'));
     }
+
+    public function saveImage(request $request,$id){
+        $filePath = $request->file('image')->getPathname();
+        $ownerId =$id;
+        $owner= 'voucher';
+        $image = Image::where('voucher_id',$id)->get();
+        try {
+        if ($image->count() > 0) {
+            //call update
+            $image = $image->first();
+            $imageRecord= $this->base64Service->updateById($filePath,$image->id);
+        }else{
+            //call create new
+            $imageRecord = $this->base64Service->saveFileToDb($filePath,$owner,$ownerId);
+        }
+
+            return back()->with('success', 'Image updated successfully');
+        }
+        catch (\Exception $e) {
+            return back()->with('error', 'Failed to update image: ' . $e->getMessage());
+        }
+    }
+
+    //voucher id
+    public function getImage($id){
+        $image= Image::where('voucher_id',$id)->first();
+        if($image->count() > 0){
+            return response()->json([
+                'success' => true,
+                'data' => $image->img,
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'message' => 'Image not found'
+            ],400);
+        }
+    }
+
 }

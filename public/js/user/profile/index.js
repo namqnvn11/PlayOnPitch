@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    Notification.showSuccess('asdasas');
     const $modalEdit = $('#modal-edit');
     const $formData = $('#form-data');
     const $formDelete = $('#form-delete');
@@ -157,3 +158,82 @@ $(document).ready(function () {
         }
     }
 });
+
+
+// phần hình ảnh ======================
+function showModalUpdateImage(){
+    let modal=$('#modal-image');
+    modal.find('#image').attr('src','');
+    modal.find('#imageInput');
+    modal.find('#errorMessage').addClass('hidden')
+    modal.modal('show');
+}
+
+function handleDragOver(event) {
+    event.preventDefault();
+    event.currentTarget.style.backgroundColor = '#ececec';
+}
+
+//thả file
+function handleDrop(event) {
+    event.preventDefault();
+    const dropZone = event.currentTarget;
+    dropZone.style.backgroundColor = 'white';
+
+    const file = event.dataTransfer.files[0];
+    const fileInput = $('#imageInput')[0];
+
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            $('#image').attr('src', e.target.result);
+        };
+        reader.readAsDataURL(file);
+        // Gắn file vào input để chuẩn bị submit
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        fileInput.files = dataTransfer.files;
+    } else {
+        showError('Please upload an valid Image')
+        $('#imageInput').val('');
+    }
+}
+function imageOnchange(event) {
+    const file = event.target.files[0];
+    // Kiểm tra nếu file không rỗng và MIME type là hình ảnh
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            $('#image').attr('src', e.target.result);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        showError('Please upload an valid Image')
+        $('#imageInput').val('');
+    }
+}
+
+function prepareSubmit(event){
+    event.preventDefault();
+    const file = $('#image').attr('src');
+    const MAX_FILE_SIZE = 2 * 1024 * 1024; // Giới hạn dung lượng: 2MB
+    if (file!=='') {
+        // Kiểm tra dung lượng hình ảnh mới
+        if ($('#imageInput')[0].files[0].size > MAX_FILE_SIZE) {
+            showError('File size exceeds 2MB. Please upload a smaller file.');
+            return;
+        }
+        event.target.submit();
+    } else {
+        // chưa có hình
+       showError('Please upload an Image');
+    }
+}
+
+function showError(message) {
+    let error = $('#errorMessage');
+    error.text(message);
+    error.removeClass('hidden');
+}
+

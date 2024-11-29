@@ -29,4 +29,7 @@ class Voucher extends Model
     {
         return $this->hasMany(User_voucher::class);
     }
+    public  function  image(){
+        return $this->hasOne(Image::class, 'voucher_id');
+    }
 }
