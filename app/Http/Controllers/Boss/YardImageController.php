@@ -17,7 +17,7 @@ class YardImageController extends Controller
     }
 
     public function index(){
-        $yardList=Auth::guard('boss')->user()->Yards()->where('block',false)->with('image')->get();
+        $yardList=Auth::guard('boss')->user()->Yards()->where('block',false)->get();
         return view('boss.yard_image.index')->with('yardList',$yardList);
     }
 
