@@ -96,7 +96,9 @@ $timeCloseInModal = $currentBoss->time_close
                                 @foreach($yards as $yard)
                                     <tr onclick="viewDetail(event)" data-url="{{ route('boss.yard.detail', $yard->id) }}" class="cursor-default">
                                         <td>{{ $yard->Boss->company_name }}</td>
-                                        <td>{{ $yard->yard_name }}</td>
+                                        <td>   @if($yard->block)
+                                                <i class="bi bi-ban mr-1"></i>
+                                            @endif{{ $yard->yard_name }}</td>
                                         <td>{{ $yard->yard_type }}</td>
                                         <td>{{ $yard->District->name }}</td>
                                         <td class="text-center" onclick="event.stopPropagation()">

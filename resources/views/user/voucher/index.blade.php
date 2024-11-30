@@ -78,7 +78,7 @@
             @if($voucher->end_date > now())
             <tr>
 
-                <td class=""><img class="max-w-[200px]" src="{{$voucher->image->img??'asdas'}}"></td>
+                <td class=""><img class="max-w-[200px] mx-auto" src="{{$voucher->image->img??asset('img/voucher.jpg')}}"></td>
                 <td>{{$voucher->name}}</td>
                 <td>{{$voucher->price}}</td>
                 <td>{{ \Carbon\Carbon::parse($voucher->release_date)->format('d/m/Y') }}</td>

@@ -39,4 +39,7 @@ class Boss extends Authenticatable
     public function Yards(){
         return $this->hasMany(Yard::class, 'boss_id');
     }
+    public function images(){
+        return $this->hasMany(Image::class, 'boss_id');
+    }
 }

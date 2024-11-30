@@ -103,7 +103,11 @@ Route::middleware(['auth:boss'])->group(function () {
             Route::post('/pricing/{id}', [PriceTimeSettingController::class, 'pricing'])->name('pricing');
             Route::get('/getPricing/{id}',[PriceTimeSettingController::class, 'getPricing'])->name('getPricing');
             Route::post('/setOpenTime/{id}',[PriceTimeSettingController::class, 'setOpenTime'])->name('setOpenTime');
-            Route::get('/testing/create',[PriceTimeSettingController::class, 'test'])->name('test');
+            Route::get('/schedule/create',[PriceTimeSettingController::class, 'scheduleCreate'])->name('schedule.create');
+            Route::get('/schedule/delete',[PriceTimeSettingController::class, 'scheduleDelete'])->name('schedule.delete');
+            Route::get('/schedule/test',function (){
+                return view('boss.yard.test');
+            })->name('schedule');
             // image
             Route::get('/image/index',[YardImageController::class, 'index'])->name('image.index');
             Route::post('/image/save/{id}',[YardImageController::class,'save'])->name('image.save');

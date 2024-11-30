@@ -27,10 +27,13 @@
                         {{-- card header--}}
                         <div class="flex justify-between p-3 border rounded-top align-middle">
                             <div class="card-tools">
-                                <green-button role="button" class="btn btn-success js-on-create">
+                                <x-green-button role="button" class="btn btn-success js-on-create">
                                     + Add new
-                                </green-button>
+                                </x-green-button>
                             </div>
+
+                            <x-green-button><a href="{{url('boss/yard/schedule/create')}}">Create Schedule</a></x-green-button>
+                            <x-green-button><a href="{{url('boss/yard/schedule/delete')}}">delete Schedule</a></x-green-button>
                         </div>
                         {{--end card header--}}
 

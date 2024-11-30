@@ -9,6 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 <body>
 <header>
@@ -49,14 +51,26 @@
         <div class="main-section">
             <div class="image-gallery">
                 <h2>{{$yard->boss->company_name}}</h2>
-                <img class="main-image" src="{{asset('img/sanbong.jpg')}}" alt="Main Field Image">
+                @php
+                    $mainImage=$yard->boss->images->first()->img??asset('img/sanbong.jpg');
+                    $yardImageList=$yard->boss->images;
+                    $countImage=$yardImageList->count();
+                @endphp
+                <img class="main-image" src="{{$mainImage}}" alt="Main Field Image">
 
                 <div class="thumbnails">
-                    <img src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 1">
-                    <img src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 2">
-                    <img src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 3">
-                    <img src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 4">
-                    <img src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 4">
+                    @foreach($yardImageList as $image)
+                        <img src="{{$image->img}}" alt="Thumbnail {{$image->id}}">
+                    @endforeach
+                    @foreach($yard->boss->Yards as $y)
+                        @if($y->image)
+                            @php $countImage++; @endphp
+                            <img src="{{$y->image->img}}" alt="Thumbnail {{$y->image->id}}">
+                        @endif
+                    @endforeach
+                    @if($countImage==0)
+                            <img src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 1">
+                        @endif
                 </div>
             </div>
 
@@ -108,7 +122,7 @@
                 <div class="review-item">
                     <div class="review-header">
                         <div class="review-user-info">
-                            <img src="https://www.gravatar.com/avatar/{{ md5(strtolower($rating->User->full_name)) }}?s=100&d=identicon" alt="{{ $rating->User->name }}'s avatar" class="user-avatar">
+                            <img src="{{$rating->User->image->img??'https://www.gravatar.com/avatar/'. md5(strtolower($rating->User->full_name)) .'?s=100&d=identicon'}}" alt="{{ $rating->User->name }}'s avatar" class="user-avatar">
                             <span class="review-user">{{ $rating->User->full_name }}</span>
                         </div>
                         <div class="review-rating">

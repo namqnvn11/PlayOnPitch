@@ -277,9 +277,6 @@ class PriceTimeSettingController extends Controller
         return true; // Trả về true nếu không có lỗi
     }
 
-// Hàm thông báo lỗi
-
-
     function setOpenTime(Request $request,$id)
     {
         if ($request->has('is_open_all_day')) {
@@ -290,10 +287,20 @@ class PriceTimeSettingController extends Controller
             ]);
 
         }else{
-            $validator = Validator::make($request->all(), [
-                'time_open' => ['required'],
-                'time_close' => ['required', 'after:time_open']
-        ]);
+            if ($request->time_close == '00:00') {
+                // Xử lý trường hợp time_close là 00:00
+                $validator = Validator::make($request->all(), [
+                    'time_open' => ['required'],
+                    'time_close' => ['required'],
+                ]);
+            } else {
+                // Trường hợp time_close không phải là 00:00
+                $validator = Validator::make($request->all(), [
+                    'time_open' => ['required'],
+                    'time_close' => ['required', 'after:time_open'],
+                ]);
+            }
+
             if ($validator->fails()) {
                 return response()->json([
                     'success' => false,
@@ -309,6 +316,13 @@ class PriceTimeSettingController extends Controller
                     foreach ($yards as $yard) {
                         $yard->PriceTimeSettings()->delete();
                     }
+                }
+
+                if (!$this->isDurationDivisibleBy1_5(request('time_open'),request('time_close'))) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => ['The opening time duration must be divisible by 1.5 hours.']
+                    ]);
                 }
                 $currentBoss->update([
                     'time_open'=>request('time_open'),
@@ -327,6 +341,18 @@ class PriceTimeSettingController extends Controller
             'message'=> 'Price Time Setting Updated Successfully',
         ]);
 
+    }
+    function isDurationDivisibleBy1_5($time_open, $time_close)
+    {
+        // Chuyển đổi thời gian mở và đóng thành đối tượng Carbon
+        $open = Carbon::createFromFormat('H:i', $time_open);
+        $close = Carbon::createFromFormat('H:i', $time_close);
+
+        // Tính chênh lệch thời gian theo phút
+        $durationInMinutes = $close->diffInMinutes($open);
+
+        // Kiểm tra chia hết cho 90 phút (1.5 giờ = 90 phút)
+        return $durationInMinutes % 90 === 0;
     }
 
     function isTimeWithinOperatingHours(array $timeSlots): array
@@ -355,15 +381,13 @@ class PriceTimeSettingController extends Controller
         return $violations;
     }
 
-    function test()
+    function scheduleCreate()
     {
-        //lấy tất cả các sân không khóa và đã có giá mặc định >=100,000
-        $yards = Yard::where('block',false)->where('defaultPrice','>=',100000)->get();
-
+        //lấy tất cả các sân không khóa và đã có giá mặc định >0
+        $yards = Yard::where('block',false)->where('defaultPrice','>',0)->get();
         //tạo lịch cho từng sân
         foreach ($yards as $yard) {
             //kiểm tra sân và xác định số ngày cần tạo lịch
-
             $maxDate = Carbon::now()->addDays(7);
             $lastedDate = $yard->YardSchedules->max('date');
 
@@ -379,65 +403,95 @@ class PriceTimeSettingController extends Controller
                 $currentDayOfWeekNumber = Carbon::parse($currentDate)->format('N');
 
                 if ($yard->Boss->is_open_all_day) {
-                    $openTime = Carbon::createFromFormat('H:i','00:00' );
-                    $closeTime = Carbon::createFromFormat('H:i', "23:59");
+                    $openTime = Carbon::createFromFormat('H:i', '00:00');
+                    $closeTime = Carbon::createFromFormat('H:i', '23:59');
                 } else {
                     $openTime = Carbon::createFromFormat('H:i:s', $yard->Boss->time_open);
-                    $closeTime = Carbon::createFromFormat('H:i:s', $yard->Boss->time_close);
+
+                    // Kiểm tra nếu time_close là 00:00:00 thì chuyển thành 23:59:00
+                    $timeClose = $yard->Boss->time_close === '00:00:00' ? '23:59:00' : $yard->Boss->time_close;
+
+                    $closeTime = Carbon::createFromFormat('H:i:s', $timeClose);
                 }
+
                 $currentTime = $openTime;
                 $priceTimeSettings = PriceTimeSetting::
                 where('yard_id', $yard->id)
                     ->where('day_of_week',$currentDayOfWeekNumber<6?'MonFri':'Weekend')
                     ->get();
                 while ($currentTime->lt($closeTime)) {
-                    $price= $this->getPriceInTime($priceTimeSettings,$currentTime)??$yard->defaultPrice/2;
+                    // Tạo bản sao của $currentTime để truyền vào hàm getPriceInTime
+                    $timeForCalculation = $currentTime->copy();
+
+                    // Tính giá tiền dựa trên thời gian sao chép
+                    $price = $this->getPriceInTime($priceTimeSettings, $timeForCalculation, $yard->defaultPrice);
+
+                    // Tạo bản ghi lịch sân
                     YardSchedule::create([
                         'yard_id' => $yard->id,
                         'date' => $currentDate->format('Y-m-d'),
-                        'time_slot' => $currentTime->format('H:i') . '-' . $currentTime->addMinutes(30)->format('H:i'),
+                        'time_slot' => $currentTime->format('H:i') . '-' . $currentTime->copy()->addMinutes(90)->format('H:i'),
                         'reservation_id' => '0',
                         'block' => false,
                         'status' => false,
                         'price_per_hour' => $price,
                     ]);
+
+                    // Tăng thời gian $currentTime lên 90 phút
+                    $currentTime->addMinutes(90);
                 }
+
             }
         }
 
-        return view('boss.yard.test');
+        return back()->with('success','Price Time Setting Schedule Created Successfully');
     }
 
-    function getPriceInTime($priceTimeSettings,$time):?float
+    function getPriceInTime($priceTimeSettings,$time,$defaultPrice):float
     {
+        $totalPrice = 0;
+        $count=3;
         foreach ($priceTimeSettings as $schedule) {
+            //tính tiền trên các đoạn 30' của 1.5h rồi cộng lại
             $startTime = Carbon::createFromFormat('H:i:s', $schedule['start_time']);
             $endTime = Carbon::createFromFormat('H:i:s', $schedule['end_time']);
 
-            // thêm đều kiện cho các khoản thời gian qua ngày vd 22:00->05:00
-            if ($startTime->gt($endTime)) {
-                //start to 24:00
-                if ($time->gte($startTime) && $time->lt(Carbon::createFromFormat('H:i','24:00' ))) {
-                    return $schedule['price_per_hour']/2;
+            // chia thành 3 đoạn thời gian để tính =>30'
+            for ($i=1;$i<=3;$i++){
+                // thêm đều kiện cho các khoản thời gian qua ngày vd 22:00->05:00
+                if ($startTime->gt($endTime)) {
+                    //start to 24:00
+                    if ($time->gte($startTime) && $time->lt(Carbon::createFromFormat('H:i','24:00' ))) {
+                       $totalPrice+= $schedule['price_per_hour']/2;
+                       $count--;
+                    }
+                    //00:00 đến end
+                    if ($time->gte(Carbon::createFromFormat('H:i','00:00' )) && $time->lt($endTime)) {
+                        $totalPrice+= $schedule['price_per_hour']/2;
+                        $count--;
+                    }
                 }
-                //00:00 đến end
-                if ($time->gte(Carbon::createFromFormat('H:i','00:00' )) && $time->lt($endTime)) {
-                    return $schedule['price_per_hour']/2;
+                if ($time->gte($startTime) && $time->lt($endTime)) {
+                    $totalPrice+= $schedule['price_per_hour']/2;
+                    $count--;
                 }
-            }
-            if ($time->gte($startTime) && $time->lt($endTime)) {
-                return $schedule['price_per_hour']/2;
+                //tăng 30' để tính
+                $time->addMinutes(30);
             }
         }
-        return null;
+
+        $total=$totalPrice+($defaultPrice/2)*$count;
+        return $total;
     }
-    function delete()
+    function scheduleDelete()
     {
         YardSchedule::all()->each(function ($schedule) {
             $schedule->delete();
         });
-        return view('boss.yard.test');
+        return back()->with('success','Price Time Setting Schedule Deleted Successfully');
     }
+
+
 }
 
 

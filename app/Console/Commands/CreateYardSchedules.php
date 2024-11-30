@@ -30,8 +30,8 @@ class CreateYardSchedules extends Command
      */
     public function handle()
     {
-        // Lấy tất cả các sân không khóa và có giá mặc định >= 100,000
-        $yards = Yard::where('block', false)->where('defaultPrice', '>=', 100000)->get();
+        // Lấy tất cả các sân không khóa và có giá mặc định > 0
+        $yards = Yard::where('block', false)->where('defaultPrice', '>', 0)->get();
 
         // Tạo lịch cho từng sân
         foreach ($yards as $yard) {
@@ -63,44 +63,65 @@ class CreateYardSchedules extends Command
                     ->get();
 
                 while ($currentTime->lt($closeTime)) {
-                    $price = $this->getPriceInTime($priceTimeSettings, $currentTime) ?? $yard->defaultPrice/2;
+                    // Tạo bản sao của $currentTime để truyền vào hàm getPriceInTime
+                    $timeForCalculation = $currentTime->copy();
+
+                    // Tính giá tiền dựa trên thời gian sao chép
+                    $price = $this->getPriceInTime($priceTimeSettings, $timeForCalculation, $yard->defaultPrice);
+
+                    // Tạo bản ghi lịch sân
                     YardSchedule::create([
                         'yard_id' => $yard->id,
                         'date' => $currentDate->format('Y-m-d'),
-                        'time_slot' => $currentTime->format('H:i') . '-' . $currentTime->addMinutes(30)->format('H:i'),
+                        'time_slot' => $currentTime->format('H:i') . '-' . $currentTime->copy()->addMinutes(90)->format('H:i'),
                         'reservation_id' => '0',
                         'block' => false,
                         'status' => false,
                         'price_per_hour' => $price,
                     ]);
+
+                    // Tăng thời gian $currentTime lên 90 phút
+                    $currentTime->addMinutes(90);
                 }
             }
         }
         Log::info('đã chạy khởi tạo Lịch thành công.');
     }
 
-    private function getPriceInTime($priceTimeSettings, $time): ?float
+    private function getPriceInTime($priceTimeSettings,$time,$defaultPrice):float
     {
+        $totalPrice = 0;
+        $count=3;
         foreach ($priceTimeSettings as $schedule) {
+            //tính tiền trên các đoạn 30' của 1.5h rồi cộng lại
             $startTime = Carbon::createFromFormat('H:i:s', $schedule['start_time']);
             $endTime = Carbon::createFromFormat('H:i:s', $schedule['end_time']);
 
-            // thêm đều kiện cho các khoản thời gian qua ngày vd 22:00->05:00
-            if ($startTime->gt($endTime)) {
-                //start to 24:00
-                if ($time->gte($startTime) && $time->lt(Carbon::createFromFormat('H:i','24:00' ))) {
-                    return $schedule['price_per_hour']/2;
+            // chia thành 3 đoạn thời gian để tính =>30'
+            for ($i=1;$i<=3;$i++){
+                // thêm đều kiện cho các khoản thời gian qua ngày vd 22:00->05:00
+                if ($startTime->gt($endTime)) {
+                    //start to 24:00
+                    if ($time->gte($startTime) && $time->lt(Carbon::createFromFormat('H:i','24:00' ))) {
+                        $totalPrice+= $schedule['price_per_hour']/2;
+                        $count--;
+                    }
+                    //00:00 đến end
+                    if ($time->gte(Carbon::createFromFormat('H:i','00:00' )) && $time->lt($endTime)) {
+                        $totalPrice+= $schedule['price_per_hour']/2;
+                        $count--;
+                    }
                 }
-                //00:00 đến end
-                if ($time->gte(Carbon::createFromFormat('H:i','00:00' )) && $time->lt($endTime)) {
-                    return $schedule['price_per_hour']/2;
+                if ($time->gte($startTime) && $time->lt($endTime)) {
+                    $totalPrice+= $schedule['price_per_hour']/2;
+                    $count--;
                 }
-            }
-
-            if ($time->gte($startTime) && $time->lt($endTime)) {
-                return $schedule['price_per_hour']/2;
+                //tăng 30' để tính
+                $time->addMinutes(30);
             }
         }
-        return null;
+
+        $total=$totalPrice+($defaultPrice/2)*$count;
+        return $total;
     }
 }

@@ -24,7 +24,7 @@
                         <div>
                             <div class="mb-1">Default</div>
                             <label for="" id="pricing-label" class="m-2">Price</label>
-                            <input class="w-[65px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" name="defaultPrice"/>&nbsp;VND
+                            <input class="w-[65px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" name="defaultPrice"/>&nbsp;VND/H
                         </div>
 
                         @if($currentBoss->is_open_all_day)
@@ -50,8 +50,8 @@
                             <label for="" id="pricing-label" class="mx-2">To</label>
                             <x-time-input name="mon-fri-to-time-1" />
                             <label for="" id="pricing-label" class="mx-2">Price</label>
-                            <input class="w-[65px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" placeholder="000000" name="mon-fri-price-1"/>&nbsp;VND
-                            <x-circle-minus-button class="absolute right-2" onclick="monToFriMinus(this)" type="button"></x-circle-minus-button>
+                            <input class="w-[65px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" placeholder="000000" name="mon-fri-price-1"/>&nbsp;VND/H
+                            <x-circle-minus-button class="absolute right-0" onclick="monToFriMinus(this)" type="button"></x-circle-minus-button>
                         </div>
                     </div>
                     <hr class="my-2">
@@ -69,8 +69,8 @@
                             <label for="" id="pricing-label" class="mx-2">To</label>
                             <x-time-input name="weekend-to-time-1"/>
                             <label for="" id="pricing-label" class="mx-2">Price</label>
-                            <input class="w-[65px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" placeholder="000000" name="weekend-price-1"/>&nbsp;VND
-                            <x-circle-minus-button class="absolute right-2" onclick="weekendMinus(this)" type="button"></x-circle-minus-button>
+                            <input class="w-[65px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" placeholder="000000" name="weekend-price-1"/>&nbsp;VND/H
+                            <x-circle-minus-button class="absolute right-0" onclick="weekendMinus(this)" type="button"></x-circle-minus-button>
                         </div>
                     </div>
 
@@ -103,8 +103,8 @@
             <label for="" id="pricing-label" class="mx-2">To</label>
             <x-time-input name="mon-fri-to-time-" />
             <label for="" id="pricing-label" class="mx-2">Price</label>
-            <x-text-input class="w-[65px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" placeholder="000000" name="mon-fri-price-"/>&nbsp;VND
-            <x-circle-minus-button class="absolute right-2" onclick="monToFriMinus(this)" type="button"></x-circle-minus-button>
+            <x-text-input class="w-[65px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" placeholder="000000" name="mon-fri-price-"/>&nbsp;VND/H
+            <x-circle-minus-button class="absolute right-0" onclick="monToFriMinus(this)" type="button"></x-circle-minus-button>
         </div>
     </template>
     <template id="weekend-template">
@@ -114,8 +114,8 @@
             <label for="" id="pricing-label" class="mx-2">To</label>
             <x-time-input name="weekend-to-time-"/>
             <label for="" id="pricing-label" class="mx-2">Price</label>
-            <x-text-input class="w-[65px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" placeholder="000000" name="weekend-price-"/>&nbsp;VND
-            <x-circle-minus-button class="absolute right-2" onclick="weekendMinus(this)" type="button"></x-circle-minus-button>
+            <x-text-input class="w-[65px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" placeholder="000000" name="weekend-price-"/>&nbsp;VND/H
+            <x-circle-minus-button class="absolute right-0" onclick="weekendMinus(this)" type="button"></x-circle-minus-button>
         </div>
     </template>
 
