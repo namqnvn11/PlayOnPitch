@@ -467,11 +467,40 @@ button#submit-rating:hover {
     align-items: center;
 }
 .star1 {
-    color: #ccc; /* Mặc định màu xám */
-    transition: color 0.3s; /* Hiệu ứng khi đổi màu */
+    font-size: 24px; /* Đảm bảo các sao có cùng kích thước */
+    color: #ddd; /* Màu xám mặc định */
+    display: inline-block;
+    line-height: 1; /* Đảm bảo không có khoảng cách giữa các sao */
+    position: relative;
+    vertical-align: middle; /* Căn chỉnh theo chiều dọc */
 }
+
+/* Sao đầy */
 .star1.filled {
-    color: #f5c518; /* Màu vàng cho sao đã chọn */
+    color: gold; /* Màu vàng cho sao đầy */
+}
+
+/* Nửa sao */
+.star1.filled-half {
+    color: gold; /* Màu vàng cho phần nửa */
+    overflow: hidden; /* Chỉ hiển thị nửa ngôi sao */
+    position: relative;
+    display: inline-block;
+    width: 12px; /* Đảm bảo nửa kích thước so với sao đầy */
+}
+
+.star1.filled-half:before {
+    content: "★"; /* Hiển thị ngôi sao */
+    position: absolute;
+    left: 0;
+    width: 50%; /* Chỉ hiển thị 50% chiều rộng */
+    color: gold; /* Màu vàng */
+    overflow: hidden;
+}
+
+/* Sao rỗng */
+.star1.empty {
+    color: #ddd; /* Màu xám */
 }
 
 .rating-point {

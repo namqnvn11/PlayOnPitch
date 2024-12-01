@@ -6,9 +6,14 @@
     <title>Play On Pitch</title>
     <link rel="stylesheet" href="{{ asset('css/yarddetail.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/avatar-js@1.0.0/dist/avatar.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/0NI+RMpF8zZOZlLlDZRQo2LfND5VNAus8mJo1h" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@flasher/flasher@1.1.2/dist/flasher.min.js"></script>
+
+
+
 </head>
 <body>
 <header>
@@ -48,7 +53,34 @@
         <!-- Main Image and Booking Info Section -->
         <div class="main-section">
             <div class="image-gallery">
+                <div class="average-rating-container">
+                    <h3 id="averageRating">
+                        @php
+                            $fullStars = floor($averageRating); // Số sao đầy
+                            $halfStar = ($averageRating - $fullStars) >= 0.5 ? 1 : 0; // Kiểm tra nửa sao
+                            $emptyStars = 5 - $fullStars - $halfStar; // Số sao rỗng
+                        @endphp
+
+                            <!-- Hiển thị các sao đầy -->
+                        @for ($i = 0; $i < $fullStars; $i++)
+                            <span class="star1 filled">★</span>
+                        @endfor
+
+                        <!-- Hiển thị một nửa sao nếu có -->
+                        @if ($halfStar)
+                            <span class="star1 filled-half">★</span>
+                        @endif
+
+                        <!-- Hiển thị các sao rỗng -->
+                        @for ($i = 0; $i < $emptyStars; $i++)
+                            <span class="star1">★</span>
+                        @endfor
+
+                        {{--                        ({{ number_format($averageRating, 2) }})--}}
+                    </h3>
+                </div>
                 <h2>{{$yard->boss->company_name}}</h2>
+
                 <img class="main-image" src="{{asset('img/sanbong.jpg')}}" alt="Main Field Image">
 
                 <div class="thumbnails">
@@ -133,7 +165,7 @@
         </div>
         @if ($ratings->hasMorePages())
             <div id="load-more" class="text-center">
-                <button id="loadMoreBtn" class="btn" style="background-color: #309C3E; color: white">Xem thêm</button>
+                <button id="loadMoreBtn" class="btn" style="background-color: #309C3E; color: white" data-current-page="{{ $ratings->currentPage() }}">Xem thêm</button>
             </div>
         @endif
     </div>
@@ -189,71 +221,154 @@
 
 @include('user.yard_detail.elements.modal_report')
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        @if (session('flasher'))
+        Flasher.render({!! session('flasher') !!});
+        @endif
+    });
+</script>
+
 <script> const getDistrictsUrl = "{{ route('boss.yard.getDistricts') }}";</script>
 
 <script src="{{ asset('js/user/home/index.js?t='.config('constants.app_version') )}}"></script>
 <script>
     const STORE_URL = "{{ route('user.storeRegister') }}";
+    const REPORT_URL = "{{ route('user.yarddetail.report') }}"
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{asset('assets/libraries/toastr/toastr.min.js' ) }}"></script>
 <script src="{{asset('js/notification.js')}}"></script>
 <script src="{{asset('js/registerBoss.js?t='.config('constants.app_version'))}}"></script>
-<script src="{{asset('js/user/yard_detail/index.js?='.config('constants.app_version'))}}"></script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const loadMoreButton = document.getElementById('loadMoreBtn');
         const reviewsContainer = document.getElementById('reviews');
+        const averageRatingDisplay = document.getElementById('averageRating');
+
+        // Lắng nghe sự kiện click cho container của reviews
+        reviewsContainer.addEventListener('click', function(event) {
+            const target = event.target;
+
+            if (target.classList.contains('ellipsis')) {
+                document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+                    dropdown.style.display = 'none';
+                });
+
+                const dropdownContent = target.nextElementSibling;
+                dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+            }
+
+            if (target.classList.contains('report-link')) {
+                const ratingId = target.dataset.ratingId;
+                console.log('Báo cáo bài viết với ID:', ratingId);
+
+                if (ratingId) {
+                } else {
+                    console.log('Không tìm thấy ratingId');
+                }
+            }
+        });
 
         loadMoreButton.addEventListener('click', function() {
-            const currentPage = {{ $ratings->currentPage() }};
+            const currentPage = parseInt(loadMoreButton.getAttribute('data-current-page'), 10);
             const nextPage = currentPage + 1;
             const url = "{{ route('user.yarddetail.loadMore', ['id' => $yard->id]) }}?page=" + nextPage;
 
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-
+                    console.log(data);
                     if (data.reviews && data.reviews.length > 0) {
-                        // Duyệt qua các đánh giá trả về
                         data.reviews.forEach(review => {
                             const reviewItem = document.createElement('div');
                             reviewItem.classList.add('review-item');
                             reviewItem.innerHTML = `
-                            <div class="review-header">
-                                <div class="review-user-info">
-                                    <img src="https://www.gravatar.com/avatar/${review.user.full_name}?s=100&d=identicon" alt="${review.user.full_name}'s avatar" class="user-avatar">
-                                    <span class="review-user">${review.user.full_name}</span>
-                                </div>
-                                <div class="review-rating">
-                                    ${[...Array(5)].map((_, i) => `
-                                        <span class="star1 ${review.point >= i + 1 ? 'filled' : ''}">★</span>
-                                    `).join('')}
-                                    <span class="rating-point">(${review.point})</span>
-                                </div>
+                        <div class="review-header">
+                            <div class="review-user-info">
+                                <img src="https://www.gravatar.com/avatar/${review.user.full_name}?s=100&d=identicon" alt="${review.user.full_name}'s avatar" class="user-avatar">
+                                <span class="review-user">${review.user.full_name}</span>
                             </div>
-                            <div class="ellipsis-menu" style="float: right">
-                                <span class="ellipsis">...</span>
-                                <div class="dropdown-content">
-                                    <a href="#" class="report-link" data-bs-toggle="modal" data-bs-target="#modalReport" data-rating-id="${review.id}">Báo cáo bài viết</a>
-                                </div>
+                            <div class="review-rating">
+                                ${[...Array(5)].map((_, i) => `
+                                    <span class="star1 ${review.point >= i + 1 ? 'filled' : ''}">★</span>
+                                `).join('')}
+                                <span class="rating-point">(${review.point})</span>
                             </div>
-                            <div class="review-comment">
-                                <p>${review.comment}</p>
+                        </div>
+                        <div class="ellipsis-menu" style="float: right">
+                            <span class="ellipsis">...</span>
+                            <div class="dropdown-content" style="display: none;">
+                                <a href="#" class="report-link" data-bs-toggle="modal" data-bs-target="#modalReport" data-rating-id="${review.id}">Báo cáo bài viết</a>
                             </div>
-                        `;
+                        </div>
+                        <div class="review-comment">
+                            <p>${review.comment}</p>
+                        </div>
+                    `;
                             reviewsContainer.appendChild(reviewItem);
                         });
+
+                        const newEllipses = reviewsContainer.querySelectorAll('.ellipsis');
+                        newEllipses.forEach(ellipsis => {
+                            ellipsis.addEventListener('click', function(event) {
+                                document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+                                    dropdown.style.display = 'none';
+                                });
+
+                                const dropdownContent = ellipsis.nextElementSibling;
+                                dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+                            });
+                        });
+
+                        const newReportLinks = reviewsContainer.querySelectorAll('.report-link');
+                        newReportLinks.forEach(link => {
+                            link.addEventListener('click', function(event) {
+                                const ratingId = link.dataset.ratingId;
+                                console.log('Báo cáo bài viết với ID:', ratingId);
+
+                            });
+                        });
+
+                        loadMoreButton.setAttribute('data-current-page', nextPage);
+                    }
+
+                    if (data.averageRating !== undefined) {
+                        averageRatingDisplay.innerHTML = `
+                    Average Rating:
+                    ${[...Array(5)].map((_, i) => `
+                        <span class="star1 ${data.averageRating >= i + 1 ? 'filled' : ''}">★</span>
+                    `).join('')}
+                    (${data.averageRating.toFixed(2)})
+                `;
                     }
 
                     if (!data.hasMorePages) {
                         loadMoreButton.style.display = 'none';
                     }
                 })
-                .catch(error => {
-                    console.error('Error:', error);
+                .catch(error => console.error('Error:', error));
+        });
+
+
+        document.addEventListener('click', function(event) {
+            const target = event.target;
+
+            // Nếu người dùng click ra ngoài dấu ba chấm và dropdown, ẩn tất cả dropdown
+            if (!target.classList.contains('ellipsis') && !target.closest('.dropdown-content')) {
+                document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+                    dropdown.style.display = 'none';
                 });
+            }
         });
     });
 </script>
+<script src="{{asset('js/user/yard_detail/index.js?='.config('constants.app_version'))}}"></script>
+
+
+
+
+
 

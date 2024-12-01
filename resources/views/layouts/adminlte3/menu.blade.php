@@ -26,6 +26,13 @@
     </li>
 
     <li class="nav-item">
+        <a href="{{ route('admin.registerBoss.index') }}" class="nav-link">
+            <i class="nav-icon far fa-circle text-warning"></i>
+            <p class="text-gray-300">Register Boss</p>
+        </a>
+    </li>
+
+    <li class="nav-item">
         <a href="{{ route('admin.logout') }}" class="nav-link">
             <i class="nav-icon far fa-circle text-info"></i>
             <p class="text-gray-300">Logout</p>

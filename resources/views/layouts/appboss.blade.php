@@ -26,6 +26,7 @@
     <!-- summernote -->
     <link rel="stylesheet" href="{{  asset('assets/templates/adminlte3/plugins/summernote/summernote-bs4.min.css' ) }}">
 
+
     <link rel="stylesheet" href="{{  asset('assets/libraries/toastr/toastr.min.css' ) }}">
     <link rel="stylesheet" href="{{  asset('css/custom.css?v='.config('constant.app_version') ) }}">
     <link rel="stylesheet" href="{{  asset('css/boss/boss.css?v='.config('constant.app_version') ) }}">
@@ -101,6 +102,7 @@
 <script src="{{  asset('assets/libraries/toastr/toastr.min.js' ) }}"></script>
 <script src="{{  asset('js/notification.js' ) }}"></script>
 <script src="{{  asset('js/common.js' ) }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!-- AdminLTE for demo purposes -->
 
 @yield('pagescript')

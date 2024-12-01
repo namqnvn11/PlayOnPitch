@@ -6,24 +6,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="reportForm" action="{{ route('user.yarddetail.report') }}" method="POST">
+                <form id="report-form">
                     @csrf
-                    <input type="hidden" name="rating_id" id="ratingId">
+                    <input type="hidden" name="rating_id" id="rating-id">
                     <input type="hidden" name="user_id" id="user_id" value="{{Auth::user()->id}}">
                     <div class="form-group">
                         <label for="title">Tiêu đề</label>
                         <input type="text" name="title" class="form-control rounded-md border-gray-400" placeholder="Nhập tiêu đề">
-                        @error('title')
-                        <small class="text-danger">{{ $message }}</small>
-                        @enderror
+                        <div class="invalid-feedback" id="title-error"></div>
                     </div>
 
                     <div class="form-group">
                         <label for="comment" class="form-label">Lý do báo cáo:</label>
                         <textarea name="comment" id="comment" class="form-control rounded-md border-gray-400" rows="3" placeholder="Nhập lí do báo cáo"></textarea>
-                        @error('comment')
-                        <small class="text-danger">{{ $message }}</small>
-                        @enderror
+                        <div class="invalid-feedback" id="comment-error"></div>
                     </div>
 
                     <div class="modal-footer">
