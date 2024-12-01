@@ -43,74 +43,73 @@
 </div>
 <form id="bookingForm" action="{{ route('user.choice_yard.store.Reservation') }}" method="POST">
     @csrf
-<div class="booking-container">
-    <div class="step-indicator">
-        <div class="step active">
-            <i class="fa fa-th-large"></i>
-            <span>Chọn sân</span>
+    <div class="booking-container">
+        <div class="step-indicator">
+            <div class="step active">
+                <i class="fa fa-th-large"></i>
+                <span>Chọn sân</span>
+            </div>
+            <span class="arrow">></span>
+            <div class="step">
+                <i class="fa fa-credit-card"></i>
+                <span>Thanh toán</span>
+            </div>
+            <span class="arrow">></span>
+            <div class="step">
+                <i class="fa fa-ticket-alt"></i>
+                <span>Thông tin đặt sân</span>
+            </div>
         </div>
-        <span class="arrow">></span>
-        <div class="step">
-            <i class="fa fa-credit-card"></i>
-            <span>Thanh toán</span>
-        </div>
-        <span class="arrow">></span>
-        <div class="step">
-            <i class="fa fa-ticket-alt"></i>
-            <span>Thông tin đặt sân</span>
-        </div>
-    </div>
 
-    <div class="time-selector">
-        <select id="dateSelector" name="reservation_date">
-            <option value="">Chọn ngày</option>
-            @foreach ($dates as $date)
-                <option value="{{ $date->date }}">{{ \Carbon\Carbon::parse($date->date)->translatedFormat('D d/m') }}</option>
-            @endforeach
-        </select>
-    </div>
-    <div class="booking-content">
-        <div class="booking-table">
-            <table class="booking-table1">
-                <thead>
-                <tr>
-                    <th></th>
-                    @foreach ($timeSlots as $slot)
-                        <th>{{ $slot->time_slot }}</th>
-                    @endforeach
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($yards as $yard)
+        <div class="time-selector">
+            <select id="dateSelector" name="reservation_date">
+                <option value="">Chọn ngày</option>
+                @foreach ($dates as $date)
+                    <option value="{{ $date }}">{{ \Carbon\Carbon::parse($date)->translatedFormat('D d/m') }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="booking-content">
+            <div class="booking-table">
+                <table class="booking-table1">
+                    <thead>
                     <tr>
-                        <td class="sticky left-0">{{ $yard->yard_name }}</td>
-                        @foreach($timeSlots as $slot)
-                            <td class="selectable"></td>
+                        <th></th>
+                        @foreach ($timeSlots as $slot)
+                            <th>{{ $slot->time_slot }}</th>
                         @endforeach
                     </tr>
-                @endforeach
-                </tbody>
-            </table>
-        </div>
-
-        <div class="booking-info">
-            <p><strong>{{$yard->boss->company_name}}</strong></p>
-            <p>{{ $yard->boss->company_address}}</p>
-            <p id="selectedDate"></p>
-{{--            <p id="selected-field"></p>--}}
-            <p id="selected-yard"></p>
-            <p id="selected-timeslot"></p>
-            <input type="hidden" name="reservation_time_slot[]" id="selected-timeslot-input">
-            <input type="hidden" name="yard_id[]" value="{{$yard->id}}">
-            <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
-            <input type="text" placeholder="Họ và tên" value="{{Auth::user()->full_name}}">
+                    </thead>
+                    <tbody>
+                    @foreach($yards as $yard)
+                        <tr>
+                            <td class="sticky left-0">{{ $yard->yard_name }}</td>
+                            @foreach($timeSlots as $slot)
+                                <td class="selectable"></td>
+                            @endforeach
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="booking-info">
+                <p><strong>{{$yard->boss->company_name}}</strong></p>
+                <p>{{ $yard->boss->company_address}}</p>
+                <p id="selectedDate"></p>
+                {{--<p id="selected-field"></p>--}}
+                <p id="selected-yard"></p>
+                <p id="selected-timeslot"></p>
+                <input type="hidden" name="reservation_time_slot[]" id="selected-timeslot-input">
+                <input type="hidden" name="yard_id[]" value="{{$yard->id}}">
+                <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
+                <input type="text" placeholder="Họ và tên" value="{{Auth::user()->full_name}}">
                 <input type="tel" placeholder="Số điện thoại" value="{{Auth::user()->phone}}">
                 <p>Tổng tiền: <strong id="totalPrice">0 đ</strong></p>
                 <input type="hidden" name="total_price" id="totalPrice-hidden">
                 <button type="submit" >Tiếp tục</button>
+            </div>
         </div>
     </div>
-</div>
 </form>
 
 <div style="background-color: #2e7d32">

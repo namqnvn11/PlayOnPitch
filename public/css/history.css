@@ -99,11 +99,12 @@ header {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 55px;
-    height: 101px;
+    margin-top: 10px;
+    height: 5%;
 }
 
 .registration input {
+    margin-top: 25px;
     padding: 10px;
     border: none;
     border-radius: 10px;
@@ -112,6 +113,7 @@ header {
 }
 
 .registration button {
+    margin-top: 25px;
     padding: 10px;
     border: none;
     border-radius: 10px;
@@ -191,154 +193,248 @@ footer {
     height: 140px;
     object-fit: cover;
 }
-.invoice-container {
-    max-width: 72%;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f8f8f8;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    font-family: Arial, sans-serif;
-}
 
-.steps {
+.profile-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-left: 15%;
+    gap: 20px;
+    max-width: 72%;
+    margin: 40px auto;
 }
 
-.step {
+
+.sidebar {
+    width: 350px;
+    padding: 20px;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+}
+
+.user-info p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.menu {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+}
+
+.menu li {
+    margin-bottom: 10px;
+}
+
+.menu a {
+    display: flex;
     align-items: center;
-    font-size: 14px;
-    color: black;
-    margin: 0 10px;
-    padding-right: 100px;
-}
-.step span {
-    padding-right: 100px;
-}
-
-.step i {
-    font-size: 24px;
-    margin-bottom: 5px;
-    color: black;
-    padding-right: 100px;
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
-.step.active i {
-    color: red;
-    padding-right: 100px;
+.menu a:hover {
+    background-color: #e8f5e9;
+    color: #4CAF50;
 }
 
-.step.active span {
-    color: red;
-    padding-right: 100px;
+.logout-btn {
+    margin-top: 20px;
+    padding: 12px;
+    width: 315%;
+    border: 1px solid #4CAF50;
+    color: #4CAF50;
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.arrow {
-    font-size: 18px;
-    color: black;
-    padding-right: 100px;
+.logout-btn:hover {
+    background-color: #e8f5e9;
 }
 
-.invoice {
-    max-width: 72%;
-    margin: 0 auto;
+/* Profile Details */
+.profile-details {
+    flex: 1;
+    background-color: #f9f9f9;
     padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-details h2 {
+    font-size: 20px;
+    color: black;
+    margin-bottom: 20px;
+}
+
+.details-box {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 10px 20px;
+    align-items: center;
+}
+
+
+.details-box p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.details-box p span {
+    padding-left: 40vh;
+    font-weight: bold;
+    color: #333;
+}
+
+.details-box a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.details-box a:hover {
+    text-decoration: underline;
+}
+
+.info-row {
+    display: contents;
+}
+
+.info-row label {
+    font-weight: bold;
+    color: #333;
+    text-align: left;
+    padding-left: 10px;
+    padding-bottom: 20px;
+}
+
+.info-row span {
+    padding-left: 20vh;
+}
+
+.edit-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: 1px solid #4CAF50;
+    color: #4CAF50;
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-btn:hover {
+    background-color: #e8f5e9;
+}
+
+.history-container {
+    max-width: 800px;
+    padding: 10px;
     background-color: #fff;
     border-radius: 8px;
-    font-family: Arial, sans-serif;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: -330px;
+    margin-left: 800px;
 }
 
-.invoice h2 {
-    text-align: left;
+.history-container h2{
     font-size: 20px;
-    margin-bottom: 20px;
 }
 
-.invoice-info,
-.customer-info,
-.total-info {
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-
-
-.invoice-info p,
-.customer-info p,
-.total-info p {
+.booking-item {
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    margin: 25px 0;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: #f5f5f5;
 }
 
-.invoice-info p strong,
-.customer-info p strong,
-.total-info p strong {
-    width: 35%; /* Độ rộng cố định cho tiêu đề */
+.booking-details {
+    display: flex;
+    gap: 10px;
+}
+
+.booking-details img {
+    width: 100px;
+    height: 100px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.details h3 {
+    margin: 3px ;
+    color: #333;
+    font-size: 20px;
+}
+
+.details p {
+    margin: 5px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.booking-status {
+    text-align: right;
+}
+
+.status {
+    font-size: 14px;
     font-weight: bold;
-    margin-right: 10px;
 }
 
-.invoice-info p span,
-.customer-info p span,
-.total-info p span {
-    flex: 1; /* Cho phép nội dung tự động co giãn */
+.status.success {
+    color: green;
 }
 
-.total-info p {
-    font-size: 16px;
-    font-weight: bold;
+.reorder-btn {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
 }
 
-.total-info p span {
-    font-size: 16px;
-    font-weight: normal;
-    color: black;
+.reorder-btn:hover {
+    background-color: #45a049;
 }
 
-hr {
-    border: 0;
-    border-top: 1px solid #ccc;
-    margin: 20px 0;
+.booking-item {
+    display: none; /* Mặc định ẩn */
 }
 
-.export-invoice{
+.booking-item.visible {
+    display: flex; /* Hiển thị các mục có class "visible" */
+    justify-content: space-between; /* Căn chỉnh các phần tử trong mục */
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.show-more-btn {
     background-color: #4CAF50;
     color: white;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 16px;
     margin: 10px auto;
     display: block;
     text-align: center;
     width: fit-content;
 }
 
-.export-invoice:hover {
+.show-more-btn:hover {
     background-color: #45a049;
 }
-@media print {
-    body * {
-        visibility: hidden; /* Ẩn mọi thứ trên trang */
-    }
-    .invoice, .invoice * {
-        visibility: visible; /* Chỉ hiển thị hóa đơn */
-    }
-    .invoice {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%; /* Đảm bảo hóa đơn chiếm toàn bộ chiều ngang giấy */
-    }
-    .export-invoice {
-        display: none; /* Ẩn nút xuất hóa đơn khi in */
-    }
-}
+

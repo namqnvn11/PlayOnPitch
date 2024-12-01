@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play On Pitch</title>
-    <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/history.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -50,38 +50,73 @@
             <p>Anh/Chị <strong>{{ Auth::user()->full_name}}</strong></p>
         </div>
         <ul class="menu">
-            <li><a href="{{route("user.history.index")}}"> <i class="fa fa-history"></i>&nbsp;Lịch sử đặt sân</a></li>
-            <li style="background-color: #F4F4F4"><a href="#"  style="color: #4CAF50;"> <i class="fa fa-info-circle" style="color: #4CAF50;"></i>&nbsp;Thông tin cá nhân</a></li>
+            <li><a href="#"> <i class="fa fa-history"></i>&nbsp;Lịch sử đặt sân</a></li>
+            <li style="background-color: #F4F4F4"><a href="{{route("user.profile.index")}}"  style="color: #4CAF50;"> <i class="fa fa-info-circle" style="color: #4CAF50;"></i>&nbsp;Thông tin cá nhân</a></li>
             <li><a href="{{route("user.my_voucher.index")}}"><i class="fa-solid fa-ticket"></i>&nbsp;Voucher của bạn</a></li>
             <li><a href="{{route("user.voucher.index")}}"><i class="fa-solid fa-retweet"></i>&nbsp;Đổi voucher</a></li>
         </ul>
         <a href="{{route("user.logout")}}"><button class="logout-btn">Đăng xuất</button></a>
     </div>
+</div>
 
-    <div class="profile-details">
-        <h2>Thông tin cá nhân</h2>
-        <div class="details-box">
-            <div class="info-row">
-                <label>Email:</label>
-                <span>{{ Auth::user()->email}}</span>
-            </div>
-            <div class="info-row">
-                <label>Tên:</label>
-                <span>{{ Auth::user()->full_name}}</span>
-            </div>
-            <div class="info-row">
-                <label>Số điện thoại:</label>
-                <span>{{ Auth::user()->phone}}</span>
-            </div>
-            <div class="info-row">
-                <label>Địa chỉ:</label>
-                <span>{{ Auth::user()->address?(Auth::user()->address . ", " . Auth::user()->District?->name . ", " . Auth::user()->District?->Province?->name) : ''}}</span>
-            </div>
+{{--<div class="history-container">--}}
+{{--    <h2>Lịch sử đặt sân</h2>--}}
+{{--    <div class="booking-list" id="bookingList">--}}
+{{--        @foreach ($reservations as $reservation)--}}
+{{--            <div class="booking-item">--}}
+{{--                <div class="booking-details">--}}
+{{--                    <img src="https://via.placeholder.com/100x70" alt="Hình sân bóng">--}}
+{{--                    <div class="details">--}}
+{{--                        <p><strong>Mã:</strong> {{ $reservation->code }}</p>--}}
+{{--                        @if ($reservation->yard)--}}
+{{--                            <h6>{{ $reservation->yard->yard_name }}</h6>--}}
+{{--                            <p>{{ $reservation->yard->address }}</p>--}}
+{{--                        @endif--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <div class="booking-status">--}}
+{{--                    <p class="status success">Thành công</p>--}}
+{{--                    <p><strong>Tổng tiền:</strong> {{ number_format($reservation->total_price, 0, ',', '.') }}đ</p>--}}
+{{--                    <button class="reorder-btn" onclick="redirectToInvoice({{ $reservation->yard->id }})">Xem hóa đơn</button>--}}
+{{--                    <button class="reorder-btn" onclick="redirectToYardDetail({{ $reservation->yard->id }})">Đặt lại</button>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        @endforeach--}}
+{{--    </div>--}}
+{{--    <button id="showMoreBtn" class="show-more-btn">Xem thêm</button>--}}
+{{--</div>--}}
 
-            <button class="edit-btn js-on-edit" data-bs-toggle="modal" data-bs-target="#editInfoModal" onclick="openEditModal()">Chỉnh sửa</button>
-            <button class="edit-btn js-on-edit" data-bs-toggle="modal" data-bs-target="#changePasswordModal" style="width: 20%">Đổi mật khẩu</button>
-        </div>
+<div class="history-container">
+    <h2>Lịch sử đặt sân</h2>
+    <div class="booking-list">
+        @forelse ($histories as $history)
+            @if ($history->reservation)
+            <div class="booking-item">
+                <div class="booking-details">
+                    <img src="https://via.placeholder.com/100x70" alt="Hình sân bóng">
+                    <div class="details">
+                        <p><strong>Mã:</strong> {{ $history->reservation->code ?? 'Không có mã' }}</p>
+                        @if ($history->reservation->yard)
+                            <h6>{{ $history->reservation->yard->yard_name }}</h6>
+                            <h6>{{ $history->reservation->yard->boss->company_address }}</h6>
+                        @else
+                            <p>Không tìm thấy thông tin sân</p>
+                        @endif
+                    </div>
+                </div>
+                <div class="booking-status">
+                    <p class="status success">Thành công</p>
+                    <p><strong>Tổng tiền:</strong> {{ number_format($history->reservation->total_price ?? 0, 0, ',', '.') }}đ</p>
+                    <button class="reorder-btn" onclick="redirectToInvoice({{ $history->reservation->id ?? '' }})">Xem hóa đơn</button>
+                    <button class="reorder-btn" onclick="redirectToYardDetail({{ $history->reservation->yard->id ?? '' }})">Đặt lại</button>
+                </div>
+            </div>
+            @endif
+        @empty
+            <p>Không có lịch sử đặt sân nào.</p>
+        @endforelse
     </div>
+       <button id="showMoreBtn" class="show-more-btn">Xem thêm</button>
 </div>
 
 <div style="background-color: #2e7d32">
@@ -132,24 +167,18 @@
 
 </html>
 
-@include('user.profile.elements.modal_edit')
-<script>
-    function openEditModal() {
-        var myModal = new bootstrap.Modal(document.getElementById('modal-edit'));
-        myModal.show();
-    }
-
-    function closeModal() {
-        var myModal = new bootstrap.Modal(document.getElementById('modal-edit'));
-        myModal.hide();
-    }
-
-</script>
-@include('user.profile.elements.changePassword')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const STORE_URL = "{{ route('user.storeRegister') }}";
+
+    function redirectToInvoice(reservationId) {
+        window.location.href = `/user/invoice/index/${reservationId}`;
+    }
+
+    function redirectToYardDetail(yardId) {
+        window.location.href = `/user/yarddetail/index/${yardId}`; // Điều hướng tới chi tiết sân
+    }
 </script>
 <!-- jQuery -->
 <script src="{{  asset('assets/templates/adminlte3/plugins/jquery/jquery.min.js' ) }}"></script>
@@ -160,5 +189,6 @@
 <script src="{{  asset('js/notification.js' ) }}"></script>
 <script src="{{  asset('js/common.js' ) }}"></script>
 <script src="{{asset('js/registerBoss.js?t='.config('constants.app_version'))}}"></script>
+<script src="{{  asset('js/user/history.js' ) }}"></script>
 
 <script src="{{ asset('js/user/profile/index.js?t='.config('constants.app_version') )}}"></script>

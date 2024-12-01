@@ -4,6 +4,7 @@ require base_path('routes/auth.php');
 use App\Http\Controllers\Boss\PriceTimeSettingController;
 use App\Http\Controllers\Boss\YardScheduleController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\User\HistoryController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Models\District;
 use Illuminate\Support\Facades\Route;
@@ -146,7 +147,7 @@ Route::middleware(['auth:web'])->group(function () {
 
         Route::prefix('choice_yard')->name('choice_yard.')->group(function () {
             Route::get('/index/{id}', [ChoiceYardController::class, 'index'])->name('index');
-            Route::post('/calculate-price', [\App\Http\Controllers\User\ReservationController::class, 'calculatePrice'])->name('calculate.Price');
+            Route::post('/calculate-price/{id}', [\App\Http\Controllers\User\ReservationController::class, 'calculatePrice'])->name('calculate.Price');
             Route::post('/store', [\App\Http\Controllers\User\ReservationController::class, 'storeReservation'])->name('store.Reservation');
         });
 
@@ -191,6 +192,9 @@ Route::middleware(['auth:web'])->group(function () {
             Route::get('/index', [PaymentController::class, 'index'])->name('index');
         });
 
+        Route::prefix('history')->name('history.')->group(function () {
+            Route::get('/index', [HistoryController::class, 'index'])->name('index');
+        });
         // MOMO
         Route::post('momo/payment', [PaymentController::class, 'createMoMoPayment'])->name('momo.payment.create');
         Route::get('momo/payment/callback', [PaymentController::class, 'handleMoMoPaymentCallback'])->name('momo.payment.callback');

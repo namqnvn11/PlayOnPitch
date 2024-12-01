@@ -19,7 +19,7 @@ class YardDetailController extends Controller
         $District = District::all();
         $Province = Province::all();
         $yard = Yard::find($id);
-        $ratings = Raiting::with('User')->where('yard_id', $id)->paginate(10);
+        $ratings = Raiting::with('User')->where('yard_id', $id)->where('block', 0)->paginate(10);
         $User = User::all();
         return view('user.yard_detail.index', compact( 'District', 'Province', 'yard', 'ratings', 'User'));
     }
@@ -71,6 +71,16 @@ class YardDetailController extends Controller
             $report->title = $request->title;
             $report->status = 'Chờ xử lý';
             $report->save();
+
+            $reportCount = Report::where('raiting_id', $request->rating_id)->count();
+
+            if($reportCount >= 5){
+                $rating = Raiting::find($request->rating_id);
+                if($rating){
+                    $rating->block = 1;
+                    $rating->save();
+                }
+            }
 
             flash()->success('Thank you for your feedback!');
             return redirect()->back();
