@@ -118,6 +118,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+function imageOnclick(imgSrc,imageElement) {
+    const thumbnails = document.querySelectorAll('#image-gallery .thumbnail');
+    console.log(thumbnails.length)
+    thumbnails.forEach(thumbnail => thumbnail.classList.remove('active'));
+    imageElement.classList.add('active');
+    let mainImage = document.getElementById('mainImage');
+    mainImage.src = imgSrc;
+}
+
 
 
 

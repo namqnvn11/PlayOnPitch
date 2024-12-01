@@ -1,8 +1,10 @@
 <?php
 require base_path('routes/auth.php');
 
+use App\Http\Controllers\Boss\BossImageController;
 use App\Http\Controllers\Boss\PriceTimeSettingController;
 use App\Http\Controllers\Boss\RevenueController;
+use App\Http\Controllers\Boss\YardImageController;
 use App\Http\Controllers\Boss\YardScheduleController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\User\HistoryController;
@@ -74,6 +76,8 @@ Route::middleware(['auth:admin'])->group(function () {
             Route::post('/block/{id}', [VoucherController::class, 'block'])->name('block');
             Route::post('/unblock/{id}', [VoucherController::class, 'unblock'])->name('unblock');
             Route::get('/search', [VoucherController::class, 'search'])->name('search');
+            Route::post('/image/save/{id}',[VoucherController::class,'saveImage'])->name('image.save');
+            Route::get('/image/get/{id}',[VoucherController::class,'getImage'])->name('image.get');
         });
 
         Route::prefix('boss')->name('boss.')->group(function () {
@@ -110,6 +114,13 @@ Route::middleware(['auth:boss'])->group(function () {
             Route::post('/setOpenTime/{id}',[PriceTimeSettingController::class, 'setOpenTime'])->name('setOpenTime');
             Route::get('/testing/create',[PriceTimeSettingController::class, 'test'])->name('test');
             Route::get('/testing/delete',[PriceTimeSettingController::class, 'delete'])->name('delete');
+            Route::get('/schedule/create',[PriceTimeSettingController::class, 'scheduleCreate'])->name('schedule.create');
+            Route::get('/schedule/delete',[PriceTimeSettingController::class, 'scheduleDelete'])->name('schedule.delete');
+            // image
+            Route::get('/image/index',[YardImageController::class, 'index'])->name('image.index');
+            Route::post('/image/save/{id}',[YardImageController::class,'save'])->name('image.save');
+            Route::post('/image/delete/{id}',[YardImageController::class,'delete'])->name('image.delete');
+            Route::post('image/update/{id}',[YardImageController::class,'update'])->name('image.update');
             Route::get('test',function () {
                 return view('boss.yard.test');
             });
@@ -117,6 +128,13 @@ Route::middleware(['auth:boss'])->group(function () {
         Route::prefix('yard_schedule')->name('yard_schedule.')->group(function () {
             Route::get('/index', [YardScheduleController::class, 'index'])->name('index');
             Route::get('/detail/{id}', [YardScheduleController::class, 'detail'])->name('detail');
+        });
+
+        Route::prefix('image')->name('image.')->group(function () {
+            Route::get('/index', [BossImageController::class, 'index'])->name('index');
+            Route::post('/save', [BossImageController::class, 'saveImage'])->name('save');
+            Route::post('/update/{id}', [BossImageController::class, 'updateImage'])->name('update');
+            Route::post('/delete/{id}', [BossImageController::class, 'deleteImage'])->name('delete');
         });
 
         Route::prefix('revenue')->name('revenue.')->group(function () {

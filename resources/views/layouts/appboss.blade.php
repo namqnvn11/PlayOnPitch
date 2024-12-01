@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="{{  asset('css/custom.css?v='.config('constant.app_version') ) }}">
     <link rel="stylesheet" href="{{  asset('css/boss/boss.css?v='.config('constant.app_version') ) }}">
 
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">

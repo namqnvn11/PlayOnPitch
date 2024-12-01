@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Boss;
 use App\Models\District;
 use App\Models\Province;
 use App\Models\Raiting;
@@ -18,6 +19,7 @@ class YardDetailController extends Controller
     {
         $District = District::all();
         $Province = Province::all();
+        $boss = Boss::find($id);
         $yard = Yard::find($id);
 
         $ratings = Raiting::with('User')
@@ -28,7 +30,7 @@ class YardDetailController extends Controller
 
         $User = User::all();
         $averageRating = Raiting::where('yard_id', $id)->avg('point');
-        return view('user.yard_detail.index', compact( 'District', 'Province', 'yard', 'ratings', 'User', 'averageRating'));
+        return view('user.yard_detail.index', compact( 'District', 'Province', 'yard', 'ratings', 'User', 'averageRating', 'boss'));
     }
 
     public function rating(Request $request){

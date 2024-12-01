@@ -51,6 +51,11 @@ class User extends Authenticatable
         return $this->hasMany(Raiting::class);
     }
 
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'user_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

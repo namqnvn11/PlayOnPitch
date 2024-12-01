@@ -51,5 +51,4 @@ class VoucherController extends Controller
             return redirect()->back();
         }
     }
-
 }

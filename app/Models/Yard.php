@@ -36,4 +36,8 @@ class Yard extends Model
     public function YardSchedules(){
         return $this->hasMany(YardSchedule::class, 'yard_id');
     }
+    public function images()
+    {
+        return $this->hasMany(Image::class, 'yard_id');
+    }
 }

@@ -44,6 +44,9 @@
                                     + Add new
                                 </x-green-button>
                             </div>
+
+                            <x-green-button><a href="{{url('boss/yard/schedule/create')}}">Create Schedule</a></x-green-button>
+                            <x-green-button><a href="{{url('boss/yard/schedule/delete')}}">delete Schedule</a></x-green-button>
                         </div>
                         {{--end card header--}}
 

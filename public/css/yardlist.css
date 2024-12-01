@@ -203,12 +203,13 @@ footer {
 }
 
 .content {
-    width: 90%;
-    margin: auto;
+    width: 100%;
+    padding: 0 26px;
 }
 
 .filters-container {
     display: flex;
+    width: 100%;
     align-items: center; /* Canh giữa các phần tử theo chiều dọc */
     justify-content: flex-start; /* Để phần tử đầu tiên (filters) nằm bên trái */
     position: relative;
@@ -222,7 +223,7 @@ footer {
 }
 
 .filters select {
-    padding: 15px;
+    padding: 14px 24px;
     font-size: 16px;
     border-radius: 15px;
     border: 1px solid #ddd;
@@ -230,12 +231,12 @@ footer {
 }
 
 .title {
-    font-size: 24px;
+    font-size: 28px;
+    font-weight: bold;
     color: #4CAF50;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     margin: 0;
+    text-align: center;
+    margin-top: 8px;
 }
 
 .grid {
@@ -251,6 +252,7 @@ footer {
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
+    margin: 0 8px;
 }
 
 .card:hover {
@@ -317,7 +319,23 @@ footer {
     cursor: pointer;
 }
 
+/* Đổi màu cho các nút phân trang */
+.pagination .page-item .page-link {
+    color: black; /* Màu chữ */
+    background-color: #FFFFFF; /* Màu nền */
+    border-color: #14532D; /* Màu viền */
+}
 
+/* Đổi màu cho nút đang được chọn */
+.pagination .page-item.active .page-link {
+    color: #fff;
+    background-color: #14532D; /* Màu nền */
+    border-color: #14532D;
+}
 
-
-
+/* Hover cho các nút */
+.pagination .page-item .page-link:hover {
+    border-color: #0056b3;
+    color: #FFFFFF;
+    background-color: #008347;
+}

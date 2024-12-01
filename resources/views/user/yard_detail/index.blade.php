@@ -6,13 +6,12 @@
     <title>Play On Pitch</title>
     <link rel="stylesheet" href="{{ asset('css/yarddetail.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/avatar-js@1.0.0/dist/avatar.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/0NI+RMpF8zZOZlLlDZRQo2LfND5VNAus8mJo1h" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@flasher/flasher@1.1.2/dist/flasher.min.js"></script>
-
-
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
 <body>
@@ -79,36 +78,32 @@
                         {{--                        ({{ number_format($averageRating, 2) }})--}}
                     </h3>
                 </div>
-                <h2>{{$yard->boss->company_name}}</h2>
+                <div class="text-[24px] font-bold mb-3">{{$boss->company_name}}</div>
+                <img class="main-image" src="{{$boss->images()->first()->img??asset('img/sanbong.jpg')}}" alt="Main Field Image" id="mainImage">
 
-                <img class="main-image" src="{{asset('img/sanbong.jpg')}}" alt="Main Field Image">
-
-                <div class="thumbnails">
-                    <img src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 1">
-                    <img src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 2">
-                    <img src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 3">
-                    <img src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 4">
-                    <img src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 4">
+                <div class="thumbnails" id="image-gallery">
+                    @foreach($boss->images()->get() as $image)
+                        <img class="thumbnail" src="{{$image->img}}" alt="Thumbnail {{$image->id}}" ONCLICK="imageOnclick('{{$image->img}}',this)">
+                    @endforeach
+                    @if($boss->images()->count()==0)
+                        <img class="border" src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 1">
+                    @endif
                 </div>
             </div>
 
             <div class="booking-info">
                 <div class="booking-controls">
-                <select class="time-select">
-                    <option value="">Chọn giờ</option>
-                </select>
-                    <a href="{{ url('user/choice_yard/index') }}/{{$yard->Boss->id}}" class="book-now">Đặt sân ngay</a>
+                    <a href="{{ url('user/choice_yard/index') }}/{{$boss->id}}" class="book-now">Đặt sân ngay</a>
                 </div>
-
                 <div class="owner-info">
                     <h3>THÔNG TIN CHỦ SÂN</h3>
-                    <p><i class="fa fa-user"></i> {{ $yard->boss->full_name}} </p>
-                    <p><i class="fa fa-phone"></i> {{ $yard->boss->phone}} </p>
-                    <p><i class="fa fa-envelope"></i> {{ $yard->boss->email}} </p>
-                    <p><i class="fa fa-map-marker"></i> {{ $yard->boss->company_address}} </p>
+                    <p><i class="fa fa-user"></i> {{ $boss->full_name}} </p>
+                    <p><i class="fa fa-phone"></i> {{ $boss->phone}} </p>
+                    <p><i class="fa fa-envelope"></i> {{ $boss->email}} </p>
+                    <p><i class="fa fa-map-marker"></i> {{ $boss->company_address}} </p>
                     <img class="map" src="{{asset('img/sanbong.jpg')}}" alt="Map Image">
                 </div>
-        </div>
+            </div>
 
         <!-- General Information Section -->
 
@@ -130,7 +125,8 @@
                 <span class="star" data-value="1">★</span>
             </div>
             <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
-            <input type="hidden" name="yard_id" value="{{$yard->id}}">
+            <input type="hidden" name="yard_id" value="{{$boss->id}}">
+{{--            <input type="hidden" name="yard_id" value="{{$yard->id}}">--}}
             <input type="hidden" id="rating-value" value="0" name="point">
             <textarea id="review-input" placeholder="Nhập đánh giá của bạn..." rows="3" name="comment"></textarea>
             <button type="submit">Gửi đánh giá</button>
@@ -140,7 +136,7 @@
                 <div class="review-item">
                     <div class="review-header">
                         <div class="review-user-info">
-                            <img src="https://www.gravatar.com/avatar/{{ md5(strtolower($rating->User->full_name)) }}?s=100&d=identicon" alt="{{ $rating->User->name }}'s avatar" class="user-avatar">
+                            <img src="{{$rating->User->image->img??'https://www.gravatar.com/avatar/'. md5(strtolower($rating->User->full_name)) .'?s=100&d=identicon'}}" alt="{{ $rating->User->name }}'s avatar" class="user-avatar">
                             <span class="review-user">{{ $rating->User->full_name }}</span>
                         </div>
                         <div class="review-rating">
