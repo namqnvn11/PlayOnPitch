@@ -2,13 +2,14 @@
 require base_path('routes/auth.php');
 
 use App\Http\Controllers\Boss\PriceTimeSettingController;
+use App\Http\Controllers\Boss\RevenueController;
 use App\Http\Controllers\Boss\YardScheduleController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Models\District;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\RegisterBossController;
+use App\Http\Controllers\Admin\RegisterBossController;
 
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
@@ -30,6 +31,7 @@ use App\Http\Controllers\User\CommodityPolicyController;
 use App\Http\Controllers\User\PaymentPolicyController;
 use App\Http\Controllers\User\VoucherController as UserVoucherController;
 use App\Http\Controllers\User\MyVoucherController;
+use App\Http\Controllers\RegisterBossController as UserRegisterBossController;
 
 
 //Route::get('/', function () {
@@ -82,7 +84,11 @@ Route::middleware(['auth:admin'])->group(function () {
             Route::get('/get-districts', [BossController::class, 'getDistricts'])->name('getDistricts');
             Route::get('/search', [BossController::class, 'search'])->name('search');
             Route::post('/reset-password/{id}', [BossController::class, 'resetPassword'])->name('reset-password');
+        });
 
+        Route::prefix('registerBoss')->name('registerBoss.')->group(function () {
+            Route::get('/index', [RegisterBossController::class, 'index'])->name('index');
+            Route::get('/detail', [RegisterBossController::class, 'detail'])->name('detail');
         });
     });
 });
@@ -109,6 +115,11 @@ Route::middleware(['auth:boss'])->group(function () {
         });
         Route::prefix('yard_schedule')->name('yard_schedule.')->group(function () {
             Route::get('/index', [YardScheduleController::class, 'index'])->name('index');
+            Route::get('/detail/{id}', [YardScheduleController::class, 'detail'])->name('detail');
+        });
+
+        Route::prefix('revenue')->name('revenue.')->group(function () {
+            Route::get('/index', [RevenueController::class, 'index'])->name('index');
         });
     });
 });
@@ -116,7 +127,7 @@ Route::middleware(['auth:boss'])->group(function () {
 Route::middleware(['auth:web'])->group(function () {
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('logout', [LoginController::class, 'logout'])->name('logout');
-        Route::post('/store', [RegisterBossController::class, 'store'])->name('storeRegister');
+        Route::post('/store', [UserRegisterBossController::class, 'store'])->name('storeRegister');
         Route::prefix('home')->name('home.')->group(function () {
             Route::get('/index', [HomeController::class, 'index'])->name('index');
             Route::get('/get-districts', [HomeController::class, 'getDistricts'])->name('getDistricts');

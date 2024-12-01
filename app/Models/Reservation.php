@@ -29,4 +29,8 @@ class Reservation extends Model
     {
         return $this->belongsTo(Yard::class, 'yard_id');
     }
+
+    public function Revenues(){
+        return $this->hasMany(Revenue::class, 'reservation_id');
+    }
 }

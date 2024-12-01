@@ -26,10 +26,23 @@
 
                         {{-- card header--}}
                         <div class="flex justify-between p-3 border rounded-top align-middle">
+                            <form method="GET" action="{{ route('boss.yard_schedule.index') }}" class="form-inline">
+                                <div class="form-group">
+                                    <label for="yard_id" class="mr-2">Select Yard:</label>
+                                    <select name="yard_id" id="yard_id" class="form-control mr-2"  style="padding-right: 40px">
+                                        @foreach($yards as $yard)
+                                            <option value="{{ $yard->id }}" {{ $yardId == $yard->id ? 'selected' : '' }}>
+                                                {{ $yard->yard_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <x-green-button type="submit" class="btn btn-primary">Filter</x-green-button>
+                            </form>
                             <div class="card-tools">
-                                <green-button role="button" class="btn btn-success js-on-create">
+                                <x-green-button role="button" class="btn btn-success js-on-create">
                                     + Add new
-                                </green-button>
+                                </x-green-button>
                             </div>
                         </div>
                         {{--end card header--}}
@@ -40,9 +53,9 @@
                                 <tr>
                                     <th>Time Slot</th>
                                     @foreach($Dates as $key => $date)
-                                        @if ($key < 7) {{-- Hiển thị tối đa 7 ngày --}}
-                                        <th>{{ $date->date }}</th>
-                                        @endif
+                                        <th>({{ \Carbon\Carbon::parse($date->date)->translatedFormat('l') }})<br>
+                                            {{ \Carbon\Carbon::parse($date->date)->format('d/m/Y') }}
+                                        </th>
                                     @endforeach
                                 </tr>
                                 </thead>
@@ -59,7 +72,7 @@
                                             @endphp
 
                                             @if ($matchingSchedule)
-                                                <td>
+                                                <td  class="editable-cell js-on-create" data-id="{{ $matchingSchedule->reservation_id }}" data-url="{{route("boss.yard_schedule.detail", ['id' => $matchingSchedule->reservation_id])}}">
                                                     <div>{{ $matchingSchedule->reservation->name ?? 'N/A' }}</div>
                                                     <div>{{ $matchingSchedule->reservation->phone ?? 'N/A' }}</div>
                                                     <div>{{ number_format($matchingSchedule->price_per_hour, 0, ',', '.') }} VNĐ</div>
@@ -89,8 +102,8 @@
     </section>
 
 
-    @include('admin.voucher.elements.modal_edit')
-    @include('admin.voucher.elements.modal_confirm')
+    @include('boss.yard_schedule.elements.modal_edit')
+    @include('boss.yard_schedule.elements.modal_confirm')
 
 @endsection
 
@@ -101,7 +114,7 @@
         const UNBLOCK_URL= "{{url('/admin/voucher/unblock')}}"
         {{--const DELETE_URL = "{{ route('admin.voucher.destroy') }}";--}}
     </script>
-    <script src="{{ asset('js/admin/voucher/index.js?t='.config('constants.app_version') )}}"></script>
+    <script src="{{ asset('js/boss/yard_schedule/index.js?t='.config('constants.app_version') )}}"></script>
 @endsection
 
 

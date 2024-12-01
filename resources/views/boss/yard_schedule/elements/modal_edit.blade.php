@@ -3,7 +3,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">{{ 'Add new' }}</h4>
+                <h4 class="modal-title">{{ 'Detail Yard Schedule' }}</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -14,59 +14,51 @@
                 @csrf
                 @flasher_render
                 <input type="hidden" name="id">
-
                 <div class="modal-body">
 
                     <div class="form-group">
                         <label for="yard_name">Yard Name</label>
-                        <select class="form-control" name="yard_name">
-                            <option value="">Select Yard Name</option>
-                            <option value="Sân số 1">Sân số 1</option>
-                            <option value="Sân số 2">Sân số 2</option>
-                            <option value="Sân số 3">Sân số 3</option>
-                            <option value="Sân số 4">Sân số 4</option>
-                            <option value="Sân số 5">Sân số 5</option>
-                            <option value="Sân số 6">Sân số 6</option>
-                            <option value="Sân số 7">Sân số 7</option>
-                            <option value="Sân số 8">Sân số 8</option>
-                            <option value="Sân số 9">Sân số 9</option>
-                            <option value="Sân số 10">Sân số 10</option>
-                        </select>
-
+                        <input type="text" name="yard_name" class="form-control" placeholder="Yard Name" readonly>
                     </div>
 
                     <div class="form-group">
-                        <label for="yard_type">Yard Type</label>
-                        <select class="form-control" name="yard_type">
-                            <option value="">Select Yard Type</option>
-                            <option value="Sân 5">Sân 5</option>
-                            <option value="Sân 7">Sân 7</option>
-                            <option value="Sân 11">Sân 11</option>
-                        </select>
+                        <label for="reservation_date">Reservation Date</label>
+                        <input type="text" name="reservation_date" class="form-control" placeholder="Reservation Date" readonly>
                     </div>
 
                     <div class="form-group">
-                        <label for="description">Description</label>
-{{--                        <textarea type="text" name="description" class="form-control" placeholder="Enter Description">--}}
-                        <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description"></textarea>
+                        <label for="reservation_time_slot">Reservation Time Slot</label>
+                        <input type="text" name="reservation_time_slot" class="form-control" placeholder="Reservation Time Slot" readonly>
                     </div>
 
                     <div class="form-group">
-                        <label for="province">Province</label>
-                        <select class="form-control" name="province" id="province_id" province-id="{{$provinceId}}">
-                            @foreach($Province as $province)
-                                <option value="{{ $province->id }}" {{$provinceId==$province->id?'selected':''}}>{{ $province->name }}</option>
-                            @endforeach
-                        </select>
+                        <label for="reservation_status">Status</label>
+                        <input type="text" name="reservation_status" class="form-control" placeholder="Status" readonly>
                     </div>
 
                     <div class="form-group">
-                        <label for="district">District</label>
-                        <select class="form-control" name="district" id="district_id" district-id="{{$districtId}}">
-{{--                            @foreach($districtList as $district)--}}
-{{--                                <option value="{{ $district->id }}" {{$districtId==$district->id?'selected':''}}>{{ $district->name }}</option>--}}
-{{--                            @endforeach--}}
-                        </select>
+                        <label for="full_name">Name</label>
+                        <input type="text" name="full_name" class="form-control" placeholder="Name" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" name="phone" class="form-control" placeholder="Phone" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" name="email" class="form-control" placeholder="Email" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="total_price">Total Amount</label>
+                        <input type="text" name="total_price" class="form-control" placeholder="Total Amount" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Paid</label>
+                        <input type="text" name="email" class="form-control" placeholder="Paid" readonly>
                     </div>
                 </div>
 

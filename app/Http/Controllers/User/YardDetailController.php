@@ -19,9 +19,13 @@ class YardDetailController extends Controller
         $District = District::all();
         $Province = Province::all();
         $yard = Yard::find($id);
-        $ratings = Raiting::with('User')->where('yard_id', $id)->paginate(10);
+        $ratings = Raiting::with('User')
+            ->where('yard_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
         $User = User::all();
-        return view('user.yard_detail.index', compact( 'District', 'Province', 'yard', 'ratings', 'User'));
+        $averageRating = Raiting::where('yard_id', $id)->avg('point');
+        return view('user.yard_detail.index', compact( 'District', 'Province', 'yard', 'ratings', 'User', 'averageRating'));
     }
 
     public function rating(Request $request){
@@ -57,10 +61,25 @@ class YardDetailController extends Controller
 
     public function report(Request $request){
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'comment' => 'required|string|min:5',
         ]);
+
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+//        $request->validate([
+//            'title' => 'required|string|max:255',
+//            'comment' => 'required|string|min:5',
+//        ]);
 
         try {
             $report = new Report();
@@ -71,29 +90,46 @@ class YardDetailController extends Controller
             $report->title = $request->title;
             $report->status = 'Chờ xử lý';
             $report->save();
+            $message = 'Thank you for your feedback!';
 
-            flash()->success('Thank you for your feedback!');
-            return redirect()->back();
+            if ($request->ajax()) {
+                flash()->success($message);
+                return response()->json([
+                    'success' => true,
+                    'message' => $message,
+                    'voucher' => $report
+                ], 200);
+
+            }
 
         }catch (\Exception $e){
+            if ($request->ajax()) {
+                flash()->error($e->getMessage());
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to process report: ' . $e->getMessage()
+                ], 500);
+            }
 
-            flash()->error($e->getMessage());
-            return redirect()->back();
+            return redirect()->back()->with(['error' => 'Failed to process report: ' . $e->getMessage()]);
         }
-
     }
     public function loadMoreRatings($id, Request $request)
     {
         $ratings = Raiting::with('User')
             ->where('yard_id', $id)
+            ->orderBy('created_at', 'desc')
             ->paginate(10, ['*'], 'page', $request->page);
+
+        $averageRating = Raiting::where('yard_id', $id)->avg('point');
 
         $reviews = $ratings->items();
         $hasMorePages = $ratings->hasMorePages();
 
         return response()->json([
             'reviews' => $reviews,
-            'hasMorePages' => $hasMorePages
+            'hasMorePages' => $hasMorePages,
+            'averageRating' => round($averageRating, 2)
         ]);
     }
 }

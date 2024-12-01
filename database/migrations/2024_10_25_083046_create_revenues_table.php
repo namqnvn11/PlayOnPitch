@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('revenues', function (Blueprint $table) {
             $table->id();
-            $table->integer('boss_id');
+            $table->integer('reservation_id');
             $table->float('total_revenue');
             $table->integer('total_invoice');
             $table->timestamps();
