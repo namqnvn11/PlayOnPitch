@@ -5,8 +5,10 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use App\Models\YardSchedule;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ReservationHistory;
 
 class ReservationController extends Controller
 {
@@ -39,7 +41,7 @@ class ReservationController extends Controller
                         'total_price' => $validatedData['total_price'],
                         'deposit_amount' => 0,
                         'payment_status' => 0,
-                        'reservation_status' => 0,
+                        'reservation_status' => 1,
                         'code' => uniqid(),
                         'created_at' => now(),
                         'updated_at' => now(),
@@ -49,6 +51,15 @@ class ReservationController extends Controller
 
             // Insert tất cả các bản ghi vào cơ sở dữ liệu
             Reservation::insert($reservations);
+
+            // Lưu vào bảng reservation_histories để ghi nhận lịch sử đặt sân
+            foreach ($reservations as $reservation) {
+                ReservationHistory::create([
+                    'user_id' => $reservation['user_id'],
+                    'reservation_id' => $reservation['yard_id'],  // Sử dụng ID của đơn đặt sân
+                    'status' => 'success', // Trạng thái là thành công
+                ]);
+            }
 
             // Chuyển hướng đến trang hóa đơn sau khi lưu
             flash()->success('Reservation created successfully');
@@ -91,10 +102,12 @@ class ReservationController extends Controller
 
     public function checkAvailability(Request $request)
     {
-        $selectedFields = $request->input('selectedFields'); // Danh sách sân và giờ người dùng chọn
-        $selectedDate = $request->input('selectedDate');     // Ngày người dùng chọn
+        $selectedFields = $request->input('selectedFields');
+        $selectedDate = $request->input('selectedDate');
 
         $unavailableFields = [];
+        $availableFields = [];
+        $currentTime = Carbon::now();
 
         foreach ($selectedFields as $field) {
             $schedule = YardSchedule::where('yard_id', $field['yardId'])
@@ -102,27 +115,25 @@ class ReservationController extends Controller
                 ->where('date', $selectedDate)
                 ->first();
 
-            if (!$schedule || $schedule->status === 'booked') {
+            $timeSlotDateTime = Carbon::createFromFormat('Y-m-d H:i', $selectedDate . ' ' . $field['time']);
+
+            // Nếu sân đã đặt hoặc đã qua thời gian hiện tại
+            if (!$schedule || $schedule->status === 'booked' || $timeSlotDateTime < $currentTime) {
                 $unavailableFields[] = $field;
+            } else {
+                $availableFields[] = $field;
             }
         }
 
         if (count($unavailableFields) > 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'Một số sân hoặc giờ đã được đặt.',
-                'unavailableFields' => $unavailableFields
+                'message' => 'Một số sân hoặc giờ không khả dụng.',
+                'unavailableFields' => $unavailableFields,
+                'availableFields' => $availableFields
             ]);
         }
 
-        // Đặt chỗ cho tất cả các lựa chọn hợp lệ
-        foreach ($selectedFields as $field) {
-            YardSchedule::where('yard_id', $field['yardId'])
-                ->where('time_slot', $field['time'])
-                ->where('date', $selectedDate)
-                ->update(['status' => 'booked', 'reservation_id' => auth()->id()]);
-        }
-
-        return response()->json(['success' => true, 'message' => 'Đặt sân thành công!']);
+        return response()->json(['success' => true, 'message' => 'Tất cả các sân khả dụng!']);
     }
 }

@@ -14,6 +14,7 @@ $(document).ready(function () {
                     $.each(data, function (key, district) {
                         $('#district_id').append('<option value="' + district.id + '">' + district.name + '</option>');
                     });
+                    $('#district_id').prop('disabled', false);
                 },
 
                 error: function () {
@@ -23,6 +24,8 @@ $(document).ready(function () {
         } else {
             $('#district_id').empty();
             $('#district_id').append('<option value="">Quận/Huyện</option>');
+
+            $('#district_id').prop('disabled', true);
         }
     });
 });

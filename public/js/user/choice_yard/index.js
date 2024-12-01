@@ -11,30 +11,54 @@ document.addEventListener("DOMContentLoaded", () => {
     let selectedDateValue = null;
     const selectedFields = []; // Danh sách các lựa chọn
 
+    const currentDate = new Date(); // Lấy thời gian hiện tại
+    const timeSlots = document.querySelectorAll('.booking-table1 tbody tr td');
+    timeSlots.forEach(cell => {
+        const timeSlotText = cell.textContent.trim(); // Giả sử text trong cell là định dạng "HH:mm"
+        if (timeSlotText) {
+            const [hours, minutes] = timeSlotText.split(':').map(Number);
+            const slotTime = new Date();
+            slotTime.setHours(hours, minutes, 0, 0); // Thiết lập giờ và phút từ text
+
+            // Nếu thời gian slot đã qua, áp dụng lớp CSS
+            if (slotTime < currentDate) {
+                cell.classList.add('past-time');
+            }
+        }
+    });
+    
     // Xử lý sự kiện click vào các ô trong bảng
     tableCells.forEach((cell) => {
+        if (cell.classList.contains("disabled")) return; // Bỏ qua các ô đã bị disable
+
         cell.addEventListener("click", () => {
             const yardName = cell.parentElement.cells[0].textContent.trim();
             const timeSlot = cell.closest("table").querySelector("thead").rows[0].cells[cell.cellIndex].textContent.trim();
 
-            const selection = { yard: yardName, time: timeSlot };
-
+            // Kiểm tra nếu ô đã được chọn
             if (cell.classList.contains("selected")) {
                 // Nếu đã chọn, bỏ chọn
                 cell.classList.remove("selected");
-                const index = selectedFields.findIndex(
-                    (item) => item.yard === yardName && item.time === timeSlot
-                );
-                if (index !== -1) selectedFields.splice(index, 1);
+                selectedFields.length = 0; // Xóa tất cả lựa chọn khỏi danh sách
             } else {
-                // Nếu chưa chọn, thêm vào danh sách
+                // Nếu chưa chọn, bỏ chọn các ô khác
+                tableCells.forEach((otherCell) => otherCell.classList.remove("selected"));
                 cell.classList.add("selected");
-                selectedFields.push(selection);
+
+                // Cập nhật danh sách chỉ với lựa chọn hiện tại
+                selectedFields.length = 0; // Xóa danh sách cũ
+                selectedFields.push({ yard: yardName, time: timeSlot });
             }
 
             // Cập nhật thông tin hiển thị
-            selectedDisplayTimeSlot.textContent = selectedFields.map((s) => s.time).join(", ");
-            selectedDisplayYard.textContent = selectedFields.map((s) => s.yard).join(", ");
+            if (selectedFields.length > 0) {
+                const { yard, time } = selectedFields[0];
+                selectedDisplayTimeSlot.textContent = time;
+                selectedDisplayYard.textContent = yard;
+            } else {
+                selectedDisplayTimeSlot.textContent = "";
+                selectedDisplayYard.textContent = "";
+            }
 
             // Cập nhật giá trị cho input hidden
             document.getElementById('selected-timeslot-input').value = selectedFields.map((s) => s.time).join(", ");
@@ -67,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // Gửi request AJAX tính tổng tiền
-        fetch('/user/choice_yard/calculate-price', {
+        fetch('/user/choice_yard/calculate-price/{id}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

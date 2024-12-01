@@ -17,19 +17,25 @@ class YardListController extends Controller
         $yard_name = $request->input('yard_name');
         $yards = Yard::query();
 
-        if ($request->has('province_id') && $request->province_id) {
+        if ($request->filled('province_id')) {
             $districtIds = District::where('province_id', $request->province_id)->pluck('id');
             $yards = $yards->whereIn('district_id', $districtIds);
+
+            if ($request->filled('district_id')) {
+                $yards = $yards->where('district_id', $request->district_id);
+            }
         }
 
-        if ($request->has('district_id') && $request->district_id) {
-            $yards = $yards->where('district_id', $request->district_id);
+        if (!$request->filled('province_id')) {
+            $yards = $yards->where('district_id', '!=', null);
         }
+
         if ($yard_name) {
-            $yards->where('yard_name', 'LIKE', '%' . $yard_name . '%');
-       }
+            $yards = $yards->where('yard_name', 'LIKE', '%' . $yard_name . '%');
+        }
 
         $yards = $yards->get();
+
         return view('user.yard_list.index', compact('yards', 'District', 'Province'));
     }
 

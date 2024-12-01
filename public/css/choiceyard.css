@@ -380,4 +380,9 @@ th, td {
     white-space: nowrap; /* Tránh xuống dòng trong các ô */
 }
 
-
+.past-time {
+    background-color: #d3d3d3; /* Màu xám nhạt */
+    pointer-events: none;     /* Vô hiệu hóa click */
+    cursor: not-allowed;
+    color: #999999;           /* Màu chữ nhạt */
+}

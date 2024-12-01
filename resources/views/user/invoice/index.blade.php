@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play On Pitch</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/invoice.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
@@ -61,24 +62,27 @@
 
     <div class="invoice">
         <h2>Hóa đơn</h2>
+        <hr>
         <div class="invoice-info">
-            <p><strong>Sân:</strong> <span>{{ $yard->boss->company_name}}</span></p>
-            <p><strong>Địa chỉ:</strong> <span>{{ $yard->boss->company_address}}</span></p>
-            <p><strong>Vị trí:</strong> <span>{{$yard->yard_name}}</span></p>
-            <p><strong>Thời gian:</strong> <span>18h00 ngày 21 tháng 10 năm 2024</span></p>
-            <p><strong>Trạng thái:</strong> <span>Đã cọc 20%</span></p>
+            <p><strong>Sân:</strong> <span>{{ $reservation->yard->boss->company_name }}</span></p>
+            <p><strong>Địa chỉ:</strong> <span>{{ $reservation->yard->boss->company_address }}</span></p>
+            <p><strong>Vị trí:</strong> <span>{{ $reservation->yard->yard_name }}</span></p>
+            <p><strong>Thời gian:</strong> <span>{{ $reservation->reservation_time_slot }}</span></p>
+            <p><strong>Trạng thái:</strong> <span>{{ $reservation->reservation_status }}</span></p>
         </div>
         <hr>
         <div class="customer-info">
-            <p><strong>Người đặt:</strong> <span>{{ Auth::user()->full_name}}</span></p>
-            <p><strong>Số điện thoại:</strong> <span>{{ Auth::user()->phone}}</span></p>
-            <p><strong>Email:</strong> <span>{{ Auth::user()->email}}</span></p>
+            <p><strong>Người đặt:</strong> <span>{{ $reservation->user->full_name }}</span></p>
+            <p><strong>Số điện thoại:</strong> <span>{{ $reservation->user->phone }}</span></p>
+            <p><strong>Email:</strong> <span>{{ $reservation->user->email }}</span></p>
         </div>
         <hr>
         <div class="total-info">
-            <p><strong>Tổng tiền:</strong> <span>600.000đ</span></p>
-            <p><strong>Đã cọc:</strong> <span>120.000đ</span></p>
+            <p><strong>Tổng tiền:</strong> <span>{{ number_format($reservation->total_price, 0, ',', '.') }}đ</span></p>
+            <p><strong>Đã cọc:</strong> <span>{{ number_format($reservation->deposit, 0, ',', '.') }}đ</span></p>
         </div>
+        <hr>
+        <button class="export-invoice" id="export-invoice">Xuất hóa đơn</button>
     </div>
 </div>
 
@@ -131,6 +135,10 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     const STORE_URL = "{{ route('user.storeRegister') }}";
+
+    document.querySelector('.export-invoice').addEventListener('click', function () {
+        window.print();
+    });
 </script>
 <script src="{{asset('assets/libraries/toastr/toastr.min.js' ) }}"></script>
 <script src="{{asset('js/notification.js')}}"></script>
