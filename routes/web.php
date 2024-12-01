@@ -218,7 +218,7 @@ Route::middleware(['auth:web'])->group(function () {
         });
 
         Route::prefix('payment')->name('payment.')->group(function () {
-            Route::get('/index', [PaymentController::class, 'index'])->name('index');
+            Route::post('/index', [PaymentController::class, 'index'])->name('index');
         });
 
         Route::prefix('history')->name('history.')->group(function () {

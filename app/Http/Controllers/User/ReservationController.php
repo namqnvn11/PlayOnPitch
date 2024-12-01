@@ -61,6 +61,7 @@ class ReservationController extends Controller
                 ]);
             }
 
+
             // Chuyển hướng đến trang hóa đơn sau khi lưu
             flash()->success('Reservation created successfully');
             return redirect()->route('user.invoice.index', ['id' => $validatedData['yard_id'][0]]);

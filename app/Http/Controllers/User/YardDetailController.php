@@ -20,17 +20,16 @@ class YardDetailController extends Controller
         $District = District::all();
         $Province = Province::all();
         $boss = Boss::find($id);
-        $yard = Yard::find($id);
-
+        $firstYard= $boss->Yards()->first();
         $ratings = Raiting::with('User')
-            ->where('yard_id', $id)
+            ->where('yard_id', $firstYard->id)
             ->where('block', 0)
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         $User = User::all();
-        $averageRating = Raiting::where('yard_id', $id)->avg('point');
-        return view('user.yard_detail.index', compact( 'District', 'Province', 'yard', 'ratings', 'User', 'averageRating', 'boss'));
+        $averageRating = Raiting::where('yard_id', $firstYard->id)->avg('point');
+        return view('user.yard_detail.index', compact( 'District', 'Province', 'ratings', 'User', 'averageRating', 'boss'));
     }
 
     public function rating(Request $request){

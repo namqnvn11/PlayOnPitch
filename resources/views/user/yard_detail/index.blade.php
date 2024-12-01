@@ -52,33 +52,36 @@
         <!-- Main Image and Booking Info Section -->
         <div class="main-section">
             <div class="image-gallery">
-                <div class="average-rating-container">
-                    <h3 id="averageRating">
-                        @php
-                            $fullStars = floor($averageRating); // Số sao đầy
-                            $halfStar = ($averageRating - $fullStars) >= 0.5 ? 1 : 0; // Kiểm tra nửa sao
-                            $emptyStars = 5 - $fullStars - $halfStar; // Số sao rỗng
-                        @endphp
+                <div class="flex items-center mb-3">
+                    <div class="text-[24px] font-bold mr-3">{{$boss->company_name}} </div>
+                    <div class="average-rating-container flex items-center mt-1">
+                        <h3 id="averageRating">
+                            @php
+                                $fullStars = floor($averageRating); // Số sao đầy
+                                $halfStar = ($averageRating - $fullStars) >= 0.5 ? 1 : 0; // Kiểm tra nửa sao
+                                $emptyStars = 5 - $fullStars - $halfStar; // Số sao rỗng
+                            @endphp
 
-                            <!-- Hiển thị các sao đầy -->
-                        @for ($i = 0; $i < $fullStars; $i++)
-                            <span class="star1 filled">★</span>
-                        @endfor
+                                <!-- Hiển thị các sao đầy -->
+                            @for ($i = 0; $i < $fullStars; $i++)
+                                <span class="star1 filled">★</span>
+                            @endfor
 
-                        <!-- Hiển thị một nửa sao nếu có -->
-                        @if ($halfStar)
-                            <span class="star1 filled-half">★</span>
-                        @endif
+                            <!-- Hiển thị một nửa sao nếu có -->
+                            @if ($halfStar)
+                                <span class="star1 filled-half">★</span>
+                            @endif
 
-                        <!-- Hiển thị các sao rỗng -->
-                        @for ($i = 0; $i < $emptyStars; $i++)
-                            <span class="star1">★</span>
-                        @endfor
+                            <!-- Hiển thị các sao rỗng -->
+                            @for ($i = 0; $i < $emptyStars; $i++)
+                                <span class="star1">★</span>
+                            @endfor
 
-                        {{--                        ({{ number_format($averageRating, 2) }})--}}
-                    </h3>
+                            {{--                        ({{ number_format($averageRating, 2) }})--}}
+                        </h3>
+                    </div>
                 </div>
-                <div class="text-[24px] font-bold mb-3">{{$boss->company_name}}</div>
+
                 <img class="main-image" src="{{$boss->images()->first()->img??asset('img/sanbong.jpg')}}" alt="Main Field Image" id="mainImage">
 
                 <div class="thumbnails" id="image-gallery">
@@ -125,7 +128,7 @@
                 <span class="star" data-value="1">★</span>
             </div>
             <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
-            <input type="hidden" name="yard_id" value="{{$boss->id}}">
+            <input type="hidden" name="yard_id" value="{{$boss->Yards()->first()->id}}">
 {{--            <input type="hidden" name="yard_id" value="{{$yard->id}}">--}}
             <input type="hidden" id="rating-value" value="0" name="point">
             <textarea id="review-input" placeholder="Nhập đánh giá của bạn..." rows="3" name="comment"></textarea>
@@ -271,7 +274,7 @@
         loadMoreButton.addEventListener('click', function() {
             const currentPage = parseInt(loadMoreButton.getAttribute('data-current-page'), 10);
             const nextPage = currentPage + 1;
-            const url = "{{ route('user.yarddetail.loadMore', ['id' => $yard->id]) }}?page=" + nextPage;
+            const url = "{{ route('user.yarddetail.loadMore', ['id' => $boss->Yards()->first()->id]) }}?page=" + nextPage;
 
             fetch(url)
                 .then(response => response.json())

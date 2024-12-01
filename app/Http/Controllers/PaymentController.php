@@ -18,7 +18,7 @@ class PaymentController extends Controller
         $this->momoService = $momoService;
     }
 
-    public function index()
+    public function index(request $request)
     {
         $currentUser = auth()->user();
         $vouchers=[];
