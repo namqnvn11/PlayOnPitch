@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Boss;
 use App\Models\District;
 use App\Models\Province;
 use App\Models\Raiting;
@@ -18,10 +19,10 @@ class YardDetailController extends Controller
     {
         $District = District::all();
         $Province = Province::all();
-        $yard = Yard::find($id);
+        $boss = Boss::find($id);
         $ratings = Raiting::with('User')->where('yard_id', $id)->paginate(10);
         $User = User::all();
-        return view('user.yard_detail.index', compact( 'District', 'Province', 'yard', 'ratings', 'User'));
+        return view('user.yard_detail.index', compact( 'District', 'Province', 'boss', 'ratings', 'User'));
     }
 
     public function rating(Request $request){

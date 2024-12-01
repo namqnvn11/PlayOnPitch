@@ -237,3 +237,36 @@ function showError(message) {
     error.removeClass('hidden');
 }
 
+
+
+//phần hiển thij hình ảnh=======================
+const imageLayer = document.getElementById('imageLayer');
+
+// Open the image layer
+function openImageLayer(imgSrc) {
+    const zoomedImage = document.getElementById('zoomedImage');
+    zoomedImage.src = imgSrc;
+
+    imageLayer.classList.remove('hidden');
+    setTimeout(() => {
+        imageLayer.classList.add('opacity-100'); // Tăng opacity
+        imageLayer.firstElementChild.classList.add('scale-100'); // Phóng to từ scale-90 về scale-100
+    }, 10); // Nhỏ delay để hiệu ứng hoạt động
+}
+
+// Close the image layer
+function closeImageLayer() {
+    imageLayer.classList.remove('opacity-100'); // Giảm opacity
+    imageLayer.firstElementChild.classList.remove('scale-100'); // Thu nhỏ về scale-90
+
+    setTimeout(() => {
+        imageLayer.classList.add('hidden');
+    }, 300); // Đợi hiệu ứng transition kết thúc trước khi ẩn
+}
+
+// Close the image layer on ESC key press
+document.addEventListener('keydown', function(event) {
+    if (event.key === "Escape" && !imageLayer.classList.contains('hidden')) {
+        closeImageLayer();
+    }
+});

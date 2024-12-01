@@ -84,7 +84,7 @@
                 @endphp
                 @if($voucher->block == 0 && $voucher->end_date > now())
                 <tr>
-                    <td class=""><img class="max-w-[200px] mx-auto" src="{{$voucher->image->img??asset('img/voucher.jpg')}}"></td>
+                    <td class=""><img class="max-w-[200px] mx-auto rounded" src="{{$voucher->image->img??asset('img/voucher.jpg')}}" onclick="openImageLayer('{{$voucher->image->img??asset('img/voucher.jpg')}}')"></td>
                     <td>{{ $voucher->name }}</td>
                     <td>{{ $voucher->price }}</td>
                     <td>{{ \Carbon\Carbon::parse($voucher->release_date)->format('d/m/Y') }}</td>
@@ -97,7 +97,15 @@
         </table>
     </div>
 </div>
-
+<!-- Image Zoom Layer -->
+<div id="imageLayer" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50 transition-opacity duration-300 opacity-0">
+    <div class="relative">
+        <!-- Close Button -->
+        <button class="absolute top-0 right-2 text-black text-2xl" onclick="closeImageLayer()">×</button>
+        <!-- Zoomed Image -->
+        <img id="zoomedImage" src="" alt="Zoomed Image" class="max-w-screen-lg max-h-screen rounded-lg shadow-lg">
+    </div>
+</div>
 <div style="background-color: #2e7d32">
     <form id="form-data" method="post">
         @csrf
@@ -163,3 +171,4 @@
 <script src="{{asset('js/registerBoss.js?t='.config('constants.app_version'))}}"></script>
 
 <script src="{{ asset('js/user/profile/index.js?t='.config('constants.app_version') )}}"></script>
+

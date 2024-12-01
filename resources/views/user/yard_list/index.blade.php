@@ -6,8 +6,8 @@
     <title>Play On Pitch</title>
     <link rel="stylesheet" href="{{ asset('css/yardlist.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
 </head>
 <body>
 <header>
@@ -48,8 +48,11 @@
     <h1 class="title">Danh sách sân</h1>
 
         <form method="GET" action="{{ route('user.yardlist.index') }}">
+
             <div class="filters-container">
+
                 <div class="filters">
+
                     <select name="province_id" id="province_id" onchange="this.form.submit()">
                         <option value="">Tỉnh/Thành Phố</option>
                         @foreach($Province as $province)
@@ -59,7 +62,7 @@
                         @endforeach
                     </select>
 
-                    <select name="district_id" id="district_id" onchange="this.form.submit()">
+                    <select name="district_id" id="district_id" onchange="this.form.submit()" class="w-[160px]">
                         <option value="">Quận/Huyện</option>
                         @if(request('province_id'))
                             @foreach($District->where('province_id', request('province_id')) as $district)
@@ -75,30 +78,43 @@
 
     </div>
 
-    <div class="grid">
 
-        @if($yards->isEmpty())
-            <p>Không có sân nào phù hợp với tiêu chí tìm kiếm.</p>
+    <div class="grid grid-cols-4 gap-x-1 gap-y-4 m-3">
+        @if($bosses->isEmpty())
+            <p class="w-[120%] ml-[12px]">Không có sân nào phù hợp với tiêu chí tìm kiếm.</p>
         @else
-        @foreach ($yards as $yard)
-            <div class="card">
-                <img src="{{$yard->image->img??asset('img/sanbong.jpg')}}" alt="Football Field">
-                <div class="card-content">
-                    <h3>{{ $yard->Boss->company_name }}</h3>
-                    <p>Khu vực: {{ $yard->district->name }} - {{ $yard->district->province->name }}</p>
-                    <p>{{ $yard->yard_name }}</p>
-                    <p>{{ $yard->yard_type }}</p>
-                    <p class="time-slots">Sân trống: </p>
-                    <a href="{{ url('user/yarddetail/index') }}/{{$yard->id}}" class="book-button">Đặt sân</a>
+            @foreach($bosses as $boss)
+                @php
+                    $bossId = 1;  // Giả sử bạn muốn lấy các sân của Boss có ID = 1
+                    $yardTypes = $boss->yards()
+                                    ->where('block', false)
+                                    ->distinct('yard_type')
+                                    ->pluck('yard_type')
+                                    ->implode(', ');
+                    $count = $boss->yards()->where('block', false)->count();
+                @endphp
+                <div class="card flex flex-col justify-between">
+                    <img src="{{$boss->images()->first()->img??asset('img/sanbong.jpg')}}" alt="Football Field">
+                    <div class="card-content">
+                        <h3>{{ $boss->company_name }}</h3>
+                        <p>Khu vực: {{ $boss->district->name }} - {{ $boss->district->province->name }}</p>
+                        <p>Loại sân: {{$yardTypes}}</p>
+                        <p>Tổng sân: {{$count}}</p>
+                        <a href="{{ url('user/yarddetail/index') }}/{{$boss->id}}" class="book-button">Đặt sân</a>
+                    </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
         @endif
+</div>
+    @if ($bosses->hasPages())
+        <x-paginate-container >
+            {!! $bosses->appends(request()->input())->links('pagination::bootstrap-4') !!}
+        </x-paginate-container >
+    @endif
+
+
 
 </div>
-    <button class="load-more">Xem thêm</button>
-</div>
-
 
 <div style="background-color: #2e7d32">
     <form id="form-data" method="post">
@@ -143,6 +159,8 @@
         <hr class="dividers" />
         <button>Chăm sóc khách hàng</button>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 </footer>
 </body>
 </html>

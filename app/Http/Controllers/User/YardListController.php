@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Boss;
 use App\Models\District;
 use App\Models\Province;
 use App\Models\Yard;
@@ -14,24 +15,33 @@ class YardListController extends Controller
     {
         $District = District::all();
         $Province = Province::all();
-        $yard_name = $request->input('yard_name');
-        $yards = Yard::query();
+        $yardName = $request->input('yard_name');
+        $provinceId = $request->input('province_id');
+        $districtId = $request->input('district_id');
 
-        if ($request->has('province_id') && $request->province_id) {
-            $districtIds = District::where('province_id', $request->province_id)->pluck('id');
-            $yards = $yards->whereIn('district_id', $districtIds);
+        $query = Boss::query();
+
+        if ($provinceId) {
+            $districtIds = District::where('province_id', $provinceId)->pluck('id');
+            $query->whereIn('district_id', $districtIds);
         }
 
-        if ($request->has('district_id') && $request->district_id) {
-            $yards = $yards->where('district_id', $request->district_id);
+        if ($districtId) {
+            $query->where('district_id', $districtId);
         }
-        if ($yard_name) {
-            $yards->where('yard_name', 'LIKE', '%' . $yard_name . '%');
-       }
 
-        $yards = $yards->get();
-        return view('user.yard_list.index', compact('yards', 'District', 'Province'));
+        if ($yardName) {
+            $query->where('company_name', 'LIKE', '%' . $yardName . '%');
+        }
+
+        // Chỉ lấy những boss có ít nhất 1 sân không bị chặn
+        $bosses = $query->whereHas('yards', function ($q) {
+            $q->where('block', false);
+        })->paginate(10);
+
+        return view('user.yard_list.index', compact('bosses', 'District', 'Province'));
     }
+
 
     public function getDistricts(Request $request)
     {

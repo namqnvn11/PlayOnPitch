@@ -8,9 +8,9 @@
     <script src="https://cdn.jsdelivr.net/npm/avatar-js@1.0.0/dist/avatar.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
 </head>
 <body>
 <header>
@@ -48,46 +48,31 @@
 
 <div class="content-wrapper">
         <!-- Main Image and Booking Info Section -->
-        <div class="main-section">
+        <div class="main-section my-0">
             <div class="image-gallery">
-                <h2>{{$yard->boss->company_name}}</h2>
-                @php
-                    $mainImage=$yard->boss->images->first()->img??asset('img/sanbong.jpg');
-                    $yardImageList=$yard->boss->images;
-                    $countImage=$yardImageList->count();
-                @endphp
-                <img class="main-image" src="{{$mainImage}}" alt="Main Field Image">
+                <div class="text-[24px] font-bold mb-3">{{$boss->company_name}}</div>
+                <img class="main-image" src="{{$boss->images()->first()->img??asset('img/sanbong.jpg')}}" alt="Main Field Image" id="mainImage">
 
-                <div class="thumbnails">
-                    @foreach($yardImageList as $image)
-                        <img src="{{$image->img}}" alt="Thumbnail {{$image->id}}">
+                <div class="thumbnails" id="image-gallery">
+                    @foreach($boss->images()->get() as $image)
+                        <img class="thumbnail" src="{{$image->img}}" alt="Thumbnail {{$image->id}}" ONCLICK="imageOnclick('{{$image->img}}',this)">
                     @endforeach
-                    @foreach($yard->boss->Yards as $y)
-                        @if($y->image)
-                            @php $countImage++; @endphp
-                            <img src="{{$y->image->img}}" alt="Thumbnail {{$y->image->id}}">
-                        @endif
-                    @endforeach
-                    @if($countImage==0)
-                            <img src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 1">
-                        @endif
+                    @if($boss->images()->count()==0)
+                            <img class="border" src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 1">
+                    @endif
                 </div>
             </div>
 
             <div class="booking-info">
                 <div class="booking-controls">
-                <select class="time-select">
-                    <option value="">Chọn giờ</option>
-                </select>
-                    <a href="{{ url('user/choice_yard/index') }}/{{$yard->Boss->id}}" class="book-now">Đặt sân ngay</a>
+                    <a href="{{ url('user/choice_yard/index') }}/{{$boss->id}}" class="book-now">Đặt sân ngay</a>
                 </div>
-
                 <div class="owner-info">
                     <h3>THÔNG TIN CHỦ SÂN</h3>
-                    <p><i class="fa fa-user"></i> {{ $yard->boss->full_name}} </p>
-                    <p><i class="fa fa-phone"></i> {{ $yard->boss->phone}} </p>
-                    <p><i class="fa fa-envelope"></i> {{ $yard->boss->email}} </p>
-                    <p><i class="fa fa-map-marker"></i> {{ $yard->boss->company_address}} </p>
+                    <p><i class="fa fa-user"></i> {{ $boss->full_name}} </p>
+                    <p><i class="fa fa-phone"></i> {{ $boss->phone}} </p>
+                    <p><i class="fa fa-envelope"></i> {{ $boss->email}} </p>
+                    <p><i class="fa fa-map-marker"></i> {{ $boss->company_address}} </p>
                     <img class="map" src="{{asset('img/sanbong.jpg')}}" alt="Map Image">
                 </div>
         </div>
@@ -98,6 +83,8 @@
     <div class="general-info">
         <h3>Giới thiệu chung</h3>
         <p>...</p> <!-- Replace with actual description content -->
+        
+
     </div>
 
     <div class="review-section">
@@ -112,7 +99,7 @@
                 <span class="star" data-value="1">★</span>
             </div>
             <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
-            <input type="hidden" name="yard_id" value="{{$yard->id}}">
+            <input type="hidden" name="yard_id" value="{{$boss->id}}">
             <input type="hidden" id="rating-value" value="0" name="point">
             <textarea id="review-input" placeholder="Nhập đánh giá của bạn..." rows="3" name="comment"></textarea>
             <button type="submit">Gửi đánh giá</button>
@@ -169,6 +156,7 @@
     </form>
 </div>
 
+
 <footer id="footer">
     <div class="footer-section">
         <h3>GIỚI THIỆU</h3>
@@ -213,7 +201,7 @@
 <script src="{{asset('js/notification.js')}}"></script>
 <script src="{{asset('js/registerBoss.js?t='.config('constants.app_version'))}}"></script>
 <script src="{{asset('js/user/yard_detail/index.js?='.config('constants.app_version'))}}"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const loadMoreButton = document.getElementById('loadMoreBtn');
@@ -222,7 +210,7 @@
         loadMoreButton.addEventListener('click', function() {
             const currentPage = {{ $ratings->currentPage() }};
             const nextPage = currentPage + 1;
-            const url = "{{ route('user.yarddetail.loadMore', ['id' => $yard->id]) }}?page=" + nextPage;
+            const url = "{{ route('user.yarddetail.loadMore', ['id' => $boss->Yards()->first()->id]) }}?page=" + nextPage;
 
             fetch(url)
                 .then(response => response.json())
@@ -269,5 +257,6 @@
                 });
         });
     });
+
 </script>
 

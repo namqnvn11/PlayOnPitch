@@ -1,16 +1,16 @@
 @extends("layouts.appboss")
-@section('title', $title ?? 'General Image')
+@section('title', $title ?? 'Images')
 @section("content")
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>General Image</h1>
+                    <h1>Images</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Admin</a></li>
-                        <li class="breadcrumb-item active">{{ $title ?? 'General Image' }}</li>
+                        <li class="breadcrumb-item active">{{ $title ?? 'Images' }}</li>
                     </ol>
                 </div>
             </div>
@@ -58,51 +58,54 @@
                                 @endforeach
 
                                 <!-- Drop Zone -->
-                                <div id="cartUpLoad" class="group relative">
-                                    <form class="h-full" method="POST" id="form-save-general-image" onsubmit="prepareSubmitSave(event)"
-                                          enctype="multipart/form-data" action="{{url('boss/image/save')}}">
-                                        @csrf
-                                        <div
-                                            class="rounded-lg overflow-hidden relative h-60 border-dashed border-[1px] border-green-600">
+                                @if($images->count()<5)
+                                    <div id="cartUpLoad" class="group relative">
+                                        <form class="h-full" method="POST" id="form-save-general-image" onsubmit="prepareSubmitSave(event)"
+                                              enctype="multipart/form-data" action="{{url('boss/image/save')}}">
+                                            @csrf
                                             <div
-                                                id="dropZone"
-                                                class="w-full h-full text-gray-500 text-center cursor-pointer flex flex-col justify-center items-center"
-                                                ondragover="handleDragOverNew(event)"
-                                                ondrop="handleDropNew(event)"
-                                                onclick="document.getElementById('generalImageSaveInput').click()"
-                                            >
-                                                <i class="bi bi-cloud-arrow-up text-[26px]" id="uploadIcon"></i>
-                                                <p id="uploadText" class="mx-1">Drag and drop images here or click to select</p>
-                                                <img id="generalImageSave"
-                                                     class="hidden rounded max-w-full max-h-full object-cover"/>
+                                                class="rounded-lg overflow-hidden relative h-60 border-dashed border-[1px] border-green-600">
+                                                <div
+                                                    id="dropZone"
+                                                    class="w-full h-full text-gray-500 text-center cursor-pointer flex flex-col justify-center items-center"
+                                                    ondragover="handleDragOverNew(event)"
+                                                    ondrop="handleDropNew(event)"
+                                                    onclick="document.getElementById('generalImageSaveInput').click()"
+                                                >
+                                                    <i class="bi bi-cloud-arrow-up text-[26px]" id="uploadIcon"></i>
+                                                    <p id="uploadText" class="mx-1">Drag and drop images here or click to select</p>
+                                                    <img id="generalImageSave"
+                                                         class="hidden rounded max-w-full max-h-full object-cover"/>
+                                                </div>
+                                                <input
+                                                    type="file"
+                                                    name="image"
+                                                    id="generalImageSaveInput"
+                                                    class="hidden"
+                                                    onchange="generalImageSaveOnchange(event)"
+                                                >
                                             </div>
-                                            <input
-                                                type="file"
-                                                name="image"
-                                                id="generalImageSaveInput"
-                                                class="hidden"
-                                                onchange="generalImageSaveOnchange(event)"
-                                            >
-                                        </div>
-                                        <!-- Save & Cancel Buttons -->
-                                        <div id="actionButtons" class="mt-4 flex justify-center space-x-4 hidden">
-                                            <button
-                                                type="button"
-                                                onclick="callSubmit()"
-                                                class="bg-green-800 text-white px-4 py-2 rounded hover:bg-green-600 transition"
-                                            >
-                                                Save
-                                            </button>
-                                            <button
-                                                type="button"
-                                                class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-                                                onclick="resetForm()"
-                                            >
-                                                Cancel
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
+                                            <!-- Save & Cancel Buttons -->
+                                            <div id="actionButtons" class="mt-4 flex justify-center space-x-4 hidden">
+                                                <button
+                                                    type="button"
+                                                    onclick="callSubmit()"
+                                                    class="bg-green-800 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+                                                >
+                                                    Save
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+                                                    onclick="resetForm()"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                @endif
+
                             </div>
 
                         </div>
