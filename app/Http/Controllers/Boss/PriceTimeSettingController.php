@@ -433,7 +433,6 @@ class PriceTimeSettingController extends Controller
                         'time_slot' => $currentTime->format('H:i') . '-' . $currentTime->copy()->addMinutes(90)->format('H:i'),
                         'reservation_id' => '0',
                         'block' => false,
-                        'status' => false,
                         'price_per_hour' => $price,
                     ]);
 

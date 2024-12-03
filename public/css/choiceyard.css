@@ -386,3 +386,17 @@ th, td {
     cursor: not-allowed;
     color: #999999;           /* Màu chữ nhạt */
 }
+
+.selectable {
+    cursor: pointer; /* Hiển thị con trỏ chuột dạng pointer khi hover vào ô */
+    padding: 10px; /* Thêm khoảng cách bên trong */
+    border: 1px solid #ddd; /* Thêm viền nhẹ cho các ô */
+    text-align: center; /* Canh giữa nội dung */
+}
+
+.selectable.active {
+    background-color: green; /* Màu nền khi được chọn */
+    color: white; /* Màu chữ khi được chọn */
+    border-color: #0056b3; /* Màu viền khi được chọn */
+}
+

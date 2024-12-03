@@ -18,6 +18,7 @@ class Reservation extends Model
         'reservation_status',
         'total_price',
         'code',
+        'payment_type',
     ];
 
     public function User()
@@ -32,5 +33,12 @@ class Reservation extends Model
 
     public function Revenues(){
         return $this->hasMany(Revenue::class, 'reservation_id');
+    }
+
+    public function Invoice(){
+        return $this->belongsTo(Invoice::class, 'reservation_id');
+    }
+    public function ReservationHistory(){
+        return $this->hasOne(ReservationHistory::class, 'reservation_id');
     }
 }

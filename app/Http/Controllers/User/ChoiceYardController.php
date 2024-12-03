@@ -8,37 +8,34 @@ use App\Models\Reservation;
 use App\Models\Yard;
 use App\Models\YardSchedule;
 use Carbon\Carbon;
+use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
 
 class ChoiceYardController extends Controller
 {
-    public function index($id)
-    {
+    //boss_id
+    public function index($id,Request $request){
+
         $today = now();
+        $selectTime= Carbon::parse($request->selectTime)??Carbon::now();
         $dates = collect();
         for ($i = 0; $i < 7; $i++) {
             $dates->push($today->copy()->addDays($i)->toDateString());
         }
-
-        $timeSlots = YardSchedule::select('time_slot')
+        $boss= Boss::find($id);
+        $yards = $boss
+            ->Yards()
+            ->where('block', false)
+            ->where('defaultPrice', '>', 0)
+            ->with(['YardSchedules' => function ($query) use ($selectTime) {
+                $query->where('date', Carbon::create($selectTime->toDateString()));
+            }])
+            ->get();
+        $timeSlots = YardSchedule::where('yard_id',$yards[0]->id)
+            ->select('time_slot')
             ->distinct()
             ->get();
-
-        $yards = Boss::find($id)->yards->filter(function ($yard) {
-            return $yard->yardSchedules->isNotEmpty();
-        });
-
-        // Lấy danh sách các đặt sân
-        $reservations = Reservation::with('yard')
-            ->whereIn('reservation_date', $dates) // Giới hạn trong 7 ngày tới
-            ->get();
-
-        return view('user.choice_yard.index')->with([
-            'yards' => $yards,
-            'dates' => $dates,
-            'timeSlots' => $timeSlots,
-            'reservations' => $reservations,
-        ]);
+        return view('user.choice_yard.index',compact('yards','dates','timeSlots','boss','selectTime'));
     }
 
     public function showSchedule()

@@ -6,56 +6,33 @@ function paymentTypeChange(event){
     let discount= document.getElementById('discount').innerText;
     let downPaymentElement= document.getElementById('downPaymentDiv');
     let dowPaymentInput= document.getElementById('downPayment');
+    let selectVoucher= document.getElementById('selectVoucher');
+    const defaultOption = selectVoucher.querySelector('option[value="0"]');
+
+    console.log(selectVoucher)
     //trả full
     if (event.currentTarget.value==='1'){
         $('#downPaymentContainer').addClass('hidden');
         $('#subTotalDivContainer').removeClass('text-gray-500');
 
+        selectVoucher.disabled = false;
         dowPaymentInput.value=0;
         downPaymentElement.innerText=0;
         totalElement.innerText=subTotalElement.innerText-discount;
     }else {
         // trả 20%
+        selectVoucher.disabled = true;
+        defaultOption.selected =true;
+
         dowPaymentInput.value=subtotalInput*0.2;
         downPaymentElement.innerText=subtotalInput*0.2;
         $('#downPaymentContainer').removeClass('hidden');
         $('#subTotalDivContainer').addClass('text-gray-500');
-        totalElement.innerText=(subTotalElement.innerText-discount)*0.2;
-
+        totalElement.innerText=(subTotalElement.innerText)*0.2;
+        document.getElementById('discount').innerText='0';
     }
 
 }
-
-
-// $("form#form_payment").submit(function(e){
-//     e.preventDefault();
-//
-//     // Danh sách reservationId
-//     let reservationIdList = [1, 2, 4];
-//
-//     // Tạo FormData từ form
-//     var formData = new FormData(this);
-//
-//     // Thêm reservationIdList vào formData (chuyển sang JSON string)
-//     formData.append('reservationIdList', JSON.stringify(reservationIdList));
-//
-//     // Thực hiện AJAX request
-//     $.ajax({
-//         url: TEST_URL,  // Thay TEST_URL bằng URL thực tế
-//         type: 'POST',
-//         dataType: "json",
-//         data: formData,
-//         cache: false,
-//         contentType: false,
-//         processData: false,
-//         success: function(response) {
-//             console.log('Success:', response);
-//         },
-//         error: function(error) {
-//             console.error('Error:', error);
-//         }
-//     });
-// });
 
 function  paymentMethodChange(){
     const form = document.getElementById('form_payment');
@@ -83,7 +60,31 @@ function chooseMomo(){
     paymentMethodChange();
 }
 
+
+
+function voucherSelectOnchange(selectElement) {
+    const userVoucherId=selectElement.value;
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    const price = selectedOption.getAttribute('price')??0;
+    document.getElementById('discount').innerText = price;
+    document.getElementById('user_voucher_id').value=userVoucherId;
+    let total= document.getElementById('total');
+    let subTotal= document.getElementById('subTotal');
+    total.innerText=parseFloat(subTotal.value)-parseFloat(price);
+}
+
 $(document).ready(function () {
+    const defaultOption = selectVoucher.querySelector('option[value="0"]');
+    defaultOption.selected =true;
     $('#momoOption').prop('checked', true);
     $('#payment_type').val('1');
+
+// Thiết lập thời gian refresh là 1 phút (60 * 1000 milliseconds)
+    const refreshInterval = 60 * 1000;
+
+// Hàm tự động refresh
+    setInterval(() => {
+        window.location.reload();
+    }, refreshInterval);
 });
+

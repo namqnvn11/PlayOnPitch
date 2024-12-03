@@ -8,6 +8,7 @@ use App\Http\Controllers\Boss\YardImageController;
 use App\Http\Controllers\Boss\YardScheduleController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\User\HistoryController;
+use App\Http\Controllers\User\ReservationController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Models\District;
 use Illuminate\Support\Facades\Route;
@@ -176,8 +177,7 @@ Route::middleware(['auth:web'])->group(function () {
 
         Route::prefix('choice_yard')->name('choice_yard.')->group(function () {
             Route::get('/index/{id}', [ChoiceYardController::class, 'index'])->name('index');
-            Route::post('/calculate-price/{id}', [\App\Http\Controllers\User\ReservationController::class, 'calculatePrice'])->name('calculate.Price');
-            Route::post('/store', [\App\Http\Controllers\User\ReservationController::class, 'storeReservation'])->name('store.Reservation');
+            Route::post('/make_reservation', [ReservationController::class, 'makeReservation'])->name('makeReservation');
         });
 
         Route::prefix('invoice')->name('invoice.')->group(function () {
@@ -218,7 +218,8 @@ Route::middleware(['auth:web'])->group(function () {
         });
 
         Route::prefix('payment')->name('payment.')->group(function () {
-            Route::post('/index', [PaymentController::class, 'index'])->name('index');
+            Route::get('/index', [PaymentController::class, 'index'])->name('index');
+            route::get('/cancel/{id}', [PaymentController::class, 'cancelPayment'])->name('cancel');
         });
 
         Route::prefix('history')->name('history.')->group(function () {

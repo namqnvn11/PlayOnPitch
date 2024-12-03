@@ -65,27 +65,30 @@
         </div>
 
         @php
-         $subTotal= 500000;
+         $subTotal= $total_price;
          $discount= 0;
-         $userId=1;
-         $reservationIdList=[];
+         $boss= $yardSchedule->Yard->Boss;
+         $userId=$currentUser->id;
         @endphp
 
         <div class="p-10 rounded mx-auto border bg-white">
             <div class="flex justify-center">
                 <div class="mx-5">
+                    <form action="{{url('user/payment/cancel')}}/{{$yardSchedule->id}}" method="get">
+                        <button type="submit" class="mb-3 text-[20xp] hover:text-red-500"><i class="bi bi-caret-left-fill"></i>  Hủy</button>
+                    </form>
                     <h2 class="text-bold-900 text-xl">Thanh Toán</h2>
                     <div class="payment-info">
-                        <p><strong>Sân:</strong> <span>Sân Phú Thọ</span></p>
-                        <p><strong>Địa chỉ:</strong> <span>182 Lê Đại Hành, Phường, Quận 11, TP HCM</span></p>
-                        <p><strong>Vị trí:</strong> <span>Sân số 1</span></p>
-                        <p><strong>Thời gian:</strong> <span>18h00 ngày 21 tháng 10 năm 2024</span></p>
+                        <p><strong>Sân:</strong> <span>{{$boss->company_name}}</span></p>
+                        <p><strong>Địa chỉ:</strong> <span>{{$boss->company_address}}, {{$boss->District->name}}, {{$boss->Province->name}}</span></p>
+                        <p><strong>Vị trí:</strong> <span>{{$yardSchedule->Yard->yard_name}}</span></p>
+                        <p><strong>Thời gian:</strong> <span>{{$yardSchedule->time_slot}} {{$yardSchedule->date}}</span></p>
                     </div>
                     <hr>
                     <div class="customer-info">
-                        <p><strong>Người đặt:</strong> <span>Huỳnh Khắc Hoài Nam</span></p>
-                        <p><strong>Số điện thoại:</strong> <span>0868.988.143</span></p>
-                        <p><strong>Email:</strong> <span>namhuynhkhachaoai@gmail.com</span></p>
+                        <p><strong>Người đặt:</strong> <span>{{$userName}}</span></p>
+                        <p><strong>Số điện thoại:</strong> <span>{{$phone}}</span></p>
+                        <p><strong>Email:</strong> <span>{{$currentUser->email}}</span></p>
                     </div>
                 </div>
                 <div class="mx-5 pt-10  ">
@@ -100,13 +103,12 @@
                                 </x-select>
                             </div>
                             <div class="mt-6 flex">
-                                <x-select name="voucher_id">
-                                    <option  value="" selected>chọn voucher của bạn</option>
-                                    @foreach($vouchers as $voucher)
-                                        <option value="{{$voucher->id}}" price="{{$voucher->price}}">{{$voucher->name}} vnd</option>
+                                <x-select name="voucher_id" id="selectVoucher" onchange="voucherSelectOnchange(this)">
+                                    <option  value="0">chọn voucher của bạn</option>
+                                    @foreach($currentUser->User_Voucher as $userVoucher)
+                                        <option value="{{$userVoucher->id}}" price="{{$userVoucher->Voucher->price}}">{{$userVoucher->Voucher->name}} vnd</option>
                                     @endforeach
                                 </x-select>
-                                <x-green-button onclick="addVoucher(event)" class="ml-4" >Áp Dụng</x-green-button>
                             </div>
                             <div class="payment_method mt-6">
                                 <div id="momoContainer" onclick="chooseMomo()" class="flex border rounded h-[60px] p-4 mt-4 justify-between items-center border-green-500">
@@ -145,7 +147,6 @@
                                 </div>
                             </div>
                             <div class="mt-6">
-{{--                                <h1>{{$currentUser->User_Voucher->count()}}</h1>--}}
                                 <h2>Tổng kết thanh toán</h2>
                                 <div class="flex w-full justify-between mt-2">
                                     <div class="text-[14px] text-gray-500">Tổng</div>
@@ -161,6 +162,7 @@
                                     <div class="text-[14px] text-gray-500">Giảm giá</div>
                                     <div class="flex">
                                         <div id="discount">{{$discount}}</div><div class="ml-1">vnd</div>
+                                        <input type="hidden" name="user_voucher_id" id="user_voucher_id">
                                     </div>
 
                                 </div>
@@ -179,8 +181,9 @@
                                 </x-green-button>
                             </div>
                             <input name="userId" value="{{$userId}}" type="hidden"/>
-                            <input name="name" value="Mai Minh Nhựt" type="hidden"/>
-                            <input name="phone" value="0345273456" type="hidden"/>
+                            <input name="name" value="{{$userName}}" type="hidden"/>
+                            <input name="phone" value="{{$phone}}" type="hidden"/>
+                            <input name="reservationId" value="{{$reservation_id}}" type="hidden"/>
                             <input value="{{$subTotal}}" name="totalPrice" type="hidden"/>
                         </form>
                     </div>
@@ -188,7 +191,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <div style="background-color: #2e7d32">

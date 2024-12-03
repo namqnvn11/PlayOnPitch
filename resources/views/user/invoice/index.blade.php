@@ -67,8 +67,9 @@
             <p><strong>Sân:</strong> <span>{{ $reservation->yard->boss->company_name }}</span></p>
             <p><strong>Địa chỉ:</strong> <span>{{ $reservation->yard->boss->company_address }}</span></p>
             <p><strong>Vị trí:</strong> <span>{{ $reservation->yard->yard_name }}</span></p>
-            <p><strong>Thời gian:</strong> <span>{{ $reservation->reservation_time_slot }}</span></p>
-            <p><strong>Trạng thái:</strong> <span>{{ $reservation->reservation_status }}</span></p>
+            <p><strong>Thời gian đặt sân:</strong> <span>{{ $reservation->reservation_time_slot }} {{$reservation->reservation_date}}</span></p>
+            <p><strong>Thanh toán lúc:</strong> <span>{{ $invoice->created_at }}</span></p>
+            <p><strong>Trạng thái:</strong> <span>Đã thanh toán bằng {{$invoice->payment_method}}</span></p>
         </div>
         <hr>
         <div class="customer-info">
@@ -78,8 +79,8 @@
         </div>
         <hr>
         <div class="total-info">
-            <p><strong>Tổng tiền:</strong> <span>{{ number_format($reservation->total_price, 0, ',', '.') }}đ</span></p>
-            <p><strong>Đã cọc:</strong> <span>{{ number_format($reservation->deposit, 0, ',', '.') }}đ</span></p>
+            <p><strong>Tổng tiền:</strong> <span>{{ number_format($reservation->total_price, 0, ',', '.') }} vnd</span></p>
+            <p><strong>Đã cọc:</strong> <span>{{ number_format($reservation->deposit, 0, ',', '.') }} vnd</span></p>
         </div>
         <hr>
         <button class="export-invoice" id="export-invoice">Xuất hóa đơn</button>

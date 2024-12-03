@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play On Pitch</title>
     <link rel="stylesheet" href="{{ asset('css/choiceyard.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
 <header>
@@ -41,8 +43,7 @@
 <div class="banner">
     <img src="{{asset('img/banner.jpg')}}" alt="">
 </div>
-<form id="bookingForm" action="{{ route('user.choice_yard.store.Reservation') }}" method="POST">
-    @csrf
+
     <div class="booking-container">
         <div class="step-indicator">
             <div class="step active">
@@ -61,14 +62,33 @@
             </div>
         </div>
 
-        <div class="time-selector">
-            <select id="dateSelector" name="reservation_date">
-                <option value="">Chọn ngày</option>
-                @foreach ($dates as $date)
-                    <option value="{{ $date }}">{{ \Carbon\Carbon::parse($date)->translatedFormat('D d/m') }}</option>
-                @endforeach
-            </select>
+        <div class="time-selector flex items-center mt-3">
+            <form method="get" id="selectedTime">
+                @php
+                    $selectedDate=$selectTime??now();
+                    $selectedDate= \Carbon\Carbon::parse($selectedDate)->toDateString();
+                 @endphp
+                <select id="dateSelector" name="selectTime" onchange="ChangeSelectTime(this)" class="px-4 rounded w-[120px]">
+                    @foreach ($dates as $date)
+                        <option value="{{ $date }}" {{ $date == $selectedDate ? 'selected' : '' }}>
+                            {{ \Carbon\Carbon::parse($date)->translatedFormat('D d/m') }}
+                        </option>
+                    @endforeach
+                </select>
+            </form>
+            <div class="flex ml-4">
+                <div class="flex mx-2 items-end">
+                    <div>Sân trống</div>
+                    <div class="mx-2 w-[50px] h-[30px] bg-white border-[1px] border-black"></div>
+                </div>
+                <div class="flex mx-2 items-end">
+                    <div>Đã đặt</div>
+                    <div class="w-[50px] h-[30px] bg-red-400 border-[1px] border-black mx-2"></div>
+                </div>
+            </div>
         </div>
+        <form id="bookingForm" action="{{ route('user.choice_yard.makeReservation') }}" method="POST" onsubmit="preparePayment(event)">
+            @csrf
         <div class="booking-content">
             <div class="booking-table">
                 <table class="booking-table1">
@@ -76,41 +96,63 @@
                     <tr>
                         <th></th>
                         @foreach ($timeSlots as $slot)
-                            <th>{{ $slot->time_slot }}</th>
+                            <th class="">{{ $slot->time_slot }}</th>
                         @endforeach
                     </tr>
                     </thead>
                     <tbody>
+                    @php
+                        use Carbon\Carbon;
+                        $currentDateTime = Carbon::now()->addMinutes(30);
+                    @endphp
                     @foreach($yards as $yard)
                         <tr>
                             <td class="sticky left-0">{{ $yard->yard_name }}</td>
-                            @foreach($timeSlots as $slot)
-                                <td class="selectable"></td>
+                            @foreach($yard->YardSchedules as $time)
+                                @php
+                                    $timeSlotParts = explode('-', $time->time_slot);
+                                    $startTime = $timeSlotParts[0];
+
+                                    // Tạo đối tượng Carbon từ date và time_slot
+                                    $scheduleDateTime = Carbon::createFromFormat('Y-m-d H:i', $time->date . ' ' . $startTime);
+                                    $isPast = $scheduleDateTime->lessThan($currentDateTime);
+                                    $isUnavailable = $time->status !== 'available';
+                                @endphp
+
+                                <td
+                                    class="{{ $isPast || $isUnavailable ? 'bg-red-400' : 'selectable' }}"
+                                    scheduleId="{{ $time->id }}"
+                                    timeSlot="{{ $time->time_slot }}"
+                                    price="{{ $time->price_per_hour }}"
+                                    date="{{ $time->date }}"
+                                    yard="{{ $yard->yard_name }}"
+                                >
+                                </td>
                             @endforeach
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
             </div>
-            <div class="booking-info">
-                <p><strong>{{$yard->boss->company_name}}</strong></p>
-                <p>{{ $yard->boss->company_address}}</p>
+            <div class="booking-info pt-2">
+                <div class="text-[20px] font-bold">{{$boss->company_name}}</div>
+                <p>{{ $boss->company_address}}</p>
                 <p id="selectedDate"></p>
-                {{--<p id="selected-field"></p>--}}
                 <p id="selected-yard"></p>
                 <p id="selected-timeslot"></p>
-                <input type="hidden" name="reservation_time_slot[]" id="selected-timeslot-input">
-                <input type="hidden" name="yard_id[]" value="{{$yard->id}}">
+                <input type="hidden" name="scheduleId" id="scheduleId">
                 <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
-                <input type="text" placeholder="Họ và tên" value="{{Auth::user()->full_name}}">
-                <input type="tel" placeholder="Số điện thoại" value="{{Auth::user()->phone}}">
-                <p>Tổng tiền: <strong id="totalPrice">0 đ</strong></p>
+                <input type="text" placeholder="Họ và tên" value="{{Auth::user()->full_name}}" name="userName" id="userName" oninput="clearError()">
+                <input type="text" placeholder="Số điện thoại" value="{{Auth::user()->phone}}" name="phone" id="userPhone" oninput="clearError()">
+                <div class="text-[16px] my-2">Tổng tiền: <strong id="totalPrice">0 đ</strong></div>
                 <input type="hidden" name="total_price" id="totalPrice-hidden">
-                <button type="submit" >Tiếp tục</button>
+                <span class="text-red-700" id="errorText"></span>
+                <button type="submit" class="mt-3">Tiếp tục</button>
             </div>
         </div>
+        </form>
     </div>
-</form>
+
 
 <div style="background-color: #2e7d32">
     <form id="form-data" method="post">
@@ -161,7 +203,9 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     const STORE_URL = "{{ route('user.storeRegister') }}";
+    const CHOICE_YARD_INDEX_URL="{{route('user.choice_yard.index',$boss->id)}}";
 </script>
+
 <script src="{{asset('assets/libraries/toastr/toastr.min.js' ) }}"></script>
 <script src="{{asset('js/notification.js')}}"></script>
 <script src="{{asset('js/registerBoss.js?t='.config('constants.app_version'))}}"></script>

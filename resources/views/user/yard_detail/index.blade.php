@@ -96,7 +96,7 @@
 
             <div class="booking-info">
                 <div class="booking-controls">
-                    <a href="{{ url('user/choice_yard/index') }}/{{$boss->id}}" class="book-now">Đặt sân ngay</a>
+                    <a href="{{ url('user/choice_yard/index', [$boss->id]) }}?selectTime={{ \Carbon\Carbon::now()->toDateString() }}" class="book-now">Đặt sân ngay</a>
                 </div>
                 <div class="owner-info">
                     <h3>THÔNG TIN CHỦ SÂN</h3>
@@ -129,7 +129,6 @@
             </div>
             <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
             <input type="hidden" name="yard_id" value="{{$boss->Yards()->first()->id}}">
-{{--            <input type="hidden" name="yard_id" value="{{$yard->id}}">--}}
             <input type="hidden" id="rating-value" value="0" name="point">
             <textarea id="review-input" placeholder="Nhập đánh giá của bạn..." rows="3" name="comment"></textarea>
             <button type="submit">Gửi đánh giá</button>
