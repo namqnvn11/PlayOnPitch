@@ -36,7 +36,7 @@ class Reservation extends Model
     }
 
     public function Invoice(){
-        return $this->belongsTo(Invoice::class, 'reservation_id');
+        return $this->hasOne(Invoice::class, 'reservation_id', 'id');
     }
     public function ReservationHistory(){
         return $this->hasOne(ReservationHistory::class, 'reservation_id');

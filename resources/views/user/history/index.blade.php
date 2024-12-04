@@ -79,7 +79,7 @@
                         <div class="booking-status">
                             <p class="status success">Thành công</p>
                             <p><strong>Tổng tiền:</strong> {{ number_format($history->reservation->total_price ?? 0, 0, ',', '.') }}đ</p>
-                            <button class="reorder-btn" onclick="redirectToInvoice({{ $history->reservation->id ?? '' }})">Xem hóa đơn</button>
+                            <button class="reorder-btn" onclick="redirectToInvoice({{ $history->reservation->invoice->id ?? '' }})">Xem hóa đơn</button>
                             <button class="reorder-btn" onclick="redirectToYardDetail({{ $history->reservation->yard->boss->id ?? '' }})">Đặt lại</button>
                         </div>
                     </div>

@@ -18,6 +18,6 @@ class Invoice extends Model
 
     public function Reservation()
     {
-        return $this->hasOne(Reservation::class);
+        return $this->hasOne(Reservation::class, 'reservation_id', 'id');
     }
 }
