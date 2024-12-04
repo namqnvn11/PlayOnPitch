@@ -50,74 +50,48 @@
             <p>Anh/Chị <strong>{{ Auth::user()->full_name}}</strong></p>
         </div>
         <ul class="menu">
-            <li><a href="#"> <i class="fa fa-history"></i>&nbsp;Lịch sử đặt sân</a></li>
-            <li style="background-color: #F4F4F4"><a href="{{route("user.profile.index")}}"  style="color: #4CAF50;"> <i class="fa fa-info-circle" style="color: #4CAF50;"></i>&nbsp;Thông tin cá nhân</a></li>
+            <li style="background-color: #F4F4F4"><a href="#"  style="color: #4CAF50;"> <i class="fa fa-history"></i>&nbsp;Lịch sử đặt sân</a></li>
+            <li><a href="{{route("user.profile.index")}}"> <i class="fa fa-info-circle"></i>&nbsp;Thông tin cá nhân</a></li>
             <li><a href="{{route("user.my_voucher.index")}}"><i class="fa-solid fa-ticket"></i>&nbsp;Voucher của bạn</a></li>
             <li><a href="{{route("user.voucher.index")}}"><i class="fa-solid fa-retweet"></i>&nbsp;Đổi voucher</a></li>
         </ul>
         <a href="{{route("user.logout")}}"><button class="logout-btn">Đăng xuất</button></a>
     </div>
-</div>
 
-{{--<div class="history-container">--}}
-{{--    <h2>Lịch sử đặt sân</h2>--}}
-{{--    <div class="booking-list" id="bookingList">--}}
-{{--        @foreach ($reservations as $reservation)--}}
-{{--            <div class="booking-item">--}}
-{{--                <div class="booking-details">--}}
-{{--                    <img src="https://via.placeholder.com/100x70" alt="Hình sân bóng">--}}
-{{--                    <div class="details">--}}
-{{--                        <p><strong>Mã:</strong> {{ $reservation->code }}</p>--}}
-{{--                        @if ($reservation->yard)--}}
-{{--                            <h6>{{ $reservation->yard->yard_name }}</h6>--}}
-{{--                            <p>{{ $reservation->yard->address }}</p>--}}
-{{--                        @endif--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--                <div class="booking-status">--}}
-{{--                    <p class="status success">Thành công</p>--}}
-{{--                    <p><strong>Tổng tiền:</strong> {{ number_format($reservation->total_price, 0, ',', '.') }}đ</p>--}}
-{{--                    <button class="reorder-btn" onclick="redirectToInvoice({{ $reservation->yard->id }})">Xem hóa đơn</button>--}}
-{{--                    <button class="reorder-btn" onclick="redirectToYardDetail({{ $reservation->yard->id }})">Đặt lại</button>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        @endforeach--}}
-{{--    </div>--}}
-{{--    <button id="showMoreBtn" class="show-more-btn">Xem thêm</button>--}}
-{{--</div>--}}
-
-<div class="history-container">
-    <h2>Lịch sử đặt sân</h2>
-    <div class="booking-list">
-        @forelse ($histories as $history)
-            @if ($history->reservation)
-            <div class="booking-item">
-                <div class="booking-details">
-                    <img src="https://via.placeholder.com/100x70" alt="Hình sân bóng">
-                    <div class="details">
-                        <p><strong>Mã:</strong> {{ $history->reservation->code ?? 'Không có mã' }}</p>
-                        @if ($history->reservation->yard)
-                            <h6>{{ $history->reservation->yard->yard_name }}</h6>
-                            <h6>{{ $history->reservation->yard->boss->company_address }}</h6>
-                        @else
-                            <p>Không tìm thấy thông tin sân</p>
-                        @endif
+    <div class="history-section">
+        <h2 class="section-title">Lịch sử đặt sân</h2>
+        <div class="booking-list">
+            @forelse ($histories as $history)
+                @if ($history->reservation)
+                    <div class="booking-item">
+                        <div class="booking-details">
+                            <img src="{{ $history->reservation->yard->boss->images->first()->img }}" alt="Hình sân bóng">
+                            <div class="details">
+                                <p><strong>Mã:</strong> {{ $history->reservation->code ?? 'Không có mã' }}</p>
+                                @if ($history->reservation->yard)
+                                    <h6>{{ $history->reservation->yard->yard_name }}</h6>
+                                    <h6>{{ $history->reservation->yard->boss->company_address .", " . $history->reservation->yard->boss->district->name . ", " . $history->reservation->yard->boss->district->province->name  }}</h6>
+                                @else
+                                    <p>Không tìm thấy thông tin sân</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="booking-status">
+                            <p class="status success">Thành công</p>
+                            <p><strong>Tổng tiền:</strong> {{ number_format($history->reservation->total_price ?? 0, 0, ',', '.') }}đ</p>
+                            <button class="reorder-btn" onclick="redirectToInvoice({{ $history->reservation->id ?? '' }})">Xem hóa đơn</button>
+                            <button class="reorder-btn" onclick="redirectToYardDetail({{ $history->reservation->yard->boss->id ?? '' }})">Đặt lại</button>
+                        </div>
                     </div>
-                </div>
-                <div class="booking-status">
-                    <p class="status success">Thành công</p>
-                    <p><strong>Tổng tiền:</strong> {{ number_format($history->reservation->total_price ?? 0, 0, ',', '.') }}đ</p>
-                    <button class="reorder-btn" onclick="redirectToInvoice({{ $history->reservation->id ?? '' }})">Xem hóa đơn</button>
-                    <button class="reorder-btn" onclick="redirectToYardDetail({{ $history->reservation->yard->id ?? '' }})">Đặt lại</button>
-                </div>
-            </div>
-            @endif
-        @empty
-            <p>Không có lịch sử đặt sân nào.</p>
-        @endforelse
+                @endif
+            @empty
+                <p>Không có lịch sử đặt sân nào.</p>
+            @endforelse
+        </div>
     </div>
-       <button id="showMoreBtn" class="show-more-btn">Xem thêm</button>
+
 </div>
+<button id="showMoreBtn" class="show-more-btn">Xem thêm</button>
 
 <div style="background-color: #2e7d32">
     <form id="form-data" method="post">

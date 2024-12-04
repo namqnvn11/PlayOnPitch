@@ -52,7 +52,7 @@
             <p>Anh/Chị <strong>{{ Auth::user()->full_name}}</strong></p>
         </div>
         <ul class="menu">
-            <li><a href="#"> <i class="fa fa-history"></i>&nbsp;Lịch sử đặt sân</a></li>
+            <li><a href="{{route("user.history.index")}}"> <i class="fa fa-history"></i>&nbsp;Lịch sử đặt sân</a></li>
             <li><a href="{{route("user.profile.index")}}"> <i class="fa fa-info-circle"></i>&nbsp;Thông tin cá nhân</a></li>
             <li style="background-color: #F4F4F4"><a href="#" style="color: #4CAF50;"><i class="fa-solid fa-ticket" style="color: #4CAF50;"></i>&nbsp;Voucher của bạn</a></li>
             <li><a href="{{route("user.voucher.index")}}"><i class="fa-solid fa-retweet" ></i>&nbsp;Đổi voucher</a></li>
