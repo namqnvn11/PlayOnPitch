@@ -25,12 +25,16 @@ class Reservation extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function Yard()
+    public function yard()
     {
         return $this->belongsTo(Yard::class, 'yard_id');
     }
 
     public function Revenues(){
         return $this->hasMany(Revenue::class, 'reservation_id');
+    }
+
+    public function reservationHistory(){
+        return $this->hasMany(ReservationHistory::class, 'reservation_id');
     }
 }

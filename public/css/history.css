@@ -346,6 +346,23 @@ footer {
 .history-container h2{
     font-size: 20px;
 }
+.history-section {
+    flex: 1;
+    margin-left: 20px;
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: left; /* Căn trái tiêu đề */
+}
+.booking-list {
+    width: 100%;
+    margin: 20px auto;
+    /*padding: 10px;*/
+}
 
 .booking-item {
     display: flex;
@@ -360,14 +377,16 @@ footer {
 
 .booking-details {
     display: flex;
-    gap: 10px;
+    align-items: center;
 }
 
 .booking-details img {
     width: 100px;
-    height: 100px;
-    border-radius: 4px;
+    height: 80px;
     object-fit: cover;
+    margin-right: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
 }
 
 .details h3 {

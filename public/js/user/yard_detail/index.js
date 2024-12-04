@@ -87,8 +87,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         window.location.reload();
                     }, 1000);
 
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('modal-report'));
-                    modal.hide();
+                    // const modal = bootstrap.Modal.getInstance(document.getElementById('modal-report'));
+                    // modal.hide();
 
                     form.reset();
 

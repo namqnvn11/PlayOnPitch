@@ -19,8 +19,8 @@ class YardDetailController extends Controller
     {
         $District = District::all();
         $Province = Province::all();
-        $boss = Boss::find($id);
-        $yard = Yard::find($id);
+        $boss = Boss::with('yards')->find($id);
+        $yard = $boss->yards->first();
 
         $ratings = Raiting::with('User')
             ->where('yard_id', $id)

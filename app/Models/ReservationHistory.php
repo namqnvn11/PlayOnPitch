@@ -19,7 +19,7 @@ class ReservationHistory extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function Reservation()
+    public function reservation()
     {
         return $this->belongsTo(Reservation::class, 'reservation_id');
     }

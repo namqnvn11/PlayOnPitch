@@ -14,7 +14,7 @@ class ReservationHistoryController extends Controller
     public function index() {
         $userId = auth()->id();
 
-        $histories = ReservationHistory::with(['reservation', 'reservation.yard'])
+        $histories = ReservationHistory::with(['reservation', 'reservation.yard.boss.images'])
             ->where('user_id', $userId)
             ->get();
 

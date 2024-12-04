@@ -239,36 +239,54 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const loadMoreButton = document.getElementById('loadMoreBtn');
         const reviewsContainer = document.getElementById('reviews');
         const averageRatingDisplay = document.getElementById('averageRating');
 
-        // Lắng nghe sự kiện click cho container của reviews
-        reviewsContainer.addEventListener('click', function(event) {
+        // Sự kiện click vào reviewsContainer
+        reviewsContainer.addEventListener('click', function (event) {
             const target = event.target;
 
+            // Xử lý dấu ba chấm
             if (target.classList.contains('ellipsis')) {
+                // Đóng tất cả dropdown trước khi mở cái mới
                 document.querySelectorAll('.dropdown-content').forEach(dropdown => {
                     dropdown.style.display = 'none';
                 });
 
+                // Mở hoặc đóng dropdown tương ứng
                 const dropdownContent = target.nextElementSibling;
-                dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+                if (dropdownContent) {
+                    dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+                }
             }
 
+            // Xử lý link báo cáo
             if (target.classList.contains('report-link')) {
                 const ratingId = target.dataset.ratingId;
                 console.log('Báo cáo bài viết với ID:', ratingId);
 
-                if (ratingId) {
-                } else {
+                if (!ratingId) {
                     console.log('Không tìm thấy ratingId');
                 }
             }
         });
 
-        loadMoreButton.addEventListener('click', function() {
+        // Sự kiện click ra ngoài để đóng tất cả dropdown
+        document.addEventListener('click', function (event) {
+            const target = event.target;
+
+            // Nếu click không thuộc dấu ba chấm hoặc dropdown-content, ẩn tất cả dropdown
+            if (!target.closest('.ellipsis-menu') && !target.classList.contains('dropdown-content')) {
+                document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+                    dropdown.style.display = 'none';
+                });
+            }
+        });
+
+        // Sự kiện load more
+        loadMoreButton.addEventListener('click', function () {
             const currentPage = parseInt(loadMoreButton.getAttribute('data-current-page'), 10);
             const nextPage = currentPage + 1;
             const url = "{{ route('user.yarddetail.loadMore', ['id' => $yard->id]) }}?page=" + nextPage;
@@ -282,50 +300,29 @@
                             const reviewItem = document.createElement('div');
                             reviewItem.classList.add('review-item');
                             reviewItem.innerHTML = `
-                        <div class="review-header">
-                            <div class="review-user-info">
-                                <img src="https://www.gravatar.com/avatar/${review.user.full_name}?s=100&d=identicon" alt="${review.user.full_name}'s avatar" class="user-avatar">
-                                <span class="review-user">${review.user.full_name}</span>
+                            <div class="review-header">
+                                <div class="review-user-info">
+                                    <img src="https://www.gravatar.com/avatar/${review.user.full_name}?s=100&d=identicon" alt="${review.user.full_name}'s avatar" class="user-avatar">
+                                    <span class="review-user">${review.user.full_name}</span>
+                                </div>
+                                <div class="review-rating">
+                                    ${[...Array(5)].map((_, i) => `
+                                        <span class="star1 ${review.point >= i + 1 ? 'filled' : ''}">★</span>
+                                    `).join('')}
+                                    <span class="rating-point">(${review.point})</span>
+                                </div>
                             </div>
-                            <div class="review-rating">
-                                ${[...Array(5)].map((_, i) => `
-                                    <span class="star1 ${review.point >= i + 1 ? 'filled' : ''}">★</span>
-                                `).join('')}
-                                <span class="rating-point">(${review.point})</span>
+                            <div class="ellipsis-menu" style="float: right">
+                                <span class="ellipsis">...</span>
+                                <div class="dropdown-content" style="display: none;">
+                                    <a href="#" class="report-link" data-bs-toggle="modal" data-bs-target="#modalReport" data-rating-id="${review.id}">Báo cáo bài viết</a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="ellipsis-menu" style="float: right">
-                            <span class="ellipsis">...</span>
-                            <div class="dropdown-content" style="display: none;">
-                                <a href="#" class="report-link" data-bs-toggle="modal" data-bs-target="#modalReport" data-rating-id="${review.id}">Báo cáo bài viết</a>
+                            <div class="review-comment">
+                                <p>${review.comment}</p>
                             </div>
-                        </div>
-                        <div class="review-comment">
-                            <p>${review.comment}</p>
-                        </div>
-                    `;
+                        `;
                             reviewsContainer.appendChild(reviewItem);
-                        });
-
-                        const newEllipses = reviewsContainer.querySelectorAll('.ellipsis');
-                        newEllipses.forEach(ellipsis => {
-                            ellipsis.addEventListener('click', function(event) {
-                                document.querySelectorAll('.dropdown-content').forEach(dropdown => {
-                                    dropdown.style.display = 'none';
-                                });
-
-                                const dropdownContent = ellipsis.nextElementSibling;
-                                dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
-                            });
-                        });
-
-                        const newReportLinks = reviewsContainer.querySelectorAll('.report-link');
-                        newReportLinks.forEach(link => {
-                            link.addEventListener('click', function(event) {
-                                const ratingId = link.dataset.ratingId;
-                                console.log('Báo cáo bài viết với ID:', ratingId);
-
-                            });
                         });
 
                         loadMoreButton.setAttribute('data-current-page', nextPage);
@@ -333,12 +330,12 @@
 
                     if (data.averageRating !== undefined) {
                         averageRatingDisplay.innerHTML = `
-                    Average Rating:
-                    ${[...Array(5)].map((_, i) => `
-                        <span class="star1 ${data.averageRating >= i + 1 ? 'filled' : ''}">★</span>
-                    `).join('')}
-                    (${data.averageRating.toFixed(2)})
-                `;
+                        Average Rating:
+                        ${[...Array(5)].map((_, i) => `
+                            <span class="star1 ${data.averageRating >= i + 1 ? 'filled' : ''}">★</span>
+                        `).join('')}
+                        (${data.averageRating.toFixed(2)})
+                    `;
                     }
 
                     if (!data.hasMorePages) {

@@ -172,6 +172,7 @@ Route::middleware(['auth:web'])->group(function () {
             Route::get('/detail/{id}', [ProfileController::class, 'detail'])->name('detail');
             Route::get('/get-provinces', [ProfileController::class, 'getProvinces'])->name('getProvinces');
             Route::get('/get-districts', [ProfileController::class, 'getDistricts'])->name('getDistricts');
+            Route::post('/image-upload', [ProfileController::class, 'imageUpload'])->name('image.upload');
         });
 
         Route::prefix('choice_yard')->name('choice_yard.')->group(function () {

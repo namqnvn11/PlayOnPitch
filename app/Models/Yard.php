@@ -40,4 +40,7 @@ class Yard extends Model
     {
         return $this->hasMany(Image::class, 'yard_id');
     }
+    public function reservation(){
+        return $this->hasMany(Reservation::class, 'yard_id');
+    }
 }
