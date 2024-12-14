@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
+use App\Models\Boss;
 use App\Models\District;
 use App\Models\Invoice;
 use App\Models\Province;
@@ -16,7 +17,11 @@ class InvoiceController extends Controller
     public function index($id)
     {
         $invoice= Invoice::find($id);
-        $reservation= Reservation::find($invoice->reservation_id);
-        return view('user.invoice.index', compact('reservation','invoice'));
+        $reservation= $invoice->Reservation;
+        $yardSchedules= $reservation->YardSchedules;
+        // Group theo yard_id
+        $groupedSchedules = $yardSchedules->groupBy('yard_id');
+        $boss= $reservation->YardSchedules->first()->Yard->Boss;
+        return view('user.invoice.index', compact('reservation','invoice','boss','groupedSchedules'));
     }
 }

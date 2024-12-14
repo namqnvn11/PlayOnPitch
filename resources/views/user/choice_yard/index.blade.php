@@ -91,6 +91,9 @@
             @csrf
         <div class="booking-content">
             <div class="booking-table">
+                @if(count($timeSlots)==0)
+                    <div>sân chưa có lịch</div>
+                @else
                 <table class="booking-table1">
                     <thead>
                     <tr>
@@ -102,9 +105,9 @@
                     </thead>
                     <tbody>
                     @php
-                        use Carbon\Carbon;
-                        $currentDateTime = Carbon::now()->addMinutes(30);
+                        $currentDateTime = \Carbon\Carbon::now()->addMinutes(30);
                     @endphp
+
                     @foreach($yards as $yard)
                         <tr>
                             <td class="sticky left-0">{{ $yard->yard_name }}</td>
@@ -114,7 +117,7 @@
                                     $startTime = $timeSlotParts[0];
 
                                     // Tạo đối tượng Carbon từ date và time_slot
-                                    $scheduleDateTime = Carbon::createFromFormat('Y-m-d H:i', $time->date . ' ' . $startTime);
+                                    $scheduleDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $time->date . ' ' . $startTime);
                                     $isPast = $scheduleDateTime->lessThan($currentDateTime);
                                     $isUnavailable = $time->status !== 'available';
                                 @endphp
@@ -133,19 +136,23 @@
                     @endforeach
                     </tbody>
                 </table>
+                @endif
             </div>
             <div class="booking-info pt-2">
                 <div class="text-[20px] font-bold">{{$boss->company_name}}</div>
-                <p>{{ $boss->company_address}}</p>
+                <p>{{ $boss->company_address}}, {{$boss->District->name}}, {{$boss->District->Province->name}}</p>
                 <p id="selectedDate"></p>
                 <p id="selected-yard"></p>
                 <p id="selected-timeslot"></p>
-                <input type="hidden" name="scheduleId" id="scheduleId">
-                <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
+                <div id="scheduleListContainer">
+{{--                    chứa danh sách id của lịch sân đã chọn--}}
+                </div>
+                <input type="hidden" name="boss_id" value="{{$boss->id}}">
+                <input type="hidden" name="user_id" value="{{Auth::user()->id??null}}">
                 <input type="text" placeholder="Họ và tên" value="{{Auth::user()->full_name}}" name="userName" id="userName" oninput="clearError()">
                 <input type="text" placeholder="Số điện thoại" value="{{Auth::user()->phone}}" name="phone" id="userPhone" oninput="clearError()">
                 <div class="text-[16px] my-2">Tổng tiền: <strong id="totalPrice">0 đ</strong></div>
-                <input type="hidden" name="total_price" id="totalPrice-hidden">
+                <input type="hidden" name="total_price" id="totalPrice-hidden" value="0">
                 <span class="text-red-700" id="errorText"></span>
                 <button type="submit" class="mt-3">Tiếp tục</button>
             </div>

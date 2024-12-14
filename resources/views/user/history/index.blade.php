@@ -59,18 +59,22 @@
     </div>
 
     <div class="history-section">
-        <h2 class="section-title">Lịch sử đặt sân</h2>
+        <h2 class="section-title">Lịch sử đặt sân {{$histories->count()}}</h2>
         <div class="booking-list">
             @forelse ($histories as $history)
-                @if ($history->reservation)
+                @if ($history->Reservation->YardSchedules->count()!==0)
+                    @php
+                    $boss=$history->Reservation->YardSchedules->first()->Yard->Boss
+                    @endphp
                     <div class="booking-item">
                         <div class="booking-details">
-                            <img src="{{ $history->reservation->yard->boss->images->first()->img }}" alt="Hình sân bóng">
+                            <img src="{{$boss->images->first()->img??asset('img/sanbong.jpg')}}" alt="Hình sân bóng">
+                            <div></div>
                             <div class="details">
                                 <p><strong>Mã:</strong> {{ $history->reservation->code ?? 'Không có mã' }}</p>
-                                @if ($history->reservation->yard)
-                                    <h6>{{ $history->reservation->yard->yard_name }}</h6>
-                                    <h6>{{ $history->reservation->yard->boss->company_address .", " . $history->reservation->yard->boss->district->name . ", " . $history->reservation->yard->boss->district->province->name  }}</h6>
+                                @if ($history->reservation->YardSchedules->first())
+                                    <h6>{{$boss->company_name }}</h6>
+                                    <h6>{{ $boss->company_address .", " . $boss->district->name . ", " . $boss->district->province->name  }}</h6>
                                 @else
                                     <p>Không tìm thấy thông tin sân</p>
                                 @endif
@@ -80,7 +84,7 @@
                             <p class="status success">Thành công</p>
                             <p><strong>Tổng tiền:</strong> {{ number_format($history->reservation->total_price ?? 0, 0, ',', '.') }}đ</p>
                             <button class="reorder-btn" onclick="redirectToInvoice({{ $history->reservation->invoice->id ?? '' }})">Xem hóa đơn</button>
-                            <button class="reorder-btn" onclick="redirectToYardDetail({{ $history->reservation->yard->boss->id ?? '' }})">Đặt lại</button>
+                            <button class="reorder-btn" onclick="redirectToYardDetail({{ $history->reservation->YardSchedules->first()->yard->boss->id ?? '' }})">Đặt lại</button>
                         </div>
                     </div>
                 @endif

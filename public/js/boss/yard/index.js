@@ -25,6 +25,16 @@ $(document).ready(function () {
         }
     });
 
+
+    function prepareOpenTime(){
+        var openAllDayCheckBox = document.getElementsByName('is_open_all_day');
+        if (openAllDayCheckBox[0].checked){
+            document.getElementById('time-open').disabled=true;
+            document.getElementById('time-close').disabled=true;
+        }
+    }
+
+    prepareOpenTime();
     saveData();
     pricing();
     setOpenTime()

@@ -1,27 +1,65 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const selectableCells = document.querySelectorAll('.selectable');
-    document.getElementById('totalPrice-hidden').value=0;
+    const totalPriceHidden = document.getElementById('totalPrice-hidden');
+    const selectedTimeSlots = document.getElementById('selected-timeslot');
+    const totalPrice = document.getElementById('totalPrice');
+    const selectedDate = document.getElementById('selectedDate');
+    const selectedYard = document.getElementById('selected-yard');
+    const scheduleListContainer = document.getElementById('scheduleListContainer');
+    let selectedCells = []; // Lưu trữ các ô được chọn
+
+    // Cập nhật giao diện và dữ liệu dựa trên các ô được chọn
+    function updateSelection() {
+        scheduleListContainer.innerHTML = '';
+        let total = 0;
+        let timeSlots = [];
+        let yards = new Set(); // Đảm bảo không bị trùng sân
+        let dates = new Set(); // Đảm bảo không bị trùng ngày
+
+        selectedCells.forEach(cell => {
+            const timeSlot = cell.getAttribute('timeSlot');
+            const price = parseInt(cell.getAttribute('price'), 10);
+            const yard = cell.getAttribute('yard');
+            const date = cell.getAttribute('date');
+            const scheduleId= cell.getAttribute('scheduleId');
+
+
+            // theem input cho scheduleId
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'scheduleIds[]';
+            hiddenInput.value = scheduleId;
+            scheduleListContainer.appendChild(hiddenInput);
+
+            total += price;
+            timeSlots.push(timeSlot);
+            yards.add(yard);
+            dates.add(date);
+        });
+
+        // Cập nhật giao diện
+        totalPrice.innerText = total.toLocaleString() + ' đ';
+        selectedTimeSlots.innerText = timeSlots.join(', ');
+        selectedDate.innerText = 'Ngày: ' + Array.from(dates).join(', ');
+        selectedYard.innerText = 'Sân: ' + Array.from(yards).join(', ');
+        totalPriceHidden.value = total;
+    }
 
     selectableCells.forEach(cell => {
-        cell.addEventListener('click', function() {
-            // Lấy dữ liệu từ ô được click
-            const scheduleId = this.getAttribute('scheduleId');
-            const timeSlot = this.getAttribute('timeSlot');
-            const date = this.getAttribute('date');
-            const price =  this.getAttribute('price');
-            const selectedYard =  this.getAttribute('yard');
+        cell.addEventListener('click', function () {
+            const index = selectedCells.indexOf(this);
 
-            // Cập nhật các phần tử trên trang
-            document.getElementById('scheduleId').value = scheduleId;
-            document.getElementById('selected-timeslot').innerText = timeSlot;
-            document.getElementById('totalPrice').innerText = price + ' đ';
-            document.getElementById('selectedDate').innerText = 'Ngày: ' + date;
-            document.getElementById('selected-yard').innerText = 'Sân: ' + selectedYard;
-            document.getElementById('totalPrice-hidden').value=price;
-            selectableCells.forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            //xóa thoong báo lỗi nếu có
-            clearError();
+            if (index === -1) {
+                // Thêm ô vào danh sách được chọn
+                selectedCells.push(this);
+                this.classList.add('active');
+            } else {
+                // Bỏ chọn ô
+                selectedCells.splice(index, 1);
+                this.classList.remove('active');
+            }
+
+            updateSelection();
         });
     });
 });

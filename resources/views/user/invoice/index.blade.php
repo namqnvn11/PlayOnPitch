@@ -7,6 +7,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/invoice.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 <body>
 <header>
@@ -64,23 +66,37 @@
         <h2>Hóa đơn</h2>
         <hr>
         <div class="invoice-info">
-            <p><strong>Sân:</strong> <span>{{ $reservation->yard->boss->company_name }}</span></p>
-            <p><strong>Địa chỉ:</strong> <span>{{ $reservation->yard->boss->company_address }}</span></p>
-            <p><strong>Vị trí:</strong> <span>{{ $reservation->yard->yard_name }}</span></p>
-            <p><strong>Thời gian đặt sân:</strong> <span>{{ $reservation->reservation_time_slot }} {{$reservation->reservation_date}}</span></p>
+            <p><strong>Sân:</strong> <span>{{ $boss->company_name }}</span></p>
+            <p><strong>Địa chỉ:</strong> <span>{{ $boss->company_address }}</span></p>
+            <div class="flex justify-between">
+                <div class="font-bold">Vị trí:</div>
+                <div class="w-[64%]">
+                    @foreach($groupedSchedules as $aYardSchedule)
+                        <div class="mb-1">
+                            {{$aYardSchedule[0]->Yard->yard_name}}:
+                            @foreach($aYardSchedule as $slot)
+                                {{$slot->time_slot}}
+                            @endforeach
+                        </div>
+                    @endforeach
+                </div>
+            </div>
             <p><strong>Thanh toán lúc:</strong> <span>{{ $invoice->created_at }}</span></p>
             <p><strong>Trạng thái:</strong> <span>Đã thanh toán bằng {{$invoice->payment_method}}</span></p>
         </div>
         <hr>
         <div class="customer-info">
-            <p><strong>Người đặt:</strong> <span>{{ $reservation->user->full_name }}</span></p>
-            <p><strong>Số điện thoại:</strong> <span>{{ $reservation->user->phone }}</span></p>
-            <p><strong>Email:</strong> <span>{{ $reservation->user->email }}</span></p>
+            <p><strong>Người đặt:</strong> <span>{{ $reservation->Contact->name??''}}</span></p>
+            <p><strong>Số điện thoại:</strong> <span>{{ $reservation->Contact->phone??'' }}</span></p>
+            <p><strong>Email:</strong> <span>{{ $reservation->user->email??'trống' }}</span></p>
         </div>
         <hr>
         <div class="total-info">
             <p><strong>Tổng tiền:</strong> <span>{{ number_format($reservation->total_price, 0, ',', '.') }} vnd</span></p>
-            <p><strong>Đã cọc:</strong> <span>{{ number_format($reservation->deposit, 0, ',', '.') }} vnd</span></p>
+
+                <p><strong>Loại thanh toán:</strong> <span>{{$reservation->deposit_amount!=0?'Đặt cọc 20%':'Trả toàn bộ'}}</span></p>
+
+            <p><strong>Đã thanh toán:</strong> <span>{{ number_format($reservation->deposit_amount==0?$reservation->total_price:$reservation->deposit_amount, 0, ',', '.') }} vnd</span></p>
         </div>
         <hr>
         <button class="export-invoice" id="export-invoice">Xuất hóa đơn</button>

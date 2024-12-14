@@ -220,7 +220,7 @@ Route::middleware(['auth:web'])->group(function () {
 
         Route::prefix('payment')->name('payment.')->group(function () {
             Route::get('/index', [PaymentController::class, 'index'])->name('index');
-            route::get('/cancel/{id}', [PaymentController::class, 'cancelPayment'])->name('cancel');
+            route::post('/cancel', [PaymentController::class, 'cancelPayment'])->name('cancel');
         });
 
         Route::prefix('history')->name('history.')->group(function () {

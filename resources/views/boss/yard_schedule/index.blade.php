@@ -25,8 +25,8 @@
                     <div class="card">
 
                         {{-- card header--}}
-                        <div class="flex justify-between p-3 border rounded-top align-middle">
-                            <form method="GET" action="{{ route('boss.yard_schedule.index') }}" class="form-inline">
+                        <div class="flex justify-start p-3 border">
+                            <form method="GET" action="{{ route('boss.yard_schedule.index') }}" class="form-inline mr-2">
                                 <div class="form-group">
                                     <label for="yard_id" class="mr-2">Select Yard:</label>
                                     <select name="yard_id" id="yard_id" class="form-control mr-2"  style="padding-right: 40px">
@@ -39,15 +39,11 @@
                                 </div>
                                 <x-green-button type="submit" class="btn btn-primary">Filter</x-green-button>
                             </form>
-                            <div class="card-tools">
-                                <x-green-button role="button" class="btn btn-success js-on-create">
-                                    + Add new
-                                </x-green-button>
+                            <div class="flex float-left border-green-900 border">
+                                <x-green-button class="w-[170px] mr-2"><a href="{{url('boss/yard/schedule/create')}}">Create Schedule</a></x-green-button>
+                                <x-green-button class="w-[170px]"><a href="{{url('boss/yard/schedule/delete')}}">delete Schedule</a></x-green-button>
                             </div>
-
-                            <x-green-button><a href="{{url('boss/yard/schedule/create')}}">Create Schedule</a></x-green-button>
-                            <x-green-button><a href="{{url('boss/yard/schedule/delete')}}">delete Schedule</a></x-green-button>
-                        </div>
+                    </div>
                         {{--end card header--}}
 
                         <div class="card-body table-responsive p-0">

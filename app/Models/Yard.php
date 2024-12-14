@@ -34,13 +34,11 @@ class Yard extends Model
         return $this->hasMany(PriceTimeSetting::class, 'yard_id');
     }
     public function YardSchedules(){
-        return $this->hasMany(YardSchedule::class, 'yard_id');
+        return $this->hasMany(YardSchedule::class);
     }
     public function images()
     {
         return $this->hasMany(Image::class, 'yard_id');
     }
-    public function reservation(){
-        return $this->hasMany(Reservation::class, 'yard_id');
-    }
+
 }

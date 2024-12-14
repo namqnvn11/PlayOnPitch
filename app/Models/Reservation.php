@@ -12,13 +12,13 @@ class Reservation extends Model
         'user_id',
         'yard_id',
         'reservation_date',
-        'reservation_time_slot',
         'deposit_amount',
         'payment_status',
         'reservation_status',
         'total_price',
         'code',
         'payment_type',
+        'contact_id'
     ];
 
     public function User()
@@ -26,9 +26,8 @@ class Reservation extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function Yard()
-    {
-        return $this->belongsTo(Yard::class, 'yard_id');
+    public function YardSchedules(){
+        return $this->hasMany(YardSchedule::class, 'reservation_id');
     }
 
     public function Revenues(){
@@ -36,9 +35,13 @@ class Reservation extends Model
     }
 
     public function Invoice(){
-        return $this->hasOne(Invoice::class, 'reservation_id', 'id');
+        return $this->hasOne(Invoice::class);
     }
     public function ReservationHistory(){
         return $this->hasOne(ReservationHistory::class, 'reservation_id');
+    }
+
+    function Contact(){
+        return $this->belongsTo(Contact::class, 'contact_id');
     }
 }

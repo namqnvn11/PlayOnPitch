@@ -4,11 +4,10 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\ExpireReservationJob;
+use App\Models\Contact;
 use App\Models\Reservation;
 use App\Models\YardSchedule;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\ReservationHistory;
 use Illuminate\Support\Facades\Cookie;
 
@@ -16,54 +15,72 @@ class ReservationController extends Controller
 {
    function makeReservation(Request $request){
 
-       $yardSchedule=YardSchedule::find(request('scheduleId'));
+       //nhận được schedule list
+       $yardScheduleIds=$request->scheduleIds;
+
+       //kiểm tra schedule list có available
+       foreach ($yardScheduleIds as $yardScheduleId) {
+           $schedule=YardSchedule::find($yardScheduleId);
+           if ($schedule->status!=='available') {
+               return back()->with('error','something went wrong, please try again');
+           }
+       }
        $userName= $request->userName;
+       $userId=$request->user_id;
+       $bossId=$request->boss_id;
        $phone= $request->phone;
        $total_price= $request->total_price;
 
-       // Tạo reservation mới
+       $contact = Contact::firstOrCreate(
+           ['phone' => $phone],
+           [
+               'name' => $userName,
+               'phone' => $phone,
+               'user_id' => $userId??null,
+           ]
+       );
+       $contact->update(['name' => $userName]);
+
        $reservation = Reservation::create([
-           'user_id' => Auth::id(),
-           'yard_id' => $yardSchedule->yard_id,
-           'reservation_date' => $yardSchedule->date,
-           'reservation_time_slot' => $yardSchedule->time_slot,
+           'user_id' => $userId??null,
+           'contact_id' => $contact->id,
+           'reservation_date' => now(),
            'total_price' => $total_price,
            'deposit_amount' => 0,
            'payment_status' => 'pending',
            'reservation_status' => 'paying',
            'code' => uniqid(),
        ]);
-
-       // Tạo lịch sử reservation mới
        $history = ReservationHistory::create([
-           'user_id' => $reservation->user_id,
+           'user_id' => $userId??null,
            'reservation_id' => $reservation->id,
            'status' => 'paying',
        ]);
-
-       $expiryTime = now()->addMinutes(15);
-
-       $yardSchedule->update([
-           'status' => 'pending',
-           'reservation_id' => $reservation->id,
-       ]);
        // Lưu id reservation và history lên cookie
        $reservationData = json_encode([
-           'userId' => $reservation->user_id,
+           'contactId' => $contact->id,
+           'bossId' => $bossId,
            'reservationId' => $reservation->id,
            'historyId' => $history->id,
-           'yardScheduleId' => $yardSchedule->id,
+           'yardScheduleIds' => $yardScheduleIds,
        ]);
        Cookie::queue('reservation', $reservationData, 15);
 
-       ExpireReservationJob::dispatch($yardSchedule->id)->delay(now()->addMinutes(15));
+       foreach($yardScheduleIds as $id){
+           $yardSchedule= YardSchedule::find($id);
+           $yardSchedule->update([
+               'status' => 'pending',
+               'reservation_id' => $reservation->id,
+           ]);
+           ExpireReservationJob::dispatch($id)->delay(now()->addMinutes(15));
+       }
 
        return redirect()->route('user.payment.index',[
-           'yard_schedule_id'=>$yardSchedule->id,
+           'yard_schedule_ids'=>$yardScheduleIds,
            'reservation_id'=>$reservation->id,
            'total_price'=>$total_price,
-           'phone'=>$phone,
-           'user_name'=>$userName,
+           'contact_id'=>$contact->id,
+           'boss_id'=>$bossId,
        ]);
    }
 }

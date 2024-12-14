@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\Auth;
 class HistoryController extends Controller
 {
     public function index(){
-        $histories = ReservationHistory::with(['reservation.yard.boss']) // Eager load các quan hệ
-        ->where('user_id', Auth::id()) // Lọc theo ID người dùng
-        ->orderBy('created_at', 'desc') // Sắp xếp theo ngày đặt mới nhất
-        ->get();
-
+        $histories = ReservationHistory::with([
+            'Reservation.YardSchedules.Yard.Boss.images'
+        ])->where('user_id', Auth::id())->where('status','success')
+            ->orderBy('created_at', 'desc')
+            ->get();
         return view('user.history.index', compact('histories'));    }
 }

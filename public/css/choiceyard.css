@@ -397,6 +397,6 @@ th, td {
 .selectable.active {
     background-color: green; /* Màu nền khi được chọn */
     color: white; /* Màu chữ khi được chọn */
-    border-color: #0056b3; /* Màu viền khi được chọn */
+    border:none; /* Màu viền khi được chọn */
 }
 

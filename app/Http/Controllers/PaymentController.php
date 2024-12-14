@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Boss;
+use App\Models\Contact;
 use App\Models\Invoice;
 use App\Models\PaymentTransaction;
 use App\Models\Reservation;
@@ -26,39 +28,54 @@ class PaymentController extends Controller
 
     public function index(request $request)
     {
-        $yardSchedule= YardSchedule::find($request->yard_schedule_id);
-        $currentUser = auth()->user();
+        $yardScheduleIds= $request->yard_schedule_ids;
+        $boss= Boss::find($request->boss_id);
+        $contact= Contact::find($request->contact_id);
+        $yardSchedules = YardSchedule::whereIn('id', $yardScheduleIds)->get();
+        // Group theo yard_id
+        $groupedSchedules = $yardSchedules->groupBy('yard_id');
 
         $reservationJson = Cookie::get('reservation');
         if (!$reservationJson) {
             return back()->with('error','your reservation is expired, please try again');
         }
         $vouchers=[];
-        foreach ($currentUser->User_Voucher as $uv) {
-            $vouchers[]=Voucher::find($uv->voucher_id);
+
+        $currentUser=$contact->User;
+        if ($currentUser){
+            foreach ($currentUser->User_Voucher as $uv) {
+                $vouchers[]=Voucher::find($uv->voucher_id);
+            }
         }
         return view('user.payment.index')
             ->with(
-                [   'currentUser' => $currentUser,
-                    'vouchers' => $vouchers,
-                    'userName'=>$request->user_name,
-                    'phone'=>$request->phone,
+                [
+                    'currentUser' => $currentUser??null,
+                    'vouchers' => $vouchers??[],
+                    'contact' => $contact,
                     'total_price'=>$request->total_price,
-                    'yardSchedule'=>$yardSchedule,
+                    'yardSchedules'=>$yardSchedules,
+                    'groupedSchedules'=>$groupedSchedules,
+                    'boss'=>$boss,
                     'reservation_id'=>$request->reservation_id,
                 ]);
     }
 
     //yardScheduleId
-    public function cancelPayment($id){
+    public function cancelPayment(request $request){
+        $ids= $request->ids;
         $reservationJson = Cookie::get('reservation');
         if ($reservationJson) {
             $reservationCookies = json_decode($reservationJson);
-            $yardSchedule=YardSchedule::find($id);
-            $yardSchedule->update([
-                'status'=>'available',
-                'reservation_id'=>0,
-            ]);
+            $count=count($ids);
+            for ($i=0;$i<$count;$i++) {
+                $yardSchedule=YardSchedule::find($ids[$i]);
+                $yardSchedule->update([
+                    'status'=>'available',
+                    'reservation_id'=>0,
+                ]);
+
+            }
             Reservation::find($reservationCookies->reservationId)->update([
                 'payment_status'=>'cancelled',
                 'reservation_status'=>'cancelled',
@@ -66,9 +83,10 @@ class PaymentController extends Controller
             ReservationHistory::find($reservationCookies->historyId)->update([
                 'status'=>'cancelled',
             ]);
+
             Cookie::queue(Cookie::forget('reservation'));
             Log::info('cancel payment');
-            return redirect()->route('user.choice_yard.index',$yardSchedule->Yard->Boss->id)->with('error','your reservation is cancelled');
+            return redirect()->route('user.choice_yard.index',$reservationCookies->bossId)->with('error','your reservation is cancelled');
         }
         return redirect()->route('home')->with('error','Something went wrong');
     }
@@ -107,6 +125,8 @@ class PaymentController extends Controller
                 'payment_method'=>'momo',
                 'status'=>'pending',
             ]);
+            session()->put('invoiceId',$invoice->id);
+
             PaymentTransaction::create([
                 'transaction_id' => $momoResponse['orderId'],
                 'user_id' => $request['userId'],
@@ -128,37 +148,44 @@ class PaymentController extends Controller
     }
     public function handleMoMoPaymentCallback(Request $request)
     {
-        $payment = PaymentTransaction::where('transaction_id', $request->orderId)->first();
-        $invoice= $payment->Invoice()->first();
-        $reservation=Reservation::find($invoice->reservation_id);
-        $reservationHistory= $reservation->ReservationHistory()->first();
-        if ($payment) {
-            $status = $request->resultCode == '0' ? 'Success' : 'Failed';
-            $payment->status =$status;
-            $invoice->status = $status;
-            $reservation->payment_status = $status;
-            $reservation->reservation_status = $request->resultCode == '0' ? 'booked' : 'failed';
-            $reservationHistory->status=$status;
-            $reservationHistory->save();
-            $reservation->save();
-            $payment->save();
-            $invoice->save();
-        }
-        // thanh toán thành công
-        if ($request->resultCode == '0'){
-            //xóa voucher của người duùng và session voucherid nếu có
-            if (session()->has('userVoucherId')) {
-                $userVoucherId= session('userVoucherId');
-                User_voucher::find($userVoucherId)->delete();
-                session()->forget('userVoucherId');
+        try {
+            $payment = PaymentTransaction::where('transaction_id', $request->orderId)->first();
+            if ($payment) {   $invoice= $payment->Invoice()->first();}
+
+            $reservation=Reservation::find($invoice->reservation_id);
+            $reservationHistory= $reservation->ReservationHistory()->first();
+            if ($payment) {
+                $status = $request->resultCode == '0' ? 'Success' : 'Failed';
+                $payment->status =$status;
+                $invoice->status = $status;
+                $reservation->payment_status = $status;
+                $reservation->reservation_status = $request->resultCode == '0' ? 'booked' : 'failed';
+                $reservationHistory->status=$status;
+                $reservationHistory->save();
+                $reservation->save();
+                $payment->save();
+                $invoice->save();
             }
-            $this->updateYardScheduleAndDeleteCookies(true);
-            return redirect()->route('user.invoice.index', $invoice->id)->with('success', 'Payment successful');
+
+            // thanh toán thành công
+            if ($request->resultCode == '0'){
+                //xóa voucher của người duùng và session voucherid nếu có
+                if (session()->has('userVoucherId')) {
+                    $userVoucherId= session('userVoucherId');
+                    User_voucher::find($userVoucherId)->delete();
+                    session()->forget('userVoucherId');
+                }
+                $this->updateYardScheduleAndDeleteCookies(true);
+                return redirect()->route('user.invoice.index', $invoice->id)->with('success', 'Payment successful');
+            }
+            //thất bại
+            $this->updateYardScheduleAndDeleteCookies(false);
+            return redirect()->route('user.yardlist.index')->with('error', 'Payment ' . $payment->status);
+        }catch (\Exception $exception){
+            return redirect('/')->with('error', 'something went wrong');
         }
-        //thất bại
-        $this->updateYardScheduleAndDeleteCookies(false);
-        return redirect()->route('user.yardlist.index')->with('error', 'Payment ' . $payment->status);
-    }
+        }
+
 
     public function createStripePayment(Request $request){
 
@@ -230,6 +257,7 @@ class PaymentController extends Controller
                 'payment_method'=>'stripe',
                 'status'=>$invoiceStatus,
             ]);
+            session()->put('invoiceId',$invoice->id);
 
             PaymentTransaction::create([
                 'transaction_id' => $response['id'],
@@ -250,6 +278,7 @@ class PaymentController extends Controller
             $reservationHistory= $reservation->ReservationHistory()->first();
             $reservationHistory->status=$invoiceStatus;
 
+
             $reservationHistory->save();
             $reservation->save();
 
@@ -264,7 +293,9 @@ class PaymentController extends Controller
             session()->forget('product_name');
             session()->forget('totalPrice');
 
+            //update schedule status
             $this->updateYardScheduleAndDeleteCookies(true);
+
             return redirect()->route('user.invoice.index',$invoice->id)->with('success', 'Payment successful!');
         } catch (ApiErrorException $e) {
             return redirect()->route('user.stripe.payment.cancel')->with('error', $e->getMessage());
@@ -273,7 +304,9 @@ class PaymentController extends Controller
 
     public function cancel(Request $request)
     {
+        //update schedule status
         $this->updateYardScheduleAndDeleteCookies(false);
+
         return redirect()->route('user.yardlist.index')->with('error', 'Payment canceled!');
     }
 
@@ -281,13 +314,21 @@ class PaymentController extends Controller
     {
         if ($reservationJson = Cookie::get('reservation')) {
             $reservationCookies = json_decode($reservationJson);
-            $yardSchedule = YardSchedule::find($reservationCookies->yardScheduleId);
-
-            $yardSchedule->update([
-                'status' => $isPaidSuccess ? 'booked' : 'available',
-                'reservation_id' => $isPaidSuccess ? $yardSchedule->reservation_id : 0,
+            $ids= $reservationCookies->yardScheduleIds;
+            foreach ($ids as $id) {
+                $yardSchedule = YardSchedule::find($id);
+                $yardSchedule->update([
+                    'status' => $isPaidSuccess ? 'booked' : 'available',
+                    'reservation_id' => $isPaidSuccess ? $yardSchedule->reservation_id : 0,
+                ]);
+            }
+            //update quan hệ contact vs invoice
+            $invoiceId= session('invoiceId');
+            Contact::find($reservationCookies->contactId)->update([
+                'invoice_id'=>$invoiceId
             ]);
         }
+        session()->forget('voucherId');
         Cookie::queue(Cookie::forget('reservation'));
     }
 

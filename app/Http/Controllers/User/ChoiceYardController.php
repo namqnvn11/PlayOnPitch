@@ -31,10 +31,14 @@ class ChoiceYardController extends Controller
                 $query->where('date', Carbon::create($selectTime->toDateString()));
             }])
             ->get();
-        $timeSlots = YardSchedule::where('yard_id',$yards[0]->id)
-            ->select('time_slot')
-            ->distinct()
-            ->get();
+        if (!$yards->isEmpty()) {
+            $timeSlots = YardSchedule::where('yard_id',$yards[0]->id)
+                ->select('time_slot')
+                ->distinct()
+                ->get();
+        }else{
+            $timeSlots = [];
+        }
         return view('user.choice_yard.index',compact('yards','dates','timeSlots','boss','selectTime'));
     }
 

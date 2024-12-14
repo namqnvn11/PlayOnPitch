@@ -65,30 +65,45 @@
         </div>
 
         @php
-         $subTotal= $total_price;
+         $subTotal= $total_price??null;
          $discount= 0;
-         $boss= $yardSchedule->Yard->Boss;
-         $userId=$currentUser->id;
+         $userId=$currentUser->id??null;
         @endphp
 
         <div class="p-10 rounded mx-auto border bg-white">
             <div class="flex justify-center">
                 <div class="mx-5">
-                    <form action="{{url('user/payment/cancel')}}/{{$yardSchedule->id}}" method="get">
+                    <form action="{{url('user/payment/cancel')}}" method="post">
+                        @csrf
+                        @foreach($yardSchedules as $yardSchedule)
+                            <input type="hidden" name="ids[]" value="{{$yardSchedule->id}}">
+                        @endforeach
                         <button type="submit" class="mb-3 text-[20xp] hover:text-red-500"><i class="bi bi-caret-left-fill"></i>  Hủy</button>
                     </form>
                     <h2 class="text-bold-900 text-xl">Thanh Toán</h2>
                     <div class="payment-info">
                         <p><strong>Sân:</strong> <span>{{$boss->company_name}}</span></p>
                         <p><strong>Địa chỉ:</strong> <span>{{$boss->company_address}}, {{$boss->District->name}}, {{$boss->Province->name}}</span></p>
-                        <p><strong>Vị trí:</strong> <span>{{$yardSchedule->Yard->yard_name}}</span></p>
-                        <p><strong>Thời gian:</strong> <span>{{$yardSchedule->time_slot}} {{$yardSchedule->date}}</span></p>
+                        <div class="flex justify-between">
+                            <div class="font-bold">Vị trí:</div>
+                            <div class="w-[70%]">
+                                @foreach($groupedSchedules as $aYardSchedule)
+                                    <div class="mb-1">
+                                        {{$aYardSchedule[0]->Yard->yard_name}}:
+                                        @foreach($aYardSchedule as $slot)
+                                            {{$slot->time_slot}}
+                                        @endforeach
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <p><strong>Thời gian:</strong> <span>{{$yardSchedule->date}}</span></p>
                     </div>
                     <hr>
                     <div class="customer-info">
-                        <p><strong>Người đặt:</strong> <span>{{$userName}}</span></p>
-                        <p><strong>Số điện thoại:</strong> <span>{{$phone}}</span></p>
-                        <p><strong>Email:</strong> <span>{{$currentUser->email}}</span></p>
+                        <p><strong>Người đặt:</strong> <span>{{$contact->name??''}}</span></p>
+                        <p><strong>Số điện thoại:</strong> <span>{{$contact->phone??''}}</span></p>
+                        <p><strong>Email:</strong> <span>{{$currentUser->email??'trống'}}</span></p>
                     </div>
                 </div>
                 <div class="mx-5 pt-10  ">
@@ -180,9 +195,8 @@
                                     Tiến Hành Thanh Toán
                                 </x-green-button>
                             </div>
-                            <input name="userId" value="{{$userId}}" type="hidden"/>
-                            <input name="name" value="{{$userName}}" type="hidden"/>
-                            <input name="phone" value="{{$phone}}" type="hidden"/>
+                            <input name="userId" value="{{$userId??null}}" type="hidden"/>
+                            <input name="contact_id" value="{{$contact->id}}" type="hidden"/>
                             <input name="reservationId" value="{{$reservation_id}}" type="hidden"/>
                             <input value="{{$subTotal}}" name="totalPrice" type="hidden"/>
                         </form>

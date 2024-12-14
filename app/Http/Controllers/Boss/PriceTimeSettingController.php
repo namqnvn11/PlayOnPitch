@@ -55,14 +55,13 @@ class PriceTimeSettingController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-
         try {
             $data= $request->all();
             //chia thời gian mon-fri và weekend
             $monFriSlots = $this->extractTimeSlots($data, 'mon-fri');
             $weekendSlots = $this->extractTimeSlots($data, 'weekend');
-            //kiểm tra price có hợp lệ
 
+            //kiểm tra price có hợp lệ
             if(!$this->validatePrice($monFriSlots)||!$this->validatePrice($weekendSlots)){
                 return response()->json([
                     'success' => false,
@@ -77,7 +76,6 @@ class PriceTimeSettingController extends Controller
             //kiểm tra có quá giới hạn thời gian mở cửa
             $isOpenAllDay= Auth::guard('boss')->user()->is_open_all_day;
             if (!$isOpenAllDay) {
-                // Giả sử bạn có hai mảng monFriSlots và weekendSlots
                 $violationsMonFri = $this->isTimeWithinOperatingHours($monFriSlots);
                 $violationsWeekend = $this->isTimeWithinOperatingHours($weekendSlots);
                 if (!empty($violationsMonFri) || !empty($violationsWeekend)) {
@@ -86,7 +84,6 @@ class PriceTimeSettingController extends Controller
                         'message' => 'There is an overlap on the opening time, please check again!'
                     ]);
                 }
-
             }
 
             //kiểm tra thời gian cung cấp có bị trùng lập với nhau
@@ -102,8 +99,6 @@ class PriceTimeSettingController extends Controller
                     'message'=> 'There is an overlap in weekend times, please check again !!!'
                 ]);
             }
-
-
 
             // lưu dữ liệu vào data base
             // bảng price
@@ -154,14 +149,12 @@ class PriceTimeSettingController extends Controller
             }
 
             //xóa các thời gian cũ
-
             //lấy danh sách các id time slot id cũ đối chiếu với các id mới để xóa
             $ids = PriceTimeSetting::where('yard_id',$id)->pluck('id')->toArray();
             // Tìm các id có trong $ids nhưng kông có trong $currentTimeSlotIdArray
             $idsToDelete = array_diff($ids, $currentTimeSlotIdArray);
             // Xóa các id này khỏi bảng
             PriceTimeSetting::whereIn('id', $idsToDelete)->delete();
-
 
             //lưu giá mặc điịnh
             Yard::find($id)->update([
@@ -260,6 +253,7 @@ class PriceTimeSettingController extends Controller
     }
 
     function validatePrice($timeSlots) {
+
         // Kiểm tra nếu mảng timeSlots có phần tử null
         foreach ($timeSlots as $slot) {
             if (is_null($slot)) {
@@ -359,25 +353,34 @@ class PriceTimeSettingController extends Controller
     {
         // Lấy thông tin từ Auth guard
         $user = Auth::guard('boss')->user();
-        $openTime = $user->time_open;
-        $closeTime = $user->time_close;
-
-        // Chuyển đổi thời gian mở và đóng sang timestamp để so sánh dễ dàng
-        $openTimestamp = strtotime($openTime);
-        $closeTimestamp = strtotime($closeTime);
-
+        $openTime = Carbon::parse($user->time_open); // Chuyển thành đối tượng Carbon
+        $closeTime = Carbon::parse($user->time_close);
         $violations = [];
+        // Nếu closeTime là 00:00:00, cộng thêm một ngày
+        if ($closeTime->format('H:i:s') === '00:00:00') {
+            $closeTime->addDay();
+        }
 
         foreach ($timeSlots as $slot) {
-            $fromTimestamp = strtotime($slot['fromTime']);
-            $toTimestamp = strtotime($slot['toTime']);
+            $fromTime = Carbon::parse($slot['fromTime']);
+            $toTime = Carbon::parse($slot['toTime']);
+            if ($toTime->format('H:i:s') === '00:00:00') {
+                $toTime->addDay();
+            }
+            // Kiểm tra khoảng thời gian không hợp lệ (ví dụ: fromTime > toTime)
+            if ($fromTime->greaterThan($toTime)) {
+                $violations[] = [
+                    'slot' => $slot,
+                    'error' => 'Invalid time range: fromTime is later than toTime.'
+                ];
+                continue;
+            }
 
-            // Kiểm tra xem khoảng thời gian có nằm ngoài thời gian hoạt động không
-            if ($fromTimestamp < $openTimestamp || $toTimestamp > $closeTimestamp) {
+            // Kiểm tra khoảng thời gian nằm ngoài thời gian hoạt động
+            if ($fromTime->lessThan($openTime) || $toTime->greaterThan($closeTime)) {
                 $violations[] = $slot; // Lưu các slot vi phạm vào mảng
             }
         }
-
         return $violations;
     }
 

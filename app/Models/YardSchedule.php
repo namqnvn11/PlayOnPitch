@@ -25,6 +25,6 @@ class YardSchedule extends Model
 
     public function Reservation()
     {
-        return $this->belongsTo(Reservation::class, 'reservation_id');
+        return $this->belongsTo(Reservation::class);
     }
 }

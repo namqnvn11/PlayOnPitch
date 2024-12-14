@@ -18,15 +18,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-//        $list = [
-//            [
-//                'name' => 'Admin',
-//                'email' => 'admin@admin.com',
-//                'password' => Hash::make('password1234'),
-//            ],
-//        ];
-//        DB::table('admins')->insert($list);
-        Yard::factory(20)->create();
-        Voucher::factory(20)->create();
+        $list = [
+            [
+                'name' => 'Admin',
+                'email' => 'admin@admin.com',
+                'password' => Hash::make('password1234'),
+            ],
+        ];
+        DB::table('admins')->insert($list);
     }
 }

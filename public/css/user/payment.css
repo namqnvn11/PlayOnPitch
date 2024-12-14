@@ -247,6 +247,7 @@ footer {
     border-radius: 8px;
     font-family: Arial, sans-serif;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
 }
 
 .payment h2 {
@@ -275,7 +276,7 @@ footer {
 .payment-info p strong,
 .customer-info p strong,
 .total-info p strong {
-    width: 35%; /* Độ rộng cố định cho tiêu đề */
+    width: 28%; /* Độ rộng cố định cho tiêu đề */
     font-weight: bold;
     margin-right: 10px;
 }
