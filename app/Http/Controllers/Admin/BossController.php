@@ -96,9 +96,6 @@ class BossController extends Controller
         }
     }
 
-
-
-
     public function block($id)
     {
         try {
