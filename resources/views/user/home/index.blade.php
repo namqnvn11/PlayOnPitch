@@ -10,7 +10,7 @@
 <body>
 <header>
     <div class="top-section">
-        <h3>Logo và tên sân</h3>
+        <a href="#"><img src="{{asset('img/logotext.png')}}" alt="" style="width: 350px; height: 50px;"></a>
     </div>
     <hr class="divider" />
     <nav class="nav-menu">
@@ -26,7 +26,7 @@
         <div class="auth-button">
             @auth
                 <a href="{{route('user.profile.index')}}">
-                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> {{ Auth::user()->full_name }}</button>
+                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> {{ Auth::user()->full_name . " | " . Auth::user()->score }}<i class="fa-regular fa-star"></i></button>
                 </a>
             @else
                 <a href="{{ route('login') }}">

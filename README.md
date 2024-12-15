@@ -14,3 +14,7 @@ php artisan schedule:run
 ```php
 php artisan schedule:list
 ```
+### chạy thời gian để tự hủy sân đã đặt mà không thanh toán
+```php
+php artisan queue:work
+```

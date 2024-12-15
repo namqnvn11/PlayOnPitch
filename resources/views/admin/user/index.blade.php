@@ -92,7 +92,7 @@
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->phone }}</td>
                                         @if($user->address)
-                                        <td>{{$user->District->name . ", " . $user->District->Province->name }}</td>
+                                        <td>{{$user->address . ', ' . $user->District->name . ", " . $user->District->Province->name }}</td>
                                         @else
                                             <td></td>
                                         @endif

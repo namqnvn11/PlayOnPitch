@@ -16,8 +16,11 @@ class YardScheduleController extends Controller
 {
     public function index(Request $request)
     {
+        $bossId = auth()->user()->id;
+
+        $yards = Yard::where('boss_id', $bossId)->get();
+
         $yardId = $request->input('yard_id');
-        $yards = Yard::all();
 
         if (!$yardId && $yards->isNotEmpty()) {
             $yardId = $yards->first()->id;
@@ -31,19 +34,17 @@ class YardScheduleController extends Controller
 
         $currentDate = now()->startOfDay();
         $endDate = $currentDate->copy()->addDays(7);
-
         $query->whereBetween('date', [$currentDate, $endDate]);
 
         $yardSchedules = $query->paginate(300);
+
         $Dates = $yardSchedules->getCollection()->unique('date')->sortBy('date')->values();
         $TimeSlots = $yardSchedules->getCollection()->unique('time_slot');
-
-
 
         return view('boss.yard_schedule.index', compact('yardSchedules', 'Dates', 'TimeSlots', 'yards', 'yardId'));
     }
 
-    public function detail(Request $request, $id)
+        public function detail(Request $request, $id)
     {
         // Tìm thông tin reservation theo ID
         $reservation = Reservation::with(['yard.boss', 'yard.district.province', 'user'])->findOrFail($id);
