@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
 //            ],
 //        ];
 //        DB::table('admins')->insert($list);
+        Boss::factory(20)->create();
         Yard::factory(20)->create();
         Voucher::factory(20)->create();
     }
