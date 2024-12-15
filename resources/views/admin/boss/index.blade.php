@@ -91,7 +91,7 @@
                                         <td>{{ $boss->full_name }}</td>
                                         <td>{{ $boss->phone }}</td>
                                         <td>{{ $boss->company_name }}</td>
-                                        <td>{{ $boss->District->name . ", " . $boss->District->Province->name }}</td>
+                                        <td>{{ $boss->company_address . ', ' . $boss->District->name . ", " . $boss->District->Province->name }}</td>
                                         <td>{{ $boss->status == 1 ? 'Mới' : 'Cũ' }}</td>
 
                                         <td class="text-center" onclick="event.stopPropagation()">

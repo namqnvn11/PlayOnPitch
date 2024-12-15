@@ -78,7 +78,7 @@ header {
     height: 50px;
     font-size: 1.5rem;
     font-weight: bold;
-    padding-left: 5%;
+    padding-left: 2%;
     width: 72%;
     margin: 0 auto;
 }
@@ -569,4 +569,25 @@ button#submit-rating:hover {
 
 .thumbnail.active {
     border-color: green; /* Màu viền khi hình ảnh được chọn */
+}
+
+/* Đổi màu cho các nút phân trang */
+.pagination .page-item .page-link {
+    color: black; /* Màu chữ */
+    background-color: #FFFFFF; /* Màu nền */
+    border-color: #14532D; /* Màu viền */
+}
+
+/* Đổi màu cho nút đang được chọn */
+.pagination .page-item.active .page-link {
+    color: #fff;
+    background-color: #14532D; /* Màu nền */
+    border-color: #14532D;
+}
+
+/* Hover cho các nút */
+.pagination .page-item .page-link:hover {
+    border-color: #0056b3;
+    color: #FFFFFF;
+    background-color: #008347;
 }

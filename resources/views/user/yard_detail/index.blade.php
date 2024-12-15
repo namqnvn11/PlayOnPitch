@@ -17,7 +17,7 @@
 <body>
 <header>
     <div class="top-section">
-        <h3>Logo và tên sân</h3>
+        <a href="{{route('user.home.index')}}"><img src="{{asset('img/logotext.png')}}" alt="" style="width: 350px; height: 50px;"></a>
     </div>
     <hr class="divider" />
     <nav class="nav-menu">
@@ -33,7 +33,7 @@
         <div class="auth-button">
             @auth
                 <a href="{{route('user.profile.index')}}">
-                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> {{ Auth::user()->full_name }}</button>
+                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> {{ Auth::user()->full_name . " | " . Auth::user()->score }}<i class="fa-regular fa-star"></i></button>
                 </a>
             @else
                 <a href="{{ route('login') }}">
@@ -161,10 +161,10 @@
                 </div>
             @endforeach
         </div>
-        @if ($ratings->hasMorePages())
-            <div id="load-more" class="text-center">
-                <button id="loadMoreBtn" class="btn" style="background-color: #309C3E; color: white" data-current-page="{{ $ratings->currentPage() }}">Xem thêm</button>
-            </div>
+        @if ($ratings->hasPages())
+            <x-paginate-container >
+                {!! $ratings->appends(request()->input())->links('pagination::bootstrap-4') !!}
+            </x-paginate-container >
         @endif
     </div>
 </div>

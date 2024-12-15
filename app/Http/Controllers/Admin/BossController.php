@@ -14,7 +14,9 @@ class BossController extends Controller
 {
     public function index()
     {
-        $bosses = Boss::where('block', 0)->paginate(10);
+        $bosses = Boss::where('block', 0)
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
         $District = District::all();
         $Province = Province::all();
         return view('admin.boss.index', compact('bosses',  'Province', 'District'));
