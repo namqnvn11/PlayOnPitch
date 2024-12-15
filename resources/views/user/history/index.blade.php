@@ -59,7 +59,7 @@
     </div>
 
     <div class="history-section">
-        <h2 class="section-title">Lịch sử đặt sân {{$histories->count()}}</h2>
+        <h2 class="section-title">Lịch sử đặt sân</h2>
         <div class="booking-list">
             @forelse ($histories as $history)
                 @if ($history->Reservation->YardSchedules->count()!==0)
@@ -83,6 +83,7 @@
                         <div class="booking-status">
                             <p class="status success">Thành công</p>
                             <p><strong>Tổng tiền:</strong> {{ number_format($history->reservation->total_price ?? 0, 0, ',', '.') }}đ</p>
+                            <p><strong>Đã cọc:</strong> {{ number_format($history->reservation->deposit_amount ?? 0, 0, ',', '.') }}đ</p>
                             <button class="reorder-btn" onclick="redirectToInvoice({{ $history->reservation->invoice->id ?? '' }})">Xem hóa đơn</button>
                             <button class="reorder-btn" onclick="redirectToYardDetail({{ $history->reservation->YardSchedules->first()->yard->boss->id ?? '' }})">Đặt lại</button>
                         </div>

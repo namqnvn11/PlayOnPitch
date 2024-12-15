@@ -39,19 +39,12 @@ class PaymentController extends Controller
         if (!$reservationJson) {
             return back()->with('error','your reservation is expired, please try again');
         }
-        $vouchers=[];
-
         $currentUser=$contact->User;
-        if ($currentUser){
-            foreach ($currentUser->User_Voucher as $uv) {
-                $vouchers[]=Voucher::find($uv->voucher_id);
-            }
-        }
+
         return view('user.payment.index')
             ->with(
                 [
                     'currentUser' => $currentUser??null,
-                    'vouchers' => $vouchers??[],
                     'contact' => $contact,
                     'total_price'=>$request->total_price,
                     'yardSchedules'=>$yardSchedules,
@@ -109,6 +102,9 @@ class PaymentController extends Controller
             $totalPrice-=$addedVoucher->Voucher->price;
             session()->put('userVoucherId',$userVoucherId);
         }
+
+        //lưu total price để tính điểm
+        session(['totalPrice'=>$totalPrice]);
 
         $orderId = uniqid();
         $orderInfo = "Payment for order {$orderId}";
@@ -291,7 +287,6 @@ class PaymentController extends Controller
 
             //xóa bỏ các session đang lưu
             session()->forget('product_name');
-            session()->forget('totalPrice');
 
             //update schedule status
             $this->updateYardScheduleAndDeleteCookies(true);
@@ -327,7 +322,20 @@ class PaymentController extends Controller
             Contact::find($reservationCookies->contactId)->update([
                 'invoice_id'=>$invoiceId
             ]);
+
+            //cộng điểm cho người dùng nếu thanh toán thành công
+            if ($isPaidSuccess) {
+                if (auth()->check()) {
+                    $totalPrice= session('totalPrice');
+                    $currentUser = auth()->user();
+                    $oldScore= $currentUser->score??0;
+                    $currentUser->update([
+                        'score'=>$oldScore+$totalPrice/1000,
+                    ]);
+                }
+            }
         }
+        session()->forget('totalPrice');
         session()->forget('voucherId');
         Cookie::queue(Cookie::forget('reservation'));
     }

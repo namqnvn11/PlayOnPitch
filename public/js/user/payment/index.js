@@ -9,7 +9,6 @@ function paymentTypeChange(event){
     let selectVoucher= document.getElementById('selectVoucher');
     const defaultOption = selectVoucher.querySelector('option[value="0"]');
 
-    console.log(selectVoucher)
     //trả full
     if (event.currentTarget.value==='1'){
         $('#downPaymentContainer').addClass('hidden');
@@ -30,6 +29,7 @@ function paymentTypeChange(event){
         $('#subTotalDivContainer').addClass('text-gray-500');
         totalElement.innerText=(subTotalElement.innerText)*0.2;
         document.getElementById('discount').innerText='0';
+        document.getElementById('user_voucher_id').value=0
     }
 
 }

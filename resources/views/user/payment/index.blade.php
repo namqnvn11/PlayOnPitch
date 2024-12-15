@@ -121,7 +121,9 @@
                                 <x-select name="voucher_id" id="selectVoucher" onchange="voucherSelectOnchange(this)">
                                     <option  value="0">chọn voucher của bạn</option>
                                     @foreach($currentUser->User_Voucher as $userVoucher)
-                                        <option value="{{$userVoucher->id}}" price="{{$userVoucher->Voucher->price}}">{{$userVoucher->Voucher->name}} vnd</option>
+                                        @if(!$userVoucher->Voucher->block)
+                                            <option value="{{$userVoucher->id}}" price="{{$userVoucher->Voucher->price}}">{{$userVoucher->Voucher->name}} vnd</option>
+                                        @endif
                                     @endforeach
                                 </x-select>
                             </div>
