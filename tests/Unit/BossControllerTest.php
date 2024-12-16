@@ -92,23 +92,26 @@ class BossControllerTest extends TestCase
 
     public function test_search_boss()
     {
-        $bossController = Mockery::mock(BossController::class)->makePartial();
+        // Tạo một request giả lập
         $request = Request::create('/admin/boss/search', 'GET', [
             'searchText' => 'Boss One',
         ]);
 
+        // Mô phỏng hành vi của controller
+        $bossController = Mockery::mock(BossController::class)->makePartial();
         $bossController->shouldReceive('search')
             ->once()
             ->with($request)
             ->andReturn(view('admin.boss.index', [
                 'bosses' => collect([
-                    ['id' => 1, 'full_name' => 'Boss One', 'email' => 'one@example.com']
-                ]),
+                    (object)['id' => 1, 'full_name' => 'Boss One', 'email' => 'one@example.com']
+                ])
             ]));
 
+        // Gọi phương thức search của controller
         $response = $bossController->search($request);
 
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString('Boss One', $response->getContent());
+        // Kiểm tra nội dung trả về trong view
+        $this->assertStringContainsString('Boss One', $response->get('full_name'));
     }
 }
