@@ -33,8 +33,9 @@ function saveData() {
 
                     $.each(errors, function(field, messages) {
                         messages.forEach(function(message) {
-                            $(`input[name="${field}"]`).after(`<span class="error-message" style="color: red;">${message}</span>`);
+                            F.showError('Registration failed, please check your information.');
                         });
+
                     });
 
                     Notification.showError("Please correct the errors in the form.");

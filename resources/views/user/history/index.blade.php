@@ -100,7 +100,7 @@
 <button id="showMoreBtn" class="show-more-btn">Xem thêm</button>
 
 <div>
-    <form id="form-data" method="post">
+    <form action="{{route('user.storeRegister')}}" method="post">
         @csrf
         <section class="registration">
             <div class="form">

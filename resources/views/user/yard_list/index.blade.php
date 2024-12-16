@@ -119,7 +119,7 @@
 </div>
 
 <div>
-    <form id="form-data" method="post">
+    <form action="{{route('user.storeRegister')}}" method="post">
         @csrf
         <section class="registration">
             <div class="form">

@@ -17,12 +17,13 @@ class RegisterBossController extends Controller
 
         if ($validator->fails()) {
             if ($request->ajax()) {
+
                 return response()->json([
                     'success' => false,
                     'errors' => $validator->errors()
                 ], 422);
             }
-
+            flash()->error('Registration failed, please check your information.');
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
