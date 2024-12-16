@@ -47,7 +47,7 @@
                         {{--end card header--}}
 
                         <div class="card-body table-responsive p-0">
-                            <table class="table table-hover text-nowrap">
+                            <table class="table table-hover table-bordered text-nowrap">
                                 <thead>
                                 <tr>
                                     <th>Time Slot</th>
@@ -71,10 +71,34 @@
                                             @endphp
 
                                             @if ($matchingSchedule)
-                                                <td  class="editable-cell js-on-create" data-id="{{ $matchingSchedule->reservation_id }}" data-url="{{route("boss.yard_schedule.detail", ['id' => $matchingSchedule->reservation_id])}}">
-                                                    <div>{{ $matchingSchedule->reservation->name ?? 'N/A' }}</div>
-                                                    <div>{{ $matchingSchedule->reservation->phone ?? 'N/A' }}</div>
-                                                    <div>{{ number_format($matchingSchedule->price_per_hour, 0, ',', '.') }} VNĐ</div>
+                                                <td class="editable-cell js-on-create"
+                                                    style="{{ $matchingSchedule->status == 'booked' ? 'background-color: #74E579;' : '' }}"
+                                                    data-id="{{ $matchingSchedule->reservation_id }}"
+                                                    data-url="{{ route('boss.yard_schedule.detail', ['id' => $matchingSchedule->reservation_id]) }}">
+
+                                                    @php
+                                                        // Kiểm tra reservation và invoice
+                                                        $reservation = $matchingSchedule->reservation ?? null;
+                                                        $invoiceId = $reservation && $reservation->invoice ? $reservation->invoice->id : null;
+                                                    @endphp
+
+                                                    @if ($invoiceId)
+                                                        <a href="{{ route('boss.invoice.index', ['id' => $invoiceId]) }}" target="_blank" style="text-decoration: none; color: inherit;">
+                                                            <div><span>Name: </span>{{ $reservation->user->full_name ?? '' }}</div>
+                                                            <div><span>Phone: </span>{{ $reservation->user->phone ?? '' }}</div>
+                                                            <div><span>Price: </span>{{ number_format($matchingSchedule->price_per_hour, 0, ',', '.') }} VNĐ</div>
+                                                        </a>
+                                                    @else
+                                                        <div>
+                                                            <span>Name: </span>{{ $reservation->user->full_name ?? '' }}
+                                                        </div>
+                                                        <div>
+                                                            <span>Phone: </span>{{ $reservation->user->phone ?? '' }}
+                                                        </div>
+                                                        <div>
+                                                            <span>Price: </span>{{ number_format($matchingSchedule->price_per_hour, 0, ',', '.') }} VNĐ
+                                                        </div>
+                                                    @endif
                                                 </td>
                                             @else
                                                 <td>--</td>

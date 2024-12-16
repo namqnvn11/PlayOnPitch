@@ -27,8 +27,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="reservation_time_slot">Reservation Time Slot</label>
-                        <input type="text" name="reservation_time_slot" class="form-control" placeholder="Reservation Time Slot" readonly>
+                        <label for="time_slot">Reservation Time Slot</label>
+                        <input type="text" name="time_slot" class="form-control" placeholder="Time Slot" readonly>
                     </div>
 
                     <div class="form-group">

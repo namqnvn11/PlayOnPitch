@@ -26,7 +26,6 @@
             <li><a href="{{route('user.yardlist.index')}}">Danh sách sân</a></li>
             <li><a href="{{route('user.policy.index')}}">Chính sách</a></li>
             <li><a href="{{route('user.clause.index')}}">Điều khoản</a></li>
-            <li><a href="#">Lợi ích chủ sân</a></li>
             <li><a href="#footer">Liên hệ</a></li>
         </ul>
 
@@ -44,9 +43,11 @@
     </nav>
 </header>
 
-<div class="banner">
-    <img src="{{asset('img/banner.jpg')}}" alt="">
-</div>
+<a href="{{route('login')}}">
+    <div class="banner">
+        <img src="{{asset('img/banner.jpg')}}" alt="">
+    </div>
+</a>
 
 <div class="content-wrapper">
         <!-- Main Image and Booking Info Section -->
@@ -170,12 +171,12 @@
 </div>
 
 
-<div style="background-color: #2e7d32">
+<div>
     <form action="{{route('user.storeRegister')}}" id="form-data" method="post">
         @csrf
         <section class="registration">
             <div class="form">
-                <h2 style="margin-right: 200px">Bạn muốn đăng ký sử dụng<br> website quản lý sân bóng MIỄN PHÍ?</h2>
+                <h2 style="margin-right: 200px">Bạn muốn đăng ký sử dụng website quản lý sân bóng MIỄN PHÍ?</h2>
                 <input type="text" placeholder="Nhập họ và tên" name="name">
                 <input type="text" placeholder="Nhập số điện thoại" name="phone">
                 <input type="text" placeholder="Nhập email" name="email">
@@ -193,7 +194,7 @@
         <ul>
             <li><a href="{{route('user.privacy_policy.index')}}">Chính sách bảo mật</a></li>
             <li><a href="{{route('user.cancellation_policy.index')}}">Chính sách hủy (đổi trả)</a></li>
-            <li><a href="{{route('user.commodity_policy.index')}}">Chính sách kiểm hàng</a></li>
+            <li><a href="{{route('user.commodity_policy.index')}}">Chính sách đặt sân</a></li>
             <li><a href="{{route('user.payment_policy.index')}}">Chính sách thanh toán</a></li>
         </ul>
     </div>
@@ -210,8 +211,11 @@
 
     <div class="footer-section">
         <h3>LIÊN HỆ</h3>
-        <hr class="dividers" />
-        <button>Chăm sóc khách hàng</button>
+        <hr class="dividers" style="width: 40vh"/>
+        <br><br>
+        <a href="https://www.facebook.com/profile.php?id=61569828033426" target="_blank"><i class="fa-brands fa-facebook fa-2xl" style="color: #ffffff;"></i></a>
+        &nbsp;&nbsp;
+        <a href="https://www.tiktok.com/@playonpitch.sg" target="_blank"><i class="fa-brands fa-tiktok fa-2xl" style="color: #000000;"></i></a>
     </div>
 </footer>
 </body>

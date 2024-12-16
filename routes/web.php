@@ -141,6 +141,9 @@ Route::middleware(['auth:boss'])->group(function () {
         Route::prefix('revenue')->name('revenue.')->group(function () {
             Route::get('/index', [RevenueController::class, 'index'])->name('index');
         });
+        Route::prefix('invoice')->name('invoice.')->group(function () {
+            Route::get('/index/{id}', [InvoiceController::class, 'index'])->name('index');
+        });
     });
 });
 

@@ -33,10 +33,10 @@ class YardScheduleController extends Controller
         }
 
         $currentDate = now()->startOfDay();
-        $endDate = $currentDate->copy()->addDays(7);
+        $endDate = $currentDate->copy()->addDays(6)->endOfDay();
         $query->whereBetween('date', [$currentDate, $endDate]);
 
-        $yardSchedules = $query->paginate(300);
+        $yardSchedules = $query->paginate(112);
 
         $Dates = $yardSchedules->getCollection()->unique('date')->sortBy('date')->values();
         $TimeSlots = $yardSchedules->getCollection()->unique('time_slot');
@@ -44,21 +44,25 @@ class YardScheduleController extends Controller
         return view('boss.yard_schedule.index', compact('yardSchedules', 'Dates', 'TimeSlots', 'yards', 'yardId'));
     }
 
-        public function detail(Request $request, $id)
+    public function detail(Request $request, $id)
     {
-        // Tìm thông tin reservation theo ID
-        $reservation = Reservation::with(['yard.boss', 'yard.district.province', 'user'])->findOrFail($id);
+        $reservation = Reservation::with([
+            'yardSchedule.yard.boss',
+            'yardSchedule.yard.district.province',
+            'user'
+        ])->findOrFail($id);
 
         if ($reservation) {
             return response()->json([
                 'success' => true,
                 'data' => [
                     'reservation' => $reservation,
-                    'yard' => $reservation->yard,
-                    'district' => $reservation->yard->district,
-                    'province' => $reservation->yard->district->province,
-                    'user' => $reservation->user,
-                    'boss' => $reservation->yard->boss,
+                    'yard' => $yardSchedule->yard ?? null,
+                    'district' => $yardSchedule->yard->district ?? null,
+                    'province' => $yardSchedule->yard->district->province ?? null,
+                    'user' => $reservation->user ?? null,
+                    'yard_schedule' => $yardSchedule ?? null,
+                    'boss' => $yardSchedule->yard->boss ?? null,
                 ],
             ]);
         }
@@ -67,7 +71,6 @@ class YardScheduleController extends Controller
             'success' => false,
             'message' => "Reservation not found.",
         ]);
-
     }
 
 

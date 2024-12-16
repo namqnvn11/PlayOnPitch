@@ -17,36 +17,47 @@ class RevenueController extends Controller
 {
     $bossId = Auth::guard('boss')->id();
 
+    // Lấy tất cả các yard của boss hiện tại
     $yards = Yard::where('boss_id', $bossId)->get();
 
-    $query = Reservation::whereIn('yard_id', $yards->pluck('id'));
+    // Bắt đầu query để lấy dữ liệu Reservation thông qua bảng yard_schedule
+    $query = Reservation::join('yard_schedules', 'reservations.id', '=', 'yard_schedules.reservation_id')
+        ->join('yards', 'yard_schedules.yard_id', '=', 'yards.id')
+        ->whereIn('yards.id', $yards->pluck('id'))
+        ->where('reservations.payment_status', 'success');
 
+    // Lọc dữ liệu theo loại filter (month, quarter, year)
     $filterType = $request->get('filter_type', 'month');
     $filterValue = $request->get('filter_value', Carbon::now()->month);
 
     switch ($filterType) {
         case 'month':
-            $query->whereMonth('reservation_date', $filterValue)
-                ->whereYear('reservation_date', Carbon::now()->year);
+            $query->whereMonth('reservations.reservation_date', $filterValue)
+                ->whereYear('reservations.reservation_date', Carbon::now()->year);
             break;
 
         case 'quarter':
             $quarterMonths = $this->getMonthsByQuarter($filterValue);
-            $query->whereIn(DB::raw('MONTH(reservation_date)'), $quarterMonths)
-                ->whereYear('reservation_date', Carbon::now()->year);
+            $query->whereIn(DB::raw('MONTH(reservations.reservation_date)'), $quarterMonths)
+                ->whereYear('reservations.reservation_date', Carbon::now()->year);
             break;
 
         case 'year':
-            $query->whereYear('reservation_date', $filterValue);
+            $query->whereYear('reservations.reservation_date', $filterValue);
             break;
     }
 
-    $data = $query->join('yards', 'reservations.yard_id', '=', 'yards.id')
-        ->selectRaw('yards.yard_name, COUNT(reservations.id) as reservation_count, SUM(reservations.total_price) as total_revenue')
+    // Lấy dữ liệu tổng hợp: yard_name, số lượng đặt sân và tổng doanh thu
+    $data = $query->selectRaw('
+            yards.yard_name as yard_name,
+            COUNT(reservations.id) as reservation_count,
+            SUM( yard_schedules.price_per_hour) as total_revenue
+        ')
         ->groupBy('yards.yard_name')
         ->orderBy('yards.yard_name', 'asc')
         ->get();
 
+    // Trả về view với dữ liệu đã tổng hợp
     return view('boss.revenue.index', compact('data'));
 }
 
@@ -65,4 +76,5 @@ class RevenueController extends Controller
                 return [];
         }
     }
+
 }
