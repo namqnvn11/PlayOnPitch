@@ -21,6 +21,12 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
+
+                <div class="flex">
+                    <x-green-button class="w-[170px] mr-2"><a href="{{url('boss/yard/schedule/create')}}">tạo tất cả (test)</a></x-green-button>
+                    <x-green-button class="w-[170px] mr-2"><a href="{{url('boss/yard/schedule/delete')}}">xóa tất cả (test)</a></x-green-button>
+                </div>
+
                 <div class="col-12">
                     <div class="card">
 
@@ -39,10 +45,38 @@
                                 </div>
                                 <x-green-button type="submit" class="btn btn-primary">Filter</x-green-button>
                             </form>
-                            <div class="flex float-left border-green-900 border">
-                                <x-green-button class="w-[170px] mr-2"><a href="{{url('boss/yard/schedule/create')}}">Create Schedule</a></x-green-button>
-                                <x-green-button class="w-[170px]"><a href="{{url('boss/yard/schedule/delete')}}">delete Schedule</a></x-green-button>
+                            <div class="flex float-left border-green-900">
+                                {{-- Lấy yard_id từ URL --}}
+                                @php
+                                    $yard_id = request()->get('yard_id');
+                                @endphp
+                                <x-green-button class="w-[230px] mr-2" id="createAllSchedule">
+                                    <span class="hover:text-white">Create all yard schedule</span>
+                                </x-green-button>
+                                <x-green-button class="w-[230px] mr-2" id="deleteAllSchedule">
+                                    <span class="hover:text-white">Delete all schedule</span>
+                                </x-green-button>
+
+                                {{-- Nếu yard_id tồn tại, hiển thị thêm các nút liên quan --}}
+                                @if ($yard_id)
+                                    <x-green-button class="w-[250px] mr-2" id="createOneSchedule">
+                                        <span class="hover:text-white">Create this yard schedule</span>
+                                    </x-green-button>
+
+                                    <x-green-button class="w-[250px] mr-2" id="deleteOneSchedule">
+                                        <span class="hover:text-white">Delete this yard schedule</span>
+                                    </x-green-button>
+                                @else
+                                    <p class="text-red-500">Yard ID không hợp lệ.</p>
+                                @endif
                             </div>
+                            <script>
+                                var createAllUrl = '{{ url("boss/yard/schedule/createAll") }}';
+                                var deleteAllUrl = '{{ url("boss/yard/schedule/deleteAll") }}';
+                                var createOneUrl = '{{ url("boss/yard/schedule/createOne") }}';
+                                var deleteOneUrl = '{{ url("boss/yard/schedule/deleteOne") }}';
+                                var yardIdValue = @json($yard_id); // Truyền yard_id từ Blade sang JS
+                            </script>
                     </div>
                         {{--end card header--}}
 
@@ -135,7 +169,6 @@
         const STORE_URL = "{{ route('admin.voucher.store') }}";
         const BLOCK_URL= "{{url('/admin/voucher/block')}}"
         const UNBLOCK_URL= "{{url('/admin/voucher/unblock')}}"
-        {{--const DELETE_URL = "{{ route('admin.voucher.destroy') }}";--}}
     </script>
     <script src="{{ asset('js/boss/yard_schedule/index.js?t='.config('constants.app_version') )}}"></script>
 @endsection

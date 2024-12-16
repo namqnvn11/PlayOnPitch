@@ -55,3 +55,81 @@
 //         processData: false
 //     });
 // }
+
+
+$(document).ready(function() {
+    // Khi nhấn vào "Create all yard schedule"
+    $('#createAllSchedule').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: createAllUrl, // URL từ controller
+            method: 'GET',
+            success: function(response) {
+                Notification.showSuccess(response.message)
+            },
+            error: function(xhr, status, error) {
+                // Xử lý lỗi nếu có
+               Notification.showError('some thing went wrong');
+            }
+        });
+    });
+
+    // Khi nhấn vào "Delete all schedule"
+    $('#deleteAllSchedule').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: deleteAllUrl, // URL từ controller
+            method: 'GET',
+            success: function(response) {
+                if (response.success){
+                    Notification.showSuccess(response.message)
+                }else {
+                    Notification.showError(response.message)
+                }
+            },
+            error: function() {
+                Notification.showError('some thing went wrong');
+            }
+        });
+    });
+
+    // Khi nhấn vào "Create this yard schedule"
+    $('#createOneSchedule').on('click', function(e) {
+        e.preventDefault();
+        var yardId = yardIdValue; // yard_id từ Blade
+        $.ajax({
+            url: createOneUrl + '/' + yardId,
+            method: 'GET',
+            success: function(response) {
+                Notification.showSuccess(response.message)
+            },
+            error: function(xhr, status, error) {
+                Notification.showError('some thing went wrong');
+            }
+        });
+    });
+
+    // Khi nhấn vào "Delete this yard schedule"
+    $('#deleteOneSchedule').on('click', function(e) {
+        e.preventDefault();
+        var yardId = yardIdValue; // yard_id từ Blade
+        $.ajax({
+            url: deleteOneUrl + '/' + yardId,
+            method: 'GET',
+            success: function(response) {
+                if (response.success){
+                    Notification.showSuccess(response.message)
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1200);
+                }else {
+                    Notification.showError(response.message)
+                }
+            },
+            error: function() {
+                Notification.showError('some thing went wrong');
+            }
+        });
+    });
+});
+

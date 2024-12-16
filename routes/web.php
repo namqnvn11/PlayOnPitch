@@ -113,10 +113,19 @@ Route::middleware(['auth:boss'])->group(function () {
             Route::post('/pricing/{id}', [PriceTimeSettingController::class, 'pricing'])->name('pricing');
             Route::get('/getPricing/{id}',[PriceTimeSettingController::class, 'getPricing'])->name('getPricing');
             Route::post('/setOpenTime/{id}',[PriceTimeSettingController::class, 'setOpenTime'])->name('setOpenTime');
-            Route::get('/testing/create',[PriceTimeSettingController::class, 'test'])->name('test');
-            Route::get('/testing/delete',[PriceTimeSettingController::class, 'delete'])->name('delete');
+
+            //tạo và xóa theo theo id boss
+            Route::get('/schedule/createAll',[PriceTimeSettingController::class, 'createAllYardSchedule'])->name('yardSchedule.create.all');
+            Route::get('/schedule/deleteAll',[PriceTimeSettingController::class, 'deleteAllYardSchedule'])->name('yardSchedule.delete.all');
+            //tạo và xóa lịch 1 sân
+            Route::get('/schedule/createOne/{yardId}',[PriceTimeSettingController::class, 'createOneYardSchedule'])->name('yardSchedule.create.one');
+            Route::get('/schedule/deleteOne/{yardId}',[PriceTimeSettingController::class, 'deleteOneYardSchedule'])->name('yardSchedule.delete.one');
+
+            //xóa sau khi test xong
+            //tạo và xóa tất cả các sân phù hợp
             Route::get('/schedule/create',[PriceTimeSettingController::class, 'scheduleCreate'])->name('schedule.create');
             Route::get('/schedule/delete',[PriceTimeSettingController::class, 'scheduleDelete'])->name('schedule.delete');
+
             // image
             Route::get('/image/index',[YardImageController::class, 'index'])->name('image.index');
             Route::post('/image/save/{id}',[YardImageController::class,'save'])->name('image.save');
