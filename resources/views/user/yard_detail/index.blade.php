@@ -125,7 +125,7 @@
                 <span class="star" data-value="1">★</span>
             </div>
             <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
-            <input type="hidden" name="yard_id" value="{{$boss->Yards()->first()->id}}">
+            <input type="hidden" name="boss_id" value="{{$boss->id}}">
             <input type="hidden" id="rating-value" value="0" name="point">
             <textarea id="review-input" placeholder="Nhập đánh giá của bạn..." rows="3" name="comment"></textarea>
             <button type="submit">Gửi đánh giá</button>

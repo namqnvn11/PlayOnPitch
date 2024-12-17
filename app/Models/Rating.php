@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Raiting extends Model
+class Rating extends Model
 {
-    protected $table = 'raitings';
+    protected $table = 'ratings';
 
     protected $fillable = [
         'user_id',
-        'yard_id',
+        'boss_id',
         'point',
         'comment',
         'block'
@@ -21,8 +21,7 @@ class Raiting extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function Yard()
-    {
-        return $this->belongsTo(Yard::class, 'yard_id');
+    public function Boss(){
+        return $this->belongsTo(Boss::class, 'boss_id');
     }
 }

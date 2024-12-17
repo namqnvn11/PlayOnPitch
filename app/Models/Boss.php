@@ -45,4 +45,8 @@ class Boss extends Authenticatable
         return $this->hasMany(Image::class, 'boss_id');
     }
 
+    public function ratings(){
+        return $this->hasMany(Rating::class, 'boss_id');
+    }
+
 }
