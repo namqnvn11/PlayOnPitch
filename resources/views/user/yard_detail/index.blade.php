@@ -51,70 +51,66 @@
 
 <div class="content-wrapper">
         <!-- Main Image and Booking Info Section -->
-        <div class="main-section">
-            <div class="image-gallery">
-                <div class="flex items-center mb-3">
-                    <div class="text-[24px] font-bold mr-3">{{$boss->company_name}} </div>
-                    <div class="average-rating-container flex items-center mt-1">
-                        <h3 id="averageRating">
-                            @php
-                                $fullStars = floor($averageRating); // Số sao đầy
-                                $halfStar = ($averageRating - $fullStars) >= 0.5 ? 1 : 0; // Kiểm tra nửa sao
-                                $emptyStars = 5 - $fullStars - $halfStar; // Số sao rỗng
-                            @endphp
+    <div class="main-section">
+        <div class="image-gallery">
+            <div class="flex items-center mb-3">
+                <div class="text-[24px] font-bold mr-3">{{$boss->company_name}} </div>
+                <div class="average-rating-container flex items-center mt-1">
+                    <h3 id="averageRating">
+                        @php
+                            $fullStars = floor($averageRating); // Số sao đầy
+                            $halfStar = ($averageRating - $fullStars) >= 0.5 ? 1 : 0; // Kiểm tra nửa sao
+                            $emptyStars = 5 - $fullStars - $halfStar; // Số sao rỗng
+                        @endphp
 
-                                <!-- Hiển thị các sao đầy -->
-                            @for ($i = 0; $i < $fullStars; $i++)
-                                <span class="star1 filled">★</span>
-                            @endfor
+                            <!-- Hiển thị các sao đầy -->
+                        @for ($i = 0; $i < $fullStars; $i++)
+                            <span class="star1 filled">★</span>
+                        @endfor
 
-                            <!-- Hiển thị một nửa sao nếu có -->
-                            @if ($halfStar)
-                                <span class="star1 filled-half">★</span>
-                            @endif
+                        <!-- Hiển thị một nửa sao nếu có -->
+                        @if ($halfStar)
+                            <span class="star1 filled-half">★</span>
+                        @endif
 
-                            <!-- Hiển thị các sao rỗng -->
-                            @for ($i = 0; $i < $emptyStars; $i++)
-                                <span class="star1">★</span>
-                            @endfor
+                        <!-- Hiển thị các sao rỗng -->
+                        @for ($i = 0; $i < $emptyStars; $i++)
+                            <span class="star1">★</span>
+                        @endfor
 
-                            {{--                        ({{ number_format($averageRating, 2) }})--}}
-                        </h3>
-                    </div>
-                </div>
-
-                <img class="main-image" src="{{$boss->images()->first()->img??asset('img/sanbong.jpg')}}" alt="Main Field Image" id="mainImage">
-
-                <div class="thumbnails" id="image-gallery">
-                    @foreach($boss->images()->get() as $image)
-                        <img class="thumbnail" src="{{$image->img}}" alt="Thumbnail {{$image->id}}" ONCLICK="imageOnclick('{{$image->img}}',this)">
-                    @endforeach
-                    @if($boss->images()->count()==0)
-                        <img class="border" src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 1">
-                    @endif
+                        {{--                        ({{ number_format($averageRating, 2) }})--}}
+                    </h3>
                 </div>
             </div>
 
-            <div class="booking-info">
-                <div class="booking-controls">
-                    <a href="{{ url('user/choice_yard/index', [$boss->id]) }}?selectTime={{ \Carbon\Carbon::now()->toDateString() }}" class="book-now">Đặt sân ngay</a>
-                </div>
-                <div class="owner-info">
-                    <h3>THÔNG TIN CHỦ SÂN</h3>
-                    <p><i class="fa fa-user"></i> {{ $boss->full_name}} </p>
-                    <p><i class="fa fa-phone"></i> {{ $boss->phone}} </p>
-                    <p><i class="fa fa-envelope"></i> {{ $boss->email}} </p>
-                    <p><i class="fa fa-map-marker"></i> {{ $boss->company_address}} </p>
-                    <img class="map" src="{{asset('img/sanbong.jpg')}}" alt="Map Image">
-                </div>
+            <img class="main-image" src="{{$boss->images()->first()->img??asset('img/sanbong.jpg')}}" alt="Main Field Image" id="mainImage">
+
+            <div class="thumbnails" id="image-gallery">
+                @foreach($boss->images()->get() as $image)
+                    <img class="thumbnail" src="{{$image->img}}" alt="Thumbnail {{$image->id}}" ONCLICK="imageOnclick('{{$image->img}}',this)">
+                @endforeach
+                @if($boss->images()->count()==0)
+                    <img class="border" src="{{asset('img/sanbong.jpg')}}" alt="Thumbnail 1">
+                @endif
             </div>
-
-        <!-- General Information Section -->
-
+        </div>
+        <div class="booking-info">
+            <div class="booking-controls">
+                <a href="{{ url('user/choice_yard/index', [$boss->id]) }}?selectTime={{ \Carbon\Carbon::now()->toDateString() }}" class="book-now">Đặt sân ngay</a>
+            </div>
+            <div class="owner-info">
+                <h3>THÔNG TIN CHỦ SÂN</h3>
+                <p><i class="fa fa-user"></i> {{ $boss->full_name}} </p>
+                <p><i class="fa fa-phone"></i> {{ $boss->phone}} </p>
+                <p><i class="fa fa-envelope"></i> {{ $boss->email}} </p>
+                <p><i class="fa fa-map-marker"></i> {{ $boss->company_address}} </p>
+                <img class="map" src="{{asset('img/sanbong.jpg')}}" alt="Map Image">
+            </div>
+        </div>
     </div>
-    <div class="general-info">
+    <div class="general-info w-[65%]">
         <h3>Giới thiệu chung</h3>
-        <p>...</p> <!-- Replace with actual description content -->
+        <div class="text-[17px] mt-2 text-justify">{{$boss->description}}</div>
     </div>
 
     <div class="review-section">

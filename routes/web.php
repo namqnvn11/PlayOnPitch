@@ -105,6 +105,7 @@ Route::middleware(['auth:boss'])->group(function () {
         Route::prefix('yard')->name('yard.')->group(function () {
             Route::get('/index', [YardController::class, 'index'])->name('index');
             Route::post('/store', [YardController::class, 'store'])->name('store');
+            Route::post('/description', [YardController::class, 'description'])->name('description');
             Route::get('/detail/{id}', [YardController::class, 'detail'])->name('detail');
             Route::post('/block/{id}', [YardController::class, 'block'])->name('block');
             Route::post('/unblock/{id}', [YardController::class, 'unblock'])->name('unblock');

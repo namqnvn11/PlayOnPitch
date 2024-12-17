@@ -57,7 +57,9 @@ $timeCloseInModal = $currentBoss->time_close
                                         </x-select>
                                     </div>
                                 </form>
+                                <x-green-button class="w-[150px] ml-4" onclick="openModalDescription()">Description</x-green-button>
                             </div>
+
                             <div class="card-tools flex items-center">
                                 @if($currentBoss->is_open_all_day)
                                     <div class="text-[20px] text-bold">OPENING : ALL DAY</div>
@@ -152,6 +154,7 @@ $timeCloseInModal = $currentBoss->time_close
     @include('boss.yard.elements.modal_confirm')
     @include('boss.yard.elements.modal_time_setting')
     @include('boss.yard.elements.modal_open_time')
+    @include('boss.yard.elements.modal_description')
 
 @endsection
 
@@ -159,11 +162,12 @@ $timeCloseInModal = $currentBoss->time_close
     <script>
         const STORE_URL = "{{ route('boss.yard.store') }}";
         var getDistrictsUrl = "{{ route('boss.yard.getDistricts') }}";
-        const BLOCK_URL= "{{url('/boss/yard/block')}}"
-        const UNBLOCK_URL= "{{url('/boss/yard/unblock')}}"
+        const BLOCK_URL= "{{url('/boss/yard/block')}}";
+        const UNBLOCK_URL= "{{url('/boss/yard/unblock')}}";
         const TIME_SETTING_URL = "{{ url('/boss/yard/pricing') }}";
         const GET_TIME_SETTING_URL= "{{url('/boss/yard/getPricing')}}";
-        const SET_OPEN_TIME_URL= "{{url('/boss/yard/setOpenTime')}}/{{$currentBoss->id}}"
+        const SET_OPEN_TIME_URL= "{{url('/boss/yard/setOpenTime')}}/{{$currentBoss->id}}";
+        const SET_DESCRIPTION= "{{url('/boss/yard/description')}}";
     </script>
     <script src="{{ asset('js/boss/yard/index.js?t='.config('constants.app_version') )}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>

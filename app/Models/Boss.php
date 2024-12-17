@@ -24,7 +24,8 @@ class Boss extends Authenticatable
         'block',
         'time_open',
         'time_close',
-        'is_open_all_day'
+        'is_open_all_day',
+        'description'
     ];
 
     public function District()

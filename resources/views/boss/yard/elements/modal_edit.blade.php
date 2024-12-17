@@ -45,11 +45,11 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="description">Description</label>
+{{--                    <div class="form-group">--}}
+{{--                        <label for="description">Description</label>--}}
 {{--                        <textarea type="text" name="description" class="form-control" placeholder="Enter Description">--}}
-                        <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description"></textarea>
-                    </div>
+{{--                        <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description"></textarea>--}}
+{{--                    </div>--}}
 
                     <div class="form-group">
                         <label for="province">Province</label>

@@ -25,7 +25,7 @@ class YardController extends Controller
             ->paginate(10);
         $District = District::all();
         $Province = Province::all();
-        return view('boss.yard.index', compact('yards', 'District', 'Province'));
+        return view('boss.yard.index', compact('yards', 'District', 'Province', 'currenBoss'));
     }
 
     public function store(Request $request)
@@ -41,7 +41,7 @@ class YardController extends Controller
                 })
             ],
             'yard_type' => 'required',
-            'description' => 'required',
+//            'description' => 'required',
             'district' => 'required|exists:districts,id',
             'province' => 'required|exists:provinces,id',
         ]);
@@ -75,7 +75,7 @@ class YardController extends Controller
 
             $yard->yard_name = $request->input('yard_name');
             $yard->yard_type = $request->input('yard_type');
-            $yard->description = $request->input('description');
+//            $yard->description = $request->input('description');
             $yard->district_id = $request->input('district');
 
             $yard->save();
@@ -99,6 +99,38 @@ class YardController extends Controller
             }
 
             return redirect()->route('boss.yard.index')->with('error', 'Failed to process yard: ' . $e->getMessage());
+        }
+    }
+
+    function description(Request $request)
+    {
+       $validator= Validator::make(request()->all(), [
+           'description' => 'max:255',
+       ]);
+
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        try {
+            $currentBoss = Auth::guard('boss')->user();
+            $currentBoss->description = $request->input('description');
+            $currentBoss->save();
+            return response()->json([
+                'success' => true,
+                'message' => 'Yards description updated successfully'
+            ]);
+        }catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
     }
 
@@ -225,5 +257,6 @@ class YardController extends Controller
 
         return view('boss.yard.index', compact('yards', 'District', 'Province'));
     }
+
 
 }

@@ -477,3 +477,36 @@ function openAllDay(event) {
     }
 }
 
+function handelSubmitDescription(event){
+    event.preventDefault();
+    var formData = new FormData(event.target);
+    $.ajax({
+        url: SET_DESCRIPTION,
+        type: 'POST',
+        dataType:"json",
+        data: formData,
+        success: function (response) {
+            if (response.success) {
+                Notification.showSuccess(response.message);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1200);
+            }else{
+                Notification.showError(response.message);
+            }
+        },
+        error: function() {
+                Notification.showError('Something went wrong, please try again!');
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+    });
+}
+
+function openModalDescription(){
+    let modal = $(`#${'modal-description'}`);
+    let description= modal.find('#inputYardDescription').val();
+    modal.find('textarea#yardDescription').val(description);
+    modal.modal('show');
+}
