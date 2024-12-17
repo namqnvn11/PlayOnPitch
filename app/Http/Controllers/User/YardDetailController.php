@@ -37,7 +37,7 @@ class YardDetailController extends Controller
     public function rating(Request $request){
         $request->validate([
             'point' => 'required',
-            'comment' => 'required',
+            'comment' => ['required', 'string', 'max:255'],
         ]);
         try {
             Rating::create([
@@ -52,7 +52,6 @@ class YardDetailController extends Controller
             return redirect()->back();
 
         }catch (\Exception $e){
-
             flash()->error($e->getMessage());
             return redirect()->back();
         }
@@ -62,7 +61,7 @@ class YardDetailController extends Controller
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'comment' => 'required|string|min:5',
+            'comment' => 'required|string|min:5|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -79,7 +78,7 @@ class YardDetailController extends Controller
         try {
             $report = new Report();
 
-            $report->raiting_id = $request->rating_id;
+            $report->rating_id = $request->rating_id;
             $report->user_id = $request->user_id;
             $report->comment = $request->comment;
             $report->title = $request->title;
@@ -88,10 +87,10 @@ class YardDetailController extends Controller
             $message = 'Thank you for your feedback!';
 
 
-            $reportCount = Report::where('raiting_id', $request->rating_id)->count();
+            $reportCount = Report::where('rating_id', $request->rating_id)->count();
 
             if($reportCount >= 5){
-                $rating = Raiting::find($request->rating_id);
+                $rating = Rating::find($request->rating_id);
                 if($rating){
                     $rating->block = 1;
                     $rating->save();
@@ -107,7 +106,6 @@ class YardDetailController extends Controller
                 ], 200);
 
             }
-
 
         }catch (\Exception $e){
             if ($request->ajax()) {

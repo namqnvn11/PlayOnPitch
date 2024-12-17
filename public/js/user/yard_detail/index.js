@@ -83,12 +83,13 @@ document.addEventListener('DOMContentLoaded', function () {
             success: function (response) {
                 if (response.success) {
                     console.log('Success response received. Reloading the page...');
+                    let modalElement = document.getElementById('modalReport');
+                    bootstrap.Modal.getInstance(modalElement).hide();
                     setTimeout(() => {
                         window.location.reload();
                     }, 1000);
 
-                    // const modal = bootstrap.Modal.getInstance(document.getElementById('modal-report'));
-                    // modal.hide();
+
 
                     form.reset();
 
