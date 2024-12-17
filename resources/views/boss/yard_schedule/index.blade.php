@@ -22,10 +22,10 @@
         <div class="container-fluid">
             <div class="row">
 
-                <div class="flex">
-                    <x-green-button class="w-[170px] mr-2"><a href="{{url('boss/yard/schedule/create')}}">tạo tất cả (test)</a></x-green-button>
-                    <x-green-button class="w-[170px] mr-2"><a href="{{url('boss/yard/schedule/delete')}}">xóa tất cả (test)</a></x-green-button>
-                </div>
+{{--                <div class="flex">--}}
+{{--                    <x-green-button class="w-[170px] mr-2"><a href="{{url('boss/yard/schedule/create')}}">tạo tất cả (test)</a></x-green-button>--}}
+{{--                    <x-green-button class="w-[170px] mr-2"><a href="{{url('boss/yard/schedule/delete')}}">xóa tất cả (test)</a></x-green-button>--}}
+{{--                </div>--}}
 
                 <div class="col-12">
                     <div class="card">
