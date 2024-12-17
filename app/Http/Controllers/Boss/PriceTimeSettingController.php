@@ -20,7 +20,7 @@ class PriceTimeSettingController extends Controller
     function getPricing($id)
     {
         // Lấy tất cả các bản ghi liên quan đến yard_id
-        $pricingData = PriceTimeSetting::where('yard_id', $id)->get();
+        $pricingData = PriceTimeSetting::where('yard_id', $id)->orderBy('start_time', 'asc')->get();
         $defaultPrice= Yard::find($id)->defaultPrice;
 
         // Kiểm tra nếu có dữ liệu liên quan đến yard_id
@@ -73,7 +73,7 @@ class PriceTimeSettingController extends Controller
             $this->sortTimeSlotsByFromTime($monFriSlots);
             $this->sortTimeSlotsByFromTime($weekendSlots);
 
-            //kiểm tra có quá giới hạn thời gian mở cửa
+            //kiểm tra có quá giới hạn thời gian mở cửa True/False
             $isOpenAllDay= Auth::guard('boss')->user()->is_open_all_day;
             if (!$isOpenAllDay) {
                 $violationsMonFri = $this->isTimeWithinOperatingHours($monFriSlots);
@@ -226,12 +226,20 @@ class PriceTimeSettingController extends Controller
             }
             return true;
         }
+
         //kiểm tra có tg qua ngày
         $isTimeOverDay=false;
+        $count=0;
         foreach ($timeSlots as $timeSlot) {
             if ($timeSlot['from'] > $timeSlot['to']) {
-                $isTimeOverDay=true;
+                $count++;
+
             }
+        }
+        if ($count==1){
+            $isTimeOverDay=true;
+        }elseif ($count>1){
+            return false;
         }
         for ($i = 0; $i < count($timeSlots); $i++) {
             $j=$i+1;
@@ -249,7 +257,7 @@ class PriceTimeSettingController extends Controller
                 return false;
             }
         }
-        return true; // Không có trùng lặp
+        return true;
     }
 
     function validatePrice($timeSlots) {
@@ -502,6 +510,14 @@ class PriceTimeSettingController extends Controller
     }
     function deleteAllYardSchedule(){
         $boss=Auth::guard('boss')->user();
+        $yardIdList = $boss->Yards()->where('block',0)->pluck('id')->toArray();
+        foreach ($yardIdList as $yardId) {
+            $this->deleteSchedule($yardId);
+        }
+        return response()->json([
+            'success'=>true,
+            'message'=>'All Yard Schedule Deleted Successfully'
+        ]);
     }
     function createOneYardSchedule($yardId){
         $this->createSchedule($yardId);
@@ -512,11 +528,10 @@ class PriceTimeSettingController extends Controller
 
     }
     function deleteOneYardSchedule($yardId){
-
         $this->deleteSchedule($yardId);
         return response()->json([
-            'success' => false,
-            'message' => 'No Schedule be able to Delete'
+            'success' => true,
+            'message' => 'Yard Schedule Deleted Successfully'
         ]);
     }
 
@@ -531,11 +546,6 @@ class PriceTimeSettingController extends Controller
         YardSchedule::where('yard_id', $yardId)
             ->where('date', '>', $lastBookedDate)
             ->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Yard Schedule Deleted Successfully'
-        ]);
     }
 
     //hàm tạo lịch của 1 sân

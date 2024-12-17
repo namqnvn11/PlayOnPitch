@@ -114,7 +114,7 @@ Route::middleware(['auth:boss'])->group(function () {
             Route::get('/getPricing/{id}',[PriceTimeSettingController::class, 'getPricing'])->name('getPricing');
             Route::post('/setOpenTime/{id}',[PriceTimeSettingController::class, 'setOpenTime'])->name('setOpenTime');
 
-            //tạo và xóa theo theo id boss
+            //tạo và xóa nhiều sân theo id boss
             Route::get('/schedule/createAll',[PriceTimeSettingController::class, 'createAllYardSchedule'])->name('yardSchedule.create.all');
             Route::get('/schedule/deleteAll',[PriceTimeSettingController::class, 'deleteAllYardSchedule'])->name('yardSchedule.delete.all');
             //tạo và xóa lịch 1 sân

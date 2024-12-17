@@ -46,36 +46,28 @@
                                 <x-green-button type="submit" class="btn btn-primary">Filter</x-green-button>
                             </form>
                             <div class="flex float-left border-green-900">
-                                {{-- Lấy yard_id từ URL --}}
-                                @php
-                                    $yard_id = request()->get('yard_id');
-                                @endphp
-                                <x-green-button class="w-[230px] mr-2" id="createAllSchedule">
-                                    <span class="hover:text-white">Create all yard schedule</span>
+                                <x-green-button class="w-[200px] mr-2" id="createAllSchedule">
+                                    <span class="hover:text-white">Create all schedule</span>
                                 </x-green-button>
-                                <x-green-button class="w-[230px] mr-2" id="deleteAllSchedule">
+                                <x-green-button class="w-[200px] mr-2" id="deleteAllSchedule">
                                     <span class="hover:text-white">Delete all schedule</span>
                                 </x-green-button>
 
-                                {{-- Nếu yard_id tồn tại, hiển thị thêm các nút liên quan --}}
-                                @if ($yard_id)
-                                    <x-green-button class="w-[250px] mr-2" id="createOneSchedule">
-                                        <span class="hover:text-white">Create this yard schedule</span>
-                                    </x-green-button>
+                                <x-green-button class="w-[250px] mr-2" id="createOneSchedule">
+                                    <span class="hover:text-white">Create this yard schedule</span>
+                                </x-green-button>
 
-                                    <x-green-button class="w-[250px] mr-2" id="deleteOneSchedule">
-                                        <span class="hover:text-white">Delete this yard schedule</span>
-                                    </x-green-button>
-                                @else
-                                    <p class="text-red-500">Yard ID không hợp lệ.</p>
-                                @endif
+                                <x-green-button class="w-[250px] mr-2" id="deleteOneSchedule">
+                                    <span class="hover:text-white">Delete this yard schedule</span>
+                                </x-green-button>
+
                             </div>
                             <script>
                                 var createAllUrl = '{{ url("boss/yard/schedule/createAll") }}';
                                 var deleteAllUrl = '{{ url("boss/yard/schedule/deleteAll") }}';
                                 var createOneUrl = '{{ url("boss/yard/schedule/createOne") }}';
                                 var deleteOneUrl = '{{ url("boss/yard/schedule/deleteOne") }}';
-                                var yardIdValue = @json($yard_id); // Truyền yard_id từ Blade sang JS
+                                var yardIdValue = {{$yardId}};
                             </script>
                     </div>
                         {{--end card header--}}

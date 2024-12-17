@@ -83,6 +83,9 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success){
                     Notification.showSuccess(response.message)
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1200);
                 }else {
                     Notification.showError(response.message)
                 }
@@ -102,6 +105,9 @@ $(document).ready(function() {
             method: 'GET',
             success: function(response) {
                 Notification.showSuccess(response.message)
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1200);
             },
             error: function(xhr, status, error) {
                 Notification.showError('some thing went wrong');
