@@ -66,6 +66,9 @@ $(document).ready(function() {
             method: 'GET',
             success: function(response) {
                 Notification.showSuccess(response.message)
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1200);
             },
             error: function(xhr, status, error) {
                 // Xử lý lỗi nếu có
