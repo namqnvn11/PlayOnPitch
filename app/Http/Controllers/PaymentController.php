@@ -330,7 +330,7 @@ class PaymentController extends Controller
                     $currentUser = auth()->user();
                     $oldScore= $currentUser->score??0;
                     $currentUser->update([
-                        'score'=>$oldScore+$totalPrice/1000,
+                        'score'=>$oldScore+$totalPrice/10000,
                     ]);
                 }
             }
