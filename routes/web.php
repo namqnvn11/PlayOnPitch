@@ -1,6 +1,7 @@
 <?php
 require base_path('routes/auth.php');
 
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Boss\BossImageController;
 use App\Http\Controllers\Boss\PriceTimeSettingController;
 use App\Http\Controllers\Boss\RevenueController;
@@ -95,6 +96,12 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::prefix('registerBoss')->name('registerBoss.')->group(function () {
             Route::get('/index', [RegisterBossController::class, 'index'])->name('index');
             Route::get('/detail', [RegisterBossController::class, 'detail'])->name('detail');
+        });
+
+        Route::prefix('reported')->name('reported.')->group(function () {
+            Route::get('/index', [ReportController::class, 'index'])->name('index');
+            Route::post('/block', [ReportController::class, 'block'])->name('block');
+            Route::post('/unblock', [ReportController::class, 'unblock'])->name('unblock');
         });
     });
 });

@@ -24,4 +24,8 @@ class Rating extends Model
     public function Boss(){
         return $this->belongsTo(Boss::class, 'boss_id');
     }
+
+    public function Reports(){
+        return $this->hasMany(Report::class, 'rating_id');
+    }
 }

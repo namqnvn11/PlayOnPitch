@@ -9,7 +9,7 @@ class Report extends Model
     protected $table = 'reports';
 
     protected $fillable = [
-        'raiting_id',
+        'rating_id',
         'user_id',
         'comment',
         'status'
@@ -20,8 +20,8 @@ class Report extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function Raiting()
+    public function Rating()
     {
-        return $this->belongsTo(Raiting::class, 'raiting_id');
+        return $this->belongsTo(Rating::class, 'rating_id');
     }
 }

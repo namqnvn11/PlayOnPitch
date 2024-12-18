@@ -26,7 +26,12 @@
                     </div>
 
                     <label for="" id="pricing-label" class="m-2 mt-4">Open All Day</label>
-                    <input class="ml-2 text-green-700 border-green-900 rounded focus:ring-2 focus:ring-green-600 " type="checkbox" name="is_open_all_day" onchange="openAllDay(event)" {{$currentBoss->is_open_all_day?'checked':''}}/>
+                    <x-check-box
+                        name="is_open_all_day"
+                        :isChecked="$currentBoss->is_open_all_day"
+                        onchange="openAllDay(event)"
+                    />
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default mr-1" data-dismiss="modal" onclick="$(`#${'modal-open-time'}`).modal('hide')">Close</button>

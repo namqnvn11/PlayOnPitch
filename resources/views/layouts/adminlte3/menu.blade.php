@@ -33,6 +33,13 @@
     </li>
 
     <li class="nav-item">
+        <a href="{{ route('admin.reported.index') }}" class="nav-link">
+            <i class="nav-icon far fa-circle text-warning"></i>
+            <p class="text-gray-300">Reported Rating</p>
+        </a>
+    </li>
+
+    <li class="nav-item">
         <a href="{{ route('admin.logout') }}" class="nav-link">
             <i class="nav-icon far fa-circle text-info"></i>
             <p class="text-gray-300">Logout</p>
