@@ -82,19 +82,18 @@ class YardDetailController extends Controller
             $report->user_id = $request->user_id;
             $report->comment = $request->comment;
             $report->title = $request->title;
-            $report->status = 'Chờ xử lý';
+            $report->status = 'pending';
             $report->save();
             $message = 'Thank you for your feedback!';
 
 
-            $reportCount = Report::where('rating_id', $request->rating_id)->count();
+            $rating = Rating::find($request->rating_id);
+            $rating->report_count=$rating->report_count+1;
+            $rating->status='pending';
+            $rating->save();
 
-            if($reportCount >= 5){
-                $rating = Rating::find($request->rating_id);
-                if($rating){
-                    $rating->block = 1;
-                    $rating->save();
-                }
+            if($rating->report_count >= 5){
+                $rating->update(['block'=>1]);
             }
 
             if ($request->ajax()) {

@@ -136,7 +136,12 @@
                     <div class="review-header">
                         <div class="review-user-info">
                             <img src="{{$rating->User->image->img??'https://www.gravatar.com/avatar/'. md5(strtolower($rating->User->full_name)) .'?s=100&d=identicon'}}" alt="{{ $rating->User->name }}'s avatar" class="user-avatar">
-                            <span class="review-user">{{ $rating->User->full_name }}</span>
+                            @if(Auth::user() && Auth::user()->id!==$rating->user_id)
+                                <span class="review-user">{{ $rating->User->full_name }}</span>
+                            @else
+                                <span class="review-user">You</span>
+                           @endif
+
                         </div>
                         <div class="review-rating">
                             @for($i = 1; $i <= 5; $i++)
@@ -147,10 +152,12 @@
 
                     </div>
                     <div class="ellipsis-menu" style="float: right">
+                        @if(Auth::user() && Auth::user()->id!==$rating->user_id)
                         <span class="ellipsis">...</span>
-                        <div class="dropdown-content">
-                            <a href="#" class="report-link" data-bs-toggle="modal" data-bs-target="#modalReport" data-rating-id="{{ $rating->id }}">Báo cáo bài viết</a>
-                        </div>
+                            <div class="dropdown-content">
+                                <a href="#" class="report-link" data-bs-toggle="modal" data-bs-target="#modalReport" data-rating-id="{{ $rating->id }}">Báo cáo bài viết</a>
+                            </div>
+                        @endif
                     </div>
                     <div class="review-comment">
                         <p>{{ $rating->comment }}</p>

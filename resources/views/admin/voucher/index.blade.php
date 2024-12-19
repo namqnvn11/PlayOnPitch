@@ -102,17 +102,19 @@
                                 @endif
 
                                 @foreach($vouchers as $voucher)
-                                    <tr onclick="viewDetail(event)" data-url="{{ route('admin.voucher.detail', $voucher->id) }}" class="cursor-default">
+                                    <tr
+                                        @if($voucher->id!==9999)  onclick="viewDetail(event)"  @endif
+                                        data-url="{{ route('admin.voucher.detail', $voucher->id) }}" class="cursor-default">
                                         <td>
                                             @if($voucher->block)
                                                 <i class="bi bi-ban mr-1"></i>
                                             @endif
                                             {{ $voucher->name }}
                                         </td>
-                                        <td>{{ $voucher->price }}</td>
-                                        <td>{{ $voucher->release_date }}</td>
-                                        <td>{{ $voucher->end_date }}</td>
-                                        <td>{{ $voucher->conditions_apply }}</td>
+                                        <td>{{ number_format($voucher->price , 0, ',', '.') }}</td>
+                                        <td>{{ $voucher->id===9999?'none':$voucher->release_date }}</td>
+                                        <td>{{ $voucher->id===9999?'none': $voucher->end_date }}</td>
+                                        <td>{{ number_format($voucher->conditions_apply,0,',','.') }}</td>
                                         <td class="text-center" onclick="event.stopPropagation()">
                                             <div class="dropdown">
                                                 <button  type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">

@@ -5,10 +5,6 @@ function toggleAll(source) {
 }
 }
 document.addEventListener("DOMContentLoaded", function() {
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    });
     var checkAllElement= document.getElementById('checkAll');
     checkAllElement.checked=false;
 
@@ -74,4 +70,10 @@ function ajaxSubmit(actionType) {
             alert('Error: ' + error.responseJSON.message);
         }
     });
+}
+
+function showContentModal(text){
+    let modal=$('#modal-rating-content');
+    modal.find('#rating_content').text(text);
+    modal.modal('show');
 }

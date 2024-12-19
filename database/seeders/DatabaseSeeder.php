@@ -10,6 +10,7 @@ use App\Models\Yard;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use function Sodium\add;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,16 +19,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-//        $list = [
-//            [
-//                'name' => 'Admin',
-//                'email' => 'admin@admin.com',
-//                'password' => Hash::make('password1234'),
-//            ],
-//        ];
-//        DB::table('admins')->insert($list);
-        Boss::factory(20)->create();
-        Yard::factory(20)->create();
-        Voucher::factory(20)->create();
+        Voucher::Create([
+            'id'=>'9999',
+            'name'=>'Tặng 100.000 cho lần đăng ký đầu tiên',
+            'price'=>100000,
+            'release_date'=>now(),
+            'end_date'=>now()->addYear(50),
+            'conditions_apply'=>0,
+            'block'=>0
+        ]);
     }
 }

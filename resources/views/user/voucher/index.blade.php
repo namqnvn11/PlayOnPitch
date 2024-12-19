@@ -76,9 +76,8 @@
             </thead>
             <tbody>
             @foreach($vouchers as $voucher)
-            @if($voucher->end_date > now())
+            @if($voucher->end_date > now() && $voucher->id!==9999)
             <tr>
-
                 <td class=""><img class="max-w-[200px] mx-auto rounded" src="{{$voucher->image->img??asset('img/voucher.jpg')}}" onclick="openImageLayer('{{$voucher->image->img??asset('img/voucher.jpg')}}')"></td>
                 <td>{{$voucher->name}}</td>
                 <td>{{$voucher->price}}</td>

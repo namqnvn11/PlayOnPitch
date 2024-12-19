@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\GiveVoucherService;
+use Illuminate\Container\Attributes\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
@@ -34,6 +36,22 @@ class GoogleController extends Controller
                 'block' => 0,
                 'password' => bcrypt('abcd1234'),
             ]);
+
+            // Tặng voucher sau khi tạo người dùng mới
+            try {
+                if ($newUser->email_verified_at==null) {
+                    $giveVoucherService = new GiveVoucherService($newUser->id);
+                    $giveVoucherService->giveVoucher();
+                }
+            } catch (\Exception $exception) {
+                Log::error('Error giving voucher during Google registration: ' . $exception->getMessage(), [
+                    'user_id' => $newUser->id,
+                    'exception' => $exception,
+                ]);
+            }
+
+            $newUser->email_verified_at=now();
+            $newUser->save();
             Auth::login($newUser);
         }
         return redirect()->intended('/user/home/index');

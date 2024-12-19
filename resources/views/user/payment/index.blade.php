@@ -123,7 +123,7 @@
                                     <option  value="0">chọn voucher của bạn</option>
                                     @foreach($currentUser->User_Voucher as $userVoucher)
                                         @if(!$userVoucher->Voucher->block)
-                                            <option value="{{$userVoucher->id}}" price="{{$userVoucher->Voucher->price}}">{{$userVoucher->Voucher->name}} vnd</option>
+                                            <option value="{{$userVoucher->id}}" price="{{$userVoucher->Voucher->price}}">{{$userVoucher->Voucher->name}}</option>
                                         @endif
                                     @endforeach
                                 </x-select>
@@ -169,17 +169,17 @@
                                 <div class="flex w-full justify-between mt-2">
                                     <div class="text-[14px] text-gray-500">Tổng</div>
                                     <input type="hidden" value="{{$subTotal}}" id="subTotal">
-                                    <div class="flex" id="subTotalDivContainer"><div id="subTotalDiv">{{$subTotal}}</div><span class="ml-1">vnd</span></div>
+                                    <div class="flex" id="subTotalDivContainer"><div id="subTotalDiv">{{number_format($subTotal,0,',','.')}}</div><span class="ml-1"></span></div>
                                 </div>
                                 <div class="flex w-full justify-between mt-2 hidden" id="downPaymentContainer">
                                     <div class="text-[14px] text-gray-500">Đặc cọc</div>
                                     <input type="hidden" value="0" id="downPayment">
-                                    <div class="flex"><div id="downPaymentDiv">0</div><span class="ml-1">vnd</span></div>
+                                    <div class="flex"><div id="downPaymentDiv">0</div><span class="ml-1"></span></div>
                                 </div>
                                 <div class="flex w-full justify-between mt-2">
                                     <div class="text-[14px] text-gray-500">Giảm giá</div>
                                     <div class="flex">
-                                        <div id="discount">{{$discount}}</div><div class="ml-1">vnd</div>
+                                        <div id="discount">{{number_format($discount,0,',','.')}}</div><div class="ml-1"></div>
                                         <input type="hidden" name="user_voucher_id" id="user_voucher_id">
                                     </div>
 
@@ -188,8 +188,8 @@
                                 <div class="flex w-full justify-between mt-2">
                                     <div>Tổng Phải trả</div>
                                     <div class="flex">
-                                        <div id="total">{{$subTotal-$discount}}</div>
-                                        <div class="ml-1">vnd</div>
+                                        <div id="total">{{number_format($subTotal-$discount,0,',','.')}}</div>
+                                        <div class="ml-1"></div>
                                     </div>
                                 </div>
                             </div>

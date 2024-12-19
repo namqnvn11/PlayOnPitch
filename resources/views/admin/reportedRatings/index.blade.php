@@ -40,27 +40,42 @@
                                     <th class="w-[20%]">Author</th>
                                     <th class="w-[10%]">Point</th>
                                     <th class="w-[40%]">Comment</th>
-                                    <th class="w-[20%]">Rating Time</th>
-                                    <th class="flex items-center max-w-[50px] mt-2" style="border: none">
+                                    <th class="w-[18%]">Rating Time</th>
+                                    <th class="flex items-center max-w-[80px] mt-2" style="border: none">
                                         <x-check-box id="checkAll" onclick="toggleAll(this)"/>
-                                        <div class="ml-2">Check All</div>
+                                        <div class="ml-2">
+                                            Check All
+                                            @if ($ratings->hasPages())
+                                                <span class="text-gray-600 text-[14px] font-weight-normal">
+                                                (this page)
+                                            </span>
+                                            @endif
+                                        </div>
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @if($ratings->count()==0)
+                                    <tr><th colspan="5" class="font-medium">No Reported</th></tr>
+                                @endif
                                     @foreach($ratings as $rating)
-                                        <tr>
+                                        <tr onclick="showContentModal('{{$rating->comment}}')">
                                             <td>{{$rating->User->full_name}}</td>
                                             <td>{{$rating->point}}</td>
-                                            <td class="text-ellipsis max-w-[200px] overflow-hidden">{{$rating->comment}} Bảng này dùng để hiển thị danh sách đánh giá từ người dùng với các cột như Tác giả, Điểm, Bình luận, Thời gian đánh giá và Hành động. Để tạo một checkbox "Chọn tất cả", bạn cần một vài điều chỉnh trong HTML và thêm JavaScript để điều khiển các checkbox. Dưới đây là cách bạn có thể cập nhật mã của mình</td>
+                                            <td class="text-ellipsis max-w-[200px] overflow-hidden">{{$rating->comment}}</td>
                                             <td>{{$rating->created_at}}</td>
-                                            <th>
+                                            <th onclick="event.stopPropagation();">
                                                 <x-check-box id="check-item" name="ratingIds[]" value="{{$rating->id}}"/>
                                             </th>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                                @if ($ratings->hasPages())
+                                    <x-paginate-container >
+                                        {!! $ratings->appends(request()->input())->links('pagination::bootstrap-4') !!}
+                                    </x-paginate-container >
+                                @endif
                             </form>
                         </div>
                     </div>
@@ -68,8 +83,7 @@
             </div>
         </div>
     </section>
-
-
+    @include('admin.reportedRatings.elements.modal_rating_content')
 @endsection
 
 @section("pagescript")

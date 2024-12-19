@@ -68,7 +68,6 @@ Route::middleware(['auth:admin'])->group(function () {
             Route::get('/get-districts', [UserController::class, 'getDistricts'])->name('getDistricts');
             Route::get('/search', [UserController::class, 'search'])->name('search');
             Route::post('/reset-password/{id}', [UserController::class, 'resetPassword'])->name('reset-password');
-
         });
 
         Route::prefix('voucher')->name('voucher.')->group(function () {

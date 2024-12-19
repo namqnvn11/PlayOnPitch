@@ -68,7 +68,7 @@
         <hr>
         <div class="invoice-info">
             <p><strong>Sân:</strong> <span>{{ $boss->company_name }}</span></p>
-            <p><strong>Địa chỉ:</strong> <span>{{ $boss->company_address }}</span></p>
+            <p><strong>Địa chỉ:</strong> <span>{{ $boss->company_address }}, {{$boss->District->name}}, {{$boss->District->Province->name}}</span></p>
             <div class="flex justify-between">
                 <div class="font-bold">Vị trí:</div>
                 <div class="w-[64%]">
@@ -93,14 +93,14 @@
         </div>
         <hr>
         <div class="total-info">
-            <p><strong>Tổng tiền:</strong> <span>{{ number_format($reservation->total_price, 0, ',', '.') }} vnd</span></p>
+            <p><strong>Tổng tiền:</strong> <span>{{ number_format($reservation->total_price, 0, ',', '.') }}</span></p>
 
                 <p><strong>Loại thanh toán:</strong> <span>{{$reservation->deposit_amount!=0?'Đặt cọc 20%':'Trả toàn bộ'}}</span></p>
 
-            <p><strong>Đã thanh toán:</strong> <span>{{ number_format($reservation->deposit_amount==0?$reservation->total_price:$reservation->deposit_amount, 0, ',', '.') }} vnd</span></p>
+            <p><strong>Đã thanh toán:</strong> <span>{{ number_format($reservation->deposit_amount==0?$reservation->total_price:$reservation->deposit_amount, 0, ',', '.') }}</span></p>
         </div>
         <hr>
-        <button class="export-invoice" id="export-invoice">Xuất hóa đơn</button>
+        <button class="export-invoice rounded" id="export-invoice">Xuất hóa đơn</button>
     </div>
 </div>
 

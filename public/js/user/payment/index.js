@@ -17,17 +17,17 @@ function paymentTypeChange(event){
         selectVoucher.disabled = false;
         dowPaymentInput.value=0;
         downPaymentElement.innerText=0;
-        totalElement.innerText=subTotalElement.innerText-discount;
+        totalElement.innerText=numberFormat(subTotalElement.innerText-discount);
     }else {
         // trả 20%
         selectVoucher.disabled = true;
         defaultOption.selected =true;
 
-        dowPaymentInput.value=subtotalInput*0.2;
-        downPaymentElement.innerText=subtotalInput*0.2;
+        dowPaymentInput.value=(subtotalInput*0.2);
+        downPaymentElement.innerText=numberFormat(subtotalInput*0.2);
         $('#downPaymentContainer').removeClass('hidden');
         $('#subTotalDivContainer').addClass('text-gray-500');
-        totalElement.innerText=(subTotalElement.innerText)*0.2;
+        totalElement.innerText=numberFormat((subTotalElement.innerText)*0.2);
         document.getElementById('discount').innerText='0';
         document.getElementById('user_voucher_id').value=0
     }
@@ -66,11 +66,11 @@ function voucherSelectOnchange(selectElement) {
     const userVoucherId=selectElement.value;
     const selectedOption = selectElement.options[selectElement.selectedIndex];
     const price = selectedOption.getAttribute('price')??0;
-    document.getElementById('discount').innerText = price;
+    document.getElementById('discount').innerText = numberFormat(parseFloat(price));
     document.getElementById('user_voucher_id').value=userVoucherId;
     let total= document.getElementById('total');
     let subTotal= document.getElementById('subTotal');
-    total.innerText=parseFloat(subTotal.value)-parseFloat(price);
+    total.innerText=numberFormat(parseFloat(subTotal.value)-parseFloat(price));
 }
 
 $(document).ready(function () {
@@ -88,3 +88,15 @@ $(document).ready(function () {
     }, refreshInterval);
 });
 
+//thêm dấu chấm vào số tiền vs 1000-> 1.000
+function numberFormat(number) {
+    if (typeof number !== 'number') {
+        throw new Error('Input must be a number');
+    }
+    let numberStr = number.toString();
+
+    if (numberStr.endsWith('000')) {
+        return numberStr.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+    return numberStr.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
