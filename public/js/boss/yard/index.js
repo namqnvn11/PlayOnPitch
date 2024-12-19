@@ -20,8 +20,6 @@ $(document).ready(function () {
     $(document).on('keydown', function(event) {
         if (event.key === "Escape" || event.keyCode === 27) {
             $('#modal-confirm').modal('hide');
-            // $('#modal-edit').modal('hide');
-            // $('#modal-pricing').modal('hide');
         }
     });
 
@@ -492,7 +490,7 @@ function handelSubmitDescription(event){
                     window.location.reload();
                 }, 1200);
             }else{
-                Notification.showError(response.message);
+                Notification.showError(response.message.description[0]);
             }
         },
         error: function() {

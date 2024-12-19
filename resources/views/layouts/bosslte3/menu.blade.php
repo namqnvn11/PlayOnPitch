@@ -26,17 +26,17 @@
         </a>
     </li>
 
-{{--    <li class="nav-item">--}}
-{{--        <a href="{{ route('boss.yard.image.index') }}" class="nav-link">--}}
-{{--            <i class="nav-icon far fa-circle text-warning"></i>--}}
-{{--            <p class="text-gray-300">Yards Images</p>--}}
-{{--        </a>--}}
-{{--    </li>--}}
-
     <li class="nav-item">
         <a href="{{ route('boss.revenue.index') }}" class="nav-link">
             <i class="nav-icon far fa-circle text-warning"></i>
             <p>Revenue</p>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a href="{{ route('boss.information.index') }}" class="nav-link">
+            <i class="nav-icon far fa-circle text-warning"></i>
+            <p>Information</p>
         </a>
     </li>
 

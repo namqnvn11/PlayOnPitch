@@ -105,15 +105,15 @@ class YardController extends Controller
     function description(Request $request)
     {
        $validator= Validator::make(request()->all(), [
-           'description' => 'max:255',
+           'description' => ['required','max:255'],
        ]);
 
         if ($validator->fails()) {
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'errors' => $validator->errors()
-                ], 422);
+                    'message' => $validator->errors()
+                ]);
             }
             return redirect()->back()->withErrors($validator)->withInput();
         }

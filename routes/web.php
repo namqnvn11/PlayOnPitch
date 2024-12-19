@@ -3,6 +3,7 @@ require base_path('routes/auth.php');
 
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Boss\BossImageController;
+use App\Http\Controllers\Boss\InformationController;
 use App\Http\Controllers\Boss\PriceTimeSettingController;
 use App\Http\Controllers\Boss\RevenueController;
 use App\Http\Controllers\Boss\YardImageController;
@@ -128,20 +129,18 @@ Route::middleware(['auth:boss'])->group(function () {
             Route::get('/schedule/createOne/{yardId}',[PriceTimeSettingController::class, 'createOneYardSchedule'])->name('yardSchedule.create.one');
             Route::get('/schedule/deleteOne/{yardId}',[PriceTimeSettingController::class, 'deleteOneYardSchedule'])->name('yardSchedule.delete.one');
 
-            //xóa sau khi test xong
-            //tạo và xóa tất cả các sân phù hợp
-            Route::get('/schedule/create',[PriceTimeSettingController::class, 'scheduleCreate'])->name('schedule.create');
-            Route::get('/schedule/delete',[PriceTimeSettingController::class, 'scheduleDelete'])->name('schedule.delete');
+//            //xóa sau khi test xong
+//            //tạo và xóa tất cả các sân phù hợp
+//            Route::get('/schedule/create',[PriceTimeSettingController::class, 'scheduleCreate'])->name('schedule.create');
+//            Route::get('/schedule/delete',[PriceTimeSettingController::class, 'scheduleDelete'])->name('schedule.delete');
 
             // image
             Route::get('/image/index',[YardImageController::class, 'index'])->name('image.index');
             Route::post('/image/save/{id}',[YardImageController::class,'save'])->name('image.save');
             Route::post('/image/delete/{id}',[YardImageController::class,'delete'])->name('image.delete');
             Route::post('image/update/{id}',[YardImageController::class,'update'])->name('image.update');
-            Route::get('test',function () {
-                return view('boss.yard.test');
-            });
         });
+
         Route::prefix('yard_schedule')->name('yard_schedule.')->group(function () {
             Route::get('/index', [YardScheduleController::class, 'index'])->name('index');
             Route::get('/detail/{id}', [YardScheduleController::class, 'detail'])->name('detail');
@@ -157,8 +156,16 @@ Route::middleware(['auth:boss'])->group(function () {
         Route::prefix('revenue')->name('revenue.')->group(function () {
             Route::get('/index', [RevenueController::class, 'index'])->name('index');
         });
+
         Route::prefix('invoice')->name('invoice.')->group(function () {
             Route::get('/index/{id}', [InvoiceController::class, 'index'])->name('index');
+        });
+
+        Route::prefix('information')->name('information.')->group(function () {
+            Route::get('/index', [InformationController::class, 'index'])->name('index');
+            Route::get('/get-districts', [BossController::class, 'getDistricts'])->name('getDistricts');
+            Route::post('/update', [InformationController::class, 'informationUpdate'])->name('update');
+            Route::post('/password-update', [InformationController::class, 'passwordUpdate'])->name('password.update');
         });
     });
 });
