@@ -25,7 +25,7 @@ class YardDetailController extends Controller
         $firstYard= $boss->Yards()->first();
 
         $ratings = Rating::with('User')
-            ->where('boss_id', $firstYard->id)
+            ->where('boss_id', $boss->id)
             ->where('block', 0)
             ->orderBy('created_at', 'desc')
             ->paginate(10);
