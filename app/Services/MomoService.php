@@ -23,7 +23,7 @@ class MomoService
         $this->accessKey = config('payment.momo.access_key');
         $this->secretKey = config('payment.momo.secret_key');
         $this->extraData = "";
-        $this->requestType = "payWithATM";
+        $this->requestType = "captureWallet";
         $this->redirectUrl = config('payment.momo.redirect_url');
         $this->ipnUrl = config('payment.momo.inp_url');
     }

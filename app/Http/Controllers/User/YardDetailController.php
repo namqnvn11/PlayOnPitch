@@ -38,18 +38,18 @@ class YardDetailController extends Controller
     public function rating(Request $request){
         $request->validate([
             'point' => 'required',
-            'comment' => 'required',
+            'comment' => ['required', 'string', 'max:255'],
         ]);
         try {
             $user_id = $request->user_id;
-            $yard_id = $request->yard_id;
+            $boss_id = $request->boss_id;
             $point = $request->point;
             $comment = $request->comment;
 
             $rating = new Rating();
 
             $rating->user_id = $user_id;
-            $rating->yard_id = $yard_id;
+            $rating->boss_id = $boss_id;
             $rating->point = $point;
             $rating->block = 0;
             $rating->comment = $comment;
@@ -68,9 +68,8 @@ class YardDetailController extends Controller
 
     public function report(Request $request)
     {
+
         if (!Auth::check()) {
-
-
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
@@ -102,24 +101,22 @@ class YardDetailController extends Controller
         try {
             // Tạo report mới
             $report = new Report();
-            $report->raiting_id = $request->rating_id;
-            $report->user_id = Auth::id(); // Lấy user_id từ Auth
+            $report->rating_id = $request->rating_id;
+            $report->user_id = $request->user_id;
             $report->comment = $request->comment;
             $report->title = $request->title;
-            $report->status = 'Pending review';
+            $report->status = 'pending';
             $report->save();
 
             $message = 'Thank you for submitting your report!';
 
-            // Đếm số lượng report cho rating
-            $reportCount = Report::where('rating_id', $request->rating_id)->count();
+            $rating = Rating::find($request->rating_id);
+            $rating->report_count=$rating->report_count+1;
+            $rating->status='pending';
+            $rating->save();
 
-            if ($reportCount >= 5) {
-                $rating = Rating::find($request->rating_id);
-                if ($rating) {
-                    $rating->block = 1; // Block rating khi có >= 5 reports
-                    $rating->save();
-                }
+            if($rating->report_count >= 5){
+                $rating->update(['block'=>1]);
             }
 
             // Phản hồi cho AJAX
@@ -132,9 +129,6 @@ class YardDetailController extends Controller
                 ], 200);
             }
 
-            // Flash message thành công
-            flash()->success($message);
-            return redirect()->back();
 
         } catch (\Exception $e) {
             if ($request->ajax()) {
@@ -145,8 +139,7 @@ class YardDetailController extends Controller
                 ], 500);
             }
 
-            flash()->error('An error occurred: ' . $e->getMessage());
-            return redirect()->back();
+            return redirect()->back()->with(['error' => 'Failed to process report: ' . $e->getMessage()]);
         }
     }
 
