@@ -15,10 +15,16 @@
     <hr class="divider" />
     <nav class="nav-menu">
         <ul>
-            <li><a href="{{route('user.home.index')}}"><i class="fas fa-home"></i></a></li>
-            <li><a href="{{route('user.yardlist.index')}}">Danh sách sân</a></li>
-            <li><a href="{{route('user.policy.index')}}">Chính sách</a></li>
-            <li><a href="{{route('user.clause.index')}}">Điều khoản</a></li>
+            <li><a href="{{ Auth::check() ? route('user.home.index') : route('guest.home.index') }}"><i class="fas fa-home"></i></a></li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.yardlist.index') : route('guest.yardlist.index') }}">Danh sách sân</a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.policy.index') : route('guest.policy.index') }}">Chính sách</a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.clause.index') : route('guest.clause.index') }}">Điều khoản</a>
+            </li>
             <li><a href="#footer">Liên hệ</a></li>
         </ul>
 
@@ -62,7 +68,7 @@
     </div>
 </div>
 <div>
-    <form action="{{route('user.storeRegister')}}" method="post">
+    <form action="{{ Auth::check() ? route('user.storeRegister') : route('guest.storeRegister') }}" method="post">
         @csrf
         <section class="registration">
             <div class="form">
@@ -82,10 +88,26 @@
         <hr class="dividers" />
         <p>Công ty Play On Pitch cung cấp nền tảng quản lý sân bóng hiệu quả.</p>
         <ul>
-            <li><a href="{{route('user.privacy_policy.index')}}">Chính sách bảo mật</a></li>
-            <li><a href="{{route('user.cancellation_policy.index')}}">Chính sách hủy (đổi trả)</a></li>
-            <li><a href="#">Chính sách đặt sân</a></li>
-            <li><a href="{{route('user.payment_policy.index')}}">Chính sách thanh toán</a></li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.privacy_policy.index') : route('guest.privacy_policy.index') }}">
+                    Chính sách bảo mật
+                </a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.cancellation_policy.index') : route('guest.cancellation_policy.index') }}">
+                    Chính sách hủy (đổi trả)
+                </a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.commodity_policy.index') : route('guest.commodity_policy.index') }}">
+                    Chính sách đặt sân
+                </a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.payment_policy.index') : route('guest.payment_policy.index') }}">
+                    Chính sách thanh toán
+                </a>
+            </li>
         </ul>
     </div>
 

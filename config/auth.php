@@ -50,6 +50,11 @@ return [
             'driver' => 'session',
             'provider' => 'bosses',
         ],
+
+        'guest' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
     ],
 
     /*
@@ -84,6 +89,7 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Boss::class,
         ],
+
 
         // 'users' => [
         //     'driver' => 'database',

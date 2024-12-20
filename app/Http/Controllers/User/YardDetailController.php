@@ -11,6 +11,7 @@ use App\Models\Report;
 use App\Models\User;
 use App\Models\Yard;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class YardDetailController extends Controller
@@ -65,8 +66,22 @@ class YardDetailController extends Controller
         }
     }
 
-    public function report(Request $request){
+    public function report(Request $request)
+    {
+        if (!Auth::check()) {
 
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You need to log in to report!'
+                ], 403);
+            }
+            flash()->error('You need to log in to report!');
+            return redirect()->back();
+        }
+
+        // Validator xác thực input
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'comment' => 'required|string|min:5',
@@ -80,54 +95,61 @@ class YardDetailController extends Controller
                 ], 422);
             }
 
+            flash()->error('Please provide correct and complete information.');
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
         try {
+            // Tạo report mới
             $report = new Report();
-
             $report->raiting_id = $request->rating_id;
-            $report->user_id = $request->user_id;
+            $report->user_id = Auth::id(); // Lấy user_id từ Auth
             $report->comment = $request->comment;
             $report->title = $request->title;
-            $report->status = 'Chờ xử lý';
+            $report->status = 'Pending review';
             $report->save();
-            $message = 'Thank you for your feedback!';
 
+            $message = 'Thank you for submitting your report!';
 
+            // Đếm số lượng report cho rating
             $reportCount = Report::where('raiting_id', $request->rating_id)->count();
 
-            if($reportCount >= 5){
+            if ($reportCount >= 5) {
                 $rating = Raiting::find($request->rating_id);
-                if($rating){
-                    $rating->block = 1;
+                if ($rating) {
+                    $rating->block = 1; // Block rating khi có >= 5 reports
                     $rating->save();
                 }
             }
 
+            // Phản hồi cho AJAX
             if ($request->ajax()) {
                 flash()->success($message);
                 return response()->json([
                     'success' => true,
                     'message' => $message,
-                    'voucher' => $report
+                    'report' => $report
                 ], 200);
-
             }
 
+            // Flash message thành công
+            flash()->success($message);
+            return redirect()->back();
 
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             if ($request->ajax()) {
-                flash()->error($e->getMessage());
+                flash()->error('An error occurred: ' . $e->getMessage());
                 return response()->json([
                     'success' => false,
                     'message' => 'Failed to process report: ' . $e->getMessage()
                 ], 500);
             }
 
-            return redirect()->back()->with(['error' => 'Failed to process report: ' . $e->getMessage()]);
+            flash()->error('An error occurred: ' . $e->getMessage());
+            return redirect()->back();
         }
     }
+
     public function loadMoreRatings($id, Request $request)
     {
         $ratings = Raiting::with('User')

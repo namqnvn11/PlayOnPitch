@@ -17,6 +17,10 @@ class RedirectIfAuthenticated
             return redirect()->route('boss.yard.index');
         }
 
+        if (Auth::guard('guest')->check()) {
+            return redirect()->route('guest.home.index');
+        }
+
         return $next($request);
     }
 }

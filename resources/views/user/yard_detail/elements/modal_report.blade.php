@@ -9,7 +9,10 @@
                 <form id="report-form">
                     @csrf
                     <input type="hidden" name="rating_id" id="rating-id">
+                    @if(Auth::check())
                     <input type="hidden" name="user_id" id="user_id" value="{{Auth::user()->id}}">
+                    @else
+                    @endif
                     <div class="form-group">
                         <label for="title">Tiêu đề</label>
                         <input type="text" name="title" class="form-control rounded-md border-gray-400" placeholder="Nhập tiêu đề">

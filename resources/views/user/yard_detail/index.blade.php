@@ -22,10 +22,16 @@
     <hr class="divider" />
     <nav class="nav-menu">
         <ul>
-            <li><a href="{{route('user.home.index')}}"><i class="fas fa-home"></i></a></li>
-            <li><a href="{{route('user.yardlist.index')}}">Danh sách sân</a></li>
-            <li><a href="{{route('user.policy.index')}}">Chính sách</a></li>
-            <li><a href="{{route('user.clause.index')}}">Điều khoản</a></li>
+            <li><a href="{{ Auth::check() ? route('user.home.index') : route('guest.home.index') }}"><i class="fas fa-home"></i></a></li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.yardlist.index') : route('guest.yardlist.index') }}">Danh sách sân</a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.policy.index') : route('guest.policy.index') }}">Chính sách</a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.clause.index') : route('guest.clause.index') }}">Điều khoản</a>
+            </li>
             <li><a href="#footer">Liên hệ</a></li>
         </ul>
 
@@ -97,7 +103,9 @@
 
             <div class="booking-info">
                 <div class="booking-controls">
-                    <a href="{{ url('user/choice_yard/index', [$boss->id]) }}?selectTime={{ \Carbon\Carbon::now()->toDateString() }}" class="book-now">Đặt sân ngay</a>
+                    <a href="{{ Auth::check() ? url('user/choice_yard/index', [$boss->id]) : url('guest/choice_yard/index', [$boss->id]) }}?selectTime={{ \Carbon\Carbon::now()->toDateString() }}" class="book-now">
+                        Đặt sân ngay
+                    </a>
                 </div>
                 <div class="owner-info">
                     <h3>THÔNG TIN CHỦ SÂN</h3>
@@ -119,6 +127,7 @@
 
     <div class="review-section">
         <h3>Đánh giá</h3>
+        @if(Auth::check())
         <form action="{{route('user.yarddetail.rating')}}" method="post" id="review-form">
             @csrf
             <div class="rating">
@@ -128,12 +137,17 @@
                 <span class="star" data-value="2">★</span>
                 <span class="star" data-value="1">★</span>
             </div>
-            <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
+            @if(Auth::check())
+                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+            @else
+                {{-- Không hiển thị input user_id nếu chưa đăng nhập --}}
+            @endif
             <input type="hidden" name="yard_id" value="{{$boss->Yards()->first()->id}}">
             <input type="hidden" id="rating-value" value="0" name="point">
             <textarea id="review-input" placeholder="Nhập đánh giá của bạn..." rows="3" name="comment"></textarea>
             <button type="submit">Gửi đánh giá</button>
         </form>
+        @endif
         <div id="reviews">
             @foreach($ratings as $rating)
                 <div class="review-item">
@@ -148,14 +162,17 @@
                             @endfor
                             <span class="rating-point">({{ $rating->point }})</span>
                         </div>
-
                     </div>
-                    <div class="ellipsis-menu" style="float: right">
-                        <span class="ellipsis">...</span>
-                        <div class="dropdown-content">
-                            <a href="#" class="report-link" data-bs-toggle="modal" data-bs-target="#modalReport" data-rating-id="{{ $rating->id }}">Báo cáo bài viết</a>
+                    @if(Auth::check())
+                        <div class="ellipsis-menu" style="float: right">
+                            <span class="ellipsis">...</span>
+                            <div class="dropdown-content">
+                                <a href="#" class="report-link" data-bs-toggle="modal" data-bs-target="#modalReport" data-rating-id="{{ $rating->id }}">
+                                    Báo cáo bài viết
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                     <div class="review-comment">
                         <p>{{ $rating->comment }}</p>
                     </div>
@@ -172,7 +189,7 @@
 
 
 <div>
-    <form action="{{route('user.storeRegister')}}" method="post">
+    <form action="{{ Auth::check() ? route('user.storeRegister') : route('guest.storeRegister') }}" method="post">
         @csrf
         <section class="registration">
             <div class="form">
@@ -192,10 +209,26 @@
         <hr class="dividers" />
         <p>Công ty Play On Pitch cung cấp nền tảng quản lý sân bóng hiệu quả.</p>
         <ul>
-            <li><a href="{{route('user.privacy_policy.index')}}">Chính sách bảo mật</a></li>
-            <li><a href="{{route('user.cancellation_policy.index')}}">Chính sách hủy (đổi trả)</a></li>
-            <li><a href="{{route('user.commodity_policy.index')}}">Chính sách đặt sân</a></li>
-            <li><a href="{{route('user.payment_policy.index')}}">Chính sách thanh toán</a></li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.privacy_policy.index') : route('guest.privacy_policy.index') }}">
+                    Chính sách bảo mật
+                </a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.cancellation_policy.index') : route('guest.cancellation_policy.index') }}">
+                    Chính sách hủy (đổi trả)
+                </a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.commodity_policy.index') : route('guest.commodity_policy.index') }}">
+                    Chính sách đặt sân
+                </a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.payment_policy.index') : route('guest.payment_policy.index') }}">
+                    Chính sách thanh toán
+                </a>
+            </li>
         </ul>
     </div>
 
