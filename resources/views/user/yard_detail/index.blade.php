@@ -115,21 +115,24 @@
 
     <div class="review-section">
         <h3>Đánh giá</h3>
-        <form action="{{route('user.yarddetail.rating')}}" method="post" id="review-form">
-            @csrf
-            <div class="rating">
-                <span class="star" data-value="5">★</span>
-                <span class="star" data-value="4">★</span>
-                <span class="star" data-value="3">★</span>
-                <span class="star" data-value="2">★</span>
-                <span class="star" data-value="1">★</span>
-            </div>
-            <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
-            <input type="hidden" name="boss_id" value="{{$boss->id}}">
-            <input type="hidden" id="rating-value" value="0" name="point">
-            <textarea id="review-input" placeholder="Nhập đánh giá của bạn..." rows="3" name="comment"></textarea>
-            <button type="submit">Gửi đánh giá</button>
-        </form>
+        @if(Auth::check())
+            <form action="{{route('user.yarddetail.rating')}}" method="post" id="review-form">
+                @csrf
+                <div class="rating">
+                    <span class="star" data-value="5">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="1">★</span>
+                </div>
+                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                <input type="hidden" name="boss_id" value="{{$boss->id}}">
+                <input type="hidden" id="rating-value" value="0" name="point">
+                <textarea id="review-input" placeholder="Nhập đánh giá của bạn..." rows="3" name="comment"></textarea>
+                <button type="submit">Gửi đánh giá</button>
+            </form>
+        @endif
+
         <div id="reviews">
             @foreach($ratings as $rating)
                 <div class="review-item">
