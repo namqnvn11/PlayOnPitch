@@ -37,7 +37,9 @@ class YardListController extends Controller
         // Chỉ lấy những boss có ít nhất 1 sân không bị chặn
         $bosses = $query->whereHas('yards', function ($q) {
             $q->where('block', false);
-        })->paginate(8);
+        })
+            ->orderBy('created_at', 'desc')
+            ->paginate(8);
 
         return view('user.yard_list.index', compact('bosses', 'District', 'Province'));
     }

@@ -261,3 +261,72 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('stripe/payment/cancel',[PaymentController::class,'cancel'])->name('stripe.payment.cancel');
     });
 });
+
+Route::middleware('guest')->group(function () {
+    Route::prefix('guest')->name('guest.')->group(function () {
+        Route::post('/store', [UserRegisterBossController::class, 'store'])->name('storeRegister');
+        Route::prefix('home')->name('home.')->group(function () {
+            Route::get('/index', [HomeController::class, 'index'])->name('index');
+            Route::get('/get-districts', [HomeController::class, 'getDistricts'])->name('getDistricts');
+            Route::get('/search', [HomeController::class, 'search'])->name('user.home.search');
+        });
+
+        Route::prefix('yardlist')->name('yardlist.')->group(function () {
+            Route::get('/index', [YardListController::class, 'index'])->name('index');
+            Route::get('/get-districts', [YardListController::class, 'getDistricts'])->name('getDistricts');
+        });
+
+        Route::prefix('yarddetail')->name('yarddetail.')->group(function () {
+            Route::get('/index/{id}', [YardDetailController::class, 'index'])->name('index');
+            Route::post('/rating', [YardDetailController::class, 'rating'])->name('rating');
+            Route::post('/report', [YardDetailController::class, 'report'])->name('report');
+            Route::get('/load-more/{id}', [YardDetailController::class, 'loadMoreRatings'])->name('loadMore');
+        });
+
+        Route::prefix('choice_yard')->name('choice_yard.')->group(function () {
+            Route::get('/index/{id}', [ChoiceYardController::class, 'index'])->name('index');
+            Route::post('/make_reservation', [ReservationController::class, 'makeReservation'])->name('makeReservation');
+        });
+
+        Route::prefix('invoice')->name('invoice.')->group(function () {
+            Route::get('/index/{id}', [InvoiceController::class, 'index'])->name('index');
+        });
+
+        Route::prefix('policy')->name('policy.')->group(function () {
+            Route::get('/index', [PolicyController::class, 'index'])->name('index');
+        });
+
+        Route::prefix('clause')->name('clause.')->group(function () {
+            Route::get('/index', [ClauseController::class, 'index'])->name('index');
+        });
+
+        Route::prefix('privacy_policy')->name('privacy_policy.')->group(function () {
+            Route::get('/index', [PrivacyPolicyController::class, 'index'])->name('index');
+        });
+
+        Route::prefix('cancellation_policy')->name('cancellation_policy.')->group(function () {
+            Route::get('/index', [CancellationPolicyController::class, 'index'])->name('index');
+        });
+
+        Route::prefix('commodity_policy')->name('commodity_policy.')->group(function () {
+            Route::get('/index', [CommodityPolicyController::class, 'index'])->name('index');
+        });
+
+        Route::prefix('payment_policy')->name('payment_policy.')->group(function () {
+            Route::get('/index', [PaymentPolicyController::class, 'index'])->name('index');
+        });
+
+        Route::prefix('payment')->name('payment.')->group(function () {
+            Route::get('/index', [PaymentController::class, 'index'])->name('index');
+            route::post('/cancel', [PaymentController::class, 'cancelPayment'])->name('cancel');
+        });
+
+        // MOMO
+        Route::post('momo/payment', [PaymentController::class, 'createMoMoPayment'])->name('momo.payment.create');
+        Route::get('momo/payment/callback', [PaymentController::class, 'handleMoMoPaymentCallback'])->name('momo.payment.callback');
+        //STRIPE
+        Route::post('stripe/payment', [PaymentController::class, 'createStripePayment'])->name('stripe.payment.create');
+        Route::get('stripe/payment/callback', [PaymentController::class, 'handleStripePaymentCallback'])->name('stripe.payment.success');
+        Route::get('stripe/payment/cancel',[PaymentController::class,'cancel'])->name('stripe.payment.cancel');
+    });
+});

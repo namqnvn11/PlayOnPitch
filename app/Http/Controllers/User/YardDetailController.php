@@ -71,7 +71,7 @@ class YardDetailController extends Controller
                     'errors' => $validator->errors()
                 ], 422);
             }
-
+            
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
