@@ -96,7 +96,12 @@
         </div>
         <div class="booking-info">
             <div class="booking-controls">
-                <a href="{{ url('user/choice_yard/index', [$boss->id]) }}?selectTime={{ \Carbon\Carbon::now()->toDateString() }}" class="book-now">Đặt sân ngay</a>
+                @php
+                    //  user||guest
+                    $name= Auth::check()? 'user':'guest';
+                    $bookingLink= url( $name . '/choice_yard/index',[$boss->id]);
+                @endphp
+                <a href="{{ $bookingLink }}?selectTime={{ \Carbon\Carbon::now()->toDateString() }}" class="book-now">Đặt sân ngay</a>
             </div>
             <div class="owner-info">
                 <h3>THÔNG TIN CHỦ SÂN</h3>
@@ -139,12 +144,11 @@
                     <div class="review-header">
                         <div class="review-user-info">
                             <img src="{{$rating->User->image->img??'https://www.gravatar.com/avatar/'. md5(strtolower($rating->User->full_name)) .'?s=100&d=identicon'}}" alt="{{ $rating->User->name }}'s avatar" class="user-avatar">
-                            @if(Auth::user() && Auth::user()->id!==$rating->user_id)
-                                <span class="review-user">{{ $rating->User->full_name }}</span>
-                            @else
+                            @if(Auth::user() && Auth::user()->id==$rating->user_id)
                                 <span class="review-user">You</span>
-                           @endif
-
+                            @else
+                                <span class="review-user">{{ $rating->User->full_name }}</span>
+                            @endif
                         </div>
                         <div class="review-rating">
                             @for($i = 1; $i <= 5; $i++)

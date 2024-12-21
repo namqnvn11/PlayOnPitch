@@ -75,17 +75,22 @@
          $subTotal= $total_price??null;
          $discount= 0;
          $userId=$currentUser->id??null;
+
+         $name= Auth::check()?'user':'guest';
         @endphp
 
         <div class="p-10 rounded mx-auto border bg-white">
             <div class="flex justify-center">
                 <div class="mx-5">
-                    <form action="{{url('user/payment/cancel')}}" method="post">
+                    <form action="{{url($name.'/payment/cancel')}}" method="post" id="form-cancel">
                         @csrf
                         @foreach($yardSchedules as $yardSchedule)
                             <input type="hidden" name="ids[]" value="{{$yardSchedule->id}}">
                         @endforeach
-                        <button type="submit" class="mb-3 text-[20xp] hover:text-red-500"><i class="bi bi-caret-left-fill"></i>  Hủy</button>
+                        <div class="flex hover:text-red-500 ">
+                            <button type="submit" class="mb-3 text-[20xp] mr-2" onclick="localStorage.clear()"><i class="bi bi-caret-left-fill"></i>  Hủy</button>
+                            <div id="countdown"></div>
+                        </div>
                     </form>
                     <h2 class="text-bold-900 text-xl">Thanh Toán</h2>
                     <div class="payment-info">
@@ -115,25 +120,28 @@
                 </div>
                 <div class="mx-5 pt-10  ">
                     <div class="payment-option">
-                        <form method="post" action="{{url('/user/momo/payment')}}" id="form_payment">
+
+                        <form method="post" action="{{url('/momo/payment')}}" id="form_payment">
                             @csrf
                             <div>
-                                <label for="payment_typ" class="">Loại thanh toán</label>
+                                <label for="payment_type" class="">Loại thanh toán</label>
                                 <x-select name="payment_type" id="payment_type"  class="ml-4" value="1" onchange="paymentTypeChange(event)">
                                     <option value="1">Trả Toàn bộ</option>
                                     <option value="2">Đặt cọc 20%</option>
                                 </x-select>
                             </div>
-                            <div class="mt-6 flex">
-                                <x-select name="voucher_id" id="selectVoucher" onchange="voucherSelectOnchange(this)">
-                                    <option  value="0">chọn voucher của bạn</option>
-                                    @foreach($currentUser->User_Voucher as $userVoucher)
-                                        @if(!$userVoucher->Voucher->block)
-                                            <option value="{{$userVoucher->id}}" price="{{$userVoucher->Voucher->price}}">{{$userVoucher->Voucher->name}}</option>
-                                        @endif
-                                    @endforeach
-                                </x-select>
-                            </div>
+                            @if($currentUser)
+                                <div class="mt-6 flex">
+                                    <x-select name="voucher_id" id="selectVoucher" onchange="voucherSelectOnchange(this)">
+                                        <option  value="0">chọn voucher của bạn</option>
+                                        @foreach($currentUser->User_Voucher as $userVoucher)
+                                            @if(!$userVoucher->Voucher->block)
+                                                <option value="{{$userVoucher->id}}" price="{{$userVoucher->Voucher->price}}">{{$userVoucher->Voucher->name}}</option>
+                                            @endif
+                                        @endforeach
+                                    </x-select>
+                                </div>
+                            @endif
                             <div class="payment_method mt-6">
                                 <div id="momoContainer" onclick="chooseMomo()" class="flex border rounded h-[60px] p-4 mt-4 justify-between items-center border-green-500">
                                     <div class="flex">
@@ -175,7 +183,7 @@
                                 <div class="flex w-full justify-between mt-2">
                                     <div class="text-[14px] text-gray-500">Tổng</div>
                                     <input type="hidden" value="{{$subTotal}}" id="subTotal">
-                                    <div class="flex" id="subTotalDivContainer"><div id="subTotalDiv">{{number_format($subTotal,0,',','.')}}</div><span class="ml-1"></span></div>
+                                    <div class="flex" id="subTotalDivContainer"><div id="subTotalDiv">{{number_format($subTotal,0,',')}}</div><span class="ml-1"></span></div>
                                 </div>
                                 <div class="flex w-full justify-between mt-2 hidden" id="downPaymentContainer">
                                     <div class="text-[14px] text-gray-500">Đặc cọc</div>
@@ -185,7 +193,7 @@
                                 <div class="flex w-full justify-between mt-2">
                                     <div class="text-[14px] text-gray-500">Giảm giá</div>
                                     <div class="flex">
-                                        <div id="discount">{{number_format($discount,0,',','.')}}</div><div class="ml-1"></div>
+                                        <div id="discount">{{number_format($discount,0,',')}}</div><div class="ml-1"></div>
                                         <input type="hidden" name="user_voucher_id" id="user_voucher_id">
                                     </div>
 
@@ -194,19 +202,19 @@
                                 <div class="flex w-full justify-between mt-2">
                                     <div>Tổng Phải trả</div>
                                     <div class="flex">
-                                        <div id="total">{{number_format($subTotal-$discount,0,',','.')}}</div>
+                                        <div id="total">{{number_format($subTotal-$discount,0,',')}}</div>
                                         <div class="ml-1"></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="mt-6">
-                                <x-green-button type="submit" class="border-green-500 border px-4 py-3 w-full rounded">
+                                <x-green-button type="submit" class="border-green-500 border px-4 py-3 w-full rounded" onclick="localStorage.clear()">
                                     Tiến Hành Thanh Toán
                                 </x-green-button>
                             </div>
                             <input name="userId" value="{{$userId??null}}" type="hidden"/>
                             <input name="contact_id" value="{{$contact->id}}" type="hidden"/>
-                            <input name="reservationId" value="{{$reservation_id}}" type="hidden"/>
+                            <input name="reservationId" value="{{$reservation_id}}" type="hidden" id="reservationId"/>
                             <input value="{{$subTotal}}" name="totalPrice" type="hidden"/>
                         </form>
                     </div>
@@ -284,9 +292,10 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     const STORE_URL = "{{ route('user.storeRegister') }}";
-    const MOMO_URL="{{url('/user/momo/payment')}}";
-    const STRIPE_URL="{{url('/user/stripe/payment')}}";
-    const TEST_URL="{{url('/user/momo/test')}}";
+    const MOMO_URL="{{url('/momo/payment')}}";
+
+    const STRIPE_URL="{{url($name .'/stripe/payment')}}";
+
 </script>
 
 <script src="{{asset('assets/libraries/toastr/toastr.min.js' ) }}"></script>

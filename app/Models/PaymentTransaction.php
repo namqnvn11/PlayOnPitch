@@ -9,7 +9,6 @@ class PaymentTransaction extends Model
     protected $table = 'payment_transactions';
 
     protected $fillable = [
-        'user_id',
         'invoice_id',
         'transaction_id',
         'amount',
@@ -18,11 +17,6 @@ class PaymentTransaction extends Model
         'payment_method',
         'response_data'
     ];
-
-    public function User()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
 
     public function Invoice()
     {

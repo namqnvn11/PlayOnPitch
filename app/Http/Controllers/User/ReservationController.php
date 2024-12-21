@@ -9,6 +9,7 @@ use App\Models\Reservation;
 use App\Models\YardSchedule;
 use Illuminate\Http\Request;
 use App\Models\ReservationHistory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 
 class ReservationController extends Controller
@@ -64,7 +65,7 @@ class ReservationController extends Controller
            'historyId' => $history->id,
            'yardScheduleIds' => $yardScheduleIds,
        ]);
-       Cookie::queue('reservation', $reservationData, 15);
+       Cookie::queue('reservation', $reservationData, 20);
 
        foreach($yardScheduleIds as $id){
            $yardSchedule= YardSchedule::find($id);
@@ -72,10 +73,11 @@ class ReservationController extends Controller
                'status' => 'pending',
                'reservation_id' => $reservation->id,
            ]);
-           ExpireReservationJob::dispatch($id)->delay(now()->addMinutes(15));
+           ExpireReservationJob::dispatch($id)->delay(now()->addMinutes(20));
        }
 
-       return redirect()->route('user.payment.index',[
+       $redirectName=Auth::check()?'user':'guest';
+       return redirect()->route($redirectName.'.payment.index',[
            'yard_schedule_ids'=>$yardScheduleIds,
            'reservation_id'=>$reservation->id,
            'total_price'=>$total_price,

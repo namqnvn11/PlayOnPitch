@@ -39,18 +39,12 @@ use App\Http\Controllers\User\VoucherController as UserVoucherController;
 use App\Http\Controllers\User\MyVoucherController;
 use App\Http\Controllers\RegisterBossController as UserRegisterBossController;
 
-
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('admin-boss/login', [LoginController::class, 'showLoginForm'])
     ->middleware(RedirectIfAuthenticated::class)
     ->name('admin.boss/login');
 Route::post('admin-boss/login', [LoginController::class, 'login'])->name('admin-boss.login');
-
 
 Route::get('login', [LoginController::class, 'showLoginUser'])
     ->middleware(RedirectIfAuthenticated::class)
@@ -125,14 +119,10 @@ Route::middleware(['auth:boss'])->group(function () {
             //tạo và xóa nhiều sân theo id boss
             Route::get('/schedule/createAll',[PriceTimeSettingController::class, 'createAllYardSchedule'])->name('yardSchedule.create.all');
             Route::get('/schedule/deleteAll',[PriceTimeSettingController::class, 'deleteAllYardSchedule'])->name('yardSchedule.delete.all');
+
             //tạo và xóa lịch 1 sân
             Route::get('/schedule/createOne/{yardId}',[PriceTimeSettingController::class, 'createOneYardSchedule'])->name('yardSchedule.create.one');
             Route::get('/schedule/deleteOne/{yardId}',[PriceTimeSettingController::class, 'deleteOneYardSchedule'])->name('yardSchedule.delete.one');
-
-//            //xóa sau khi test xong
-//            //tạo và xóa tất cả các sân phù hợp
-//            Route::get('/schedule/create',[PriceTimeSettingController::class, 'scheduleCreate'])->name('schedule.create');
-//            Route::get('/schedule/delete',[PriceTimeSettingController::class, 'scheduleDelete'])->name('schedule.delete');
 
             // image
             Route::get('/image/index',[YardImageController::class, 'index'])->name('image.index');
@@ -253,9 +243,9 @@ Route::middleware(['auth:web'])->group(function () {
             Route::get('/index', [HistoryController::class, 'index'])->name('index');
         });
         // MOMO
-        Route::post('momo/payment', [PaymentController::class, 'createMoMoPayment'])->name('momo.payment.create');
-        Route::get('momo/payment/callback', [PaymentController::class, 'handleMoMoPaymentCallback'])->name('momo.payment.callback');
-        //STRIPE
+//        Route::post('momo/payment', [PaymentController::class, 'createMoMoPayment'])->name('momo.payment.create');
+//        Route::get('momo/payment/callback', [PaymentController::class, 'handleMoMoPaymentCallback'])->name('momo.payment.callback');
+//        //STRIPE
         Route::post('stripe/payment', [PaymentController::class, 'createStripePayment'])->name('stripe.payment.create');
         Route::get('stripe/payment/callback', [PaymentController::class, 'handleStripePaymentCallback'])->name('stripe.payment.success');
         Route::get('stripe/payment/cancel',[PaymentController::class,'cancel'])->name('stripe.payment.cancel');
@@ -321,12 +311,12 @@ Route::middleware('guest')->group(function () {
             route::post('/cancel', [PaymentController::class, 'cancelPayment'])->name('cancel');
         });
 
-        // MOMO
-        Route::post('momo/payment', [PaymentController::class, 'createMoMoPayment'])->name('momo.payment.create');
-        Route::get('momo/payment/callback', [PaymentController::class, 'handleMoMoPaymentCallback'])->name('momo.payment.callback');
         //STRIPE
         Route::post('stripe/payment', [PaymentController::class, 'createStripePayment'])->name('stripe.payment.create');
         Route::get('stripe/payment/callback', [PaymentController::class, 'handleStripePaymentCallback'])->name('stripe.payment.success');
         Route::get('stripe/payment/cancel',[PaymentController::class,'cancel'])->name('stripe.payment.cancel');
     });
 });
+
+Route::post('/momo/payment', [PaymentController::class, 'createMoMoPayment'])->name('momo.payment.create');
+Route::get('/momo/payment/callback', [PaymentController::class, 'handleMoMoPaymentCallback'])->name('momo.payment.callback');

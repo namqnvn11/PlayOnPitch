@@ -94,7 +94,11 @@
                 </div>
             </div>
         </div>
-        <form id="bookingForm" action="{{ route('user.choice_yard.makeReservation') }}" method="POST" onsubmit="preparePayment(event)">
+        @php
+         $name= Auth::check()?'user':'guest';
+         $makeReservationLink= route($name.'.choice_yard.makeReservation');
+        @endphp
+        <form id="bookingForm" action="{{$makeReservationLink}}" method="POST" onsubmit="preparePayment(event)">
             @csrf
         <div class="booking-content">
             <div class="booking-table">
@@ -161,7 +165,7 @@
                 <input type="text" placeholder="Số điện thoại" value="{{Auth::user()->phone}}" name="phone" id="userPhone" oninput="clearError()">
                 @else
                     <input type="hidden" name="boss_id" value="{{$boss->id}}">
-                    {{-- Không hiển thị input user_id, full_name và phone --}}
+                    <input type="hidden" name="user_id">
                     <input type="text" placeholder="Họ và tên" name="userName" id="userName" oninput="clearError()">
                     <input type="text" placeholder="Số điện thoại" name="phone" id="userPhone" oninput="clearError()">
                 @endif

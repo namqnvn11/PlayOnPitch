@@ -13,6 +13,7 @@ use App\Models\Voucher;
 use App\Models\YardSchedule;
 use App\Services\MomoService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
 use Stripe\Exception\ApiErrorException;
@@ -20,14 +21,17 @@ use Stripe\StripeClient;
 class PaymentController extends Controller
 {
     protected $momoService;
+    protected $redirectName;
 
     public function __construct(MomoService $momoService)
     {
         $this->momoService = $momoService;
+        $this->redirectName = Auth::check()?'user':'guest';
     }
 
     public function index(request $request)
     {
+        //gia hạn cookies 10' theo momo
         $yardScheduleIds= $request->yard_schedule_ids;
         $boss= Boss::find($request->boss_id);
         $contact= Contact::find($request->contact_id);
@@ -54,7 +58,7 @@ class PaymentController extends Controller
                 ]);
     }
 
-    //yardScheduleId
+    //yardScheduleIds
     public function cancelPayment(request $request){
         $ids= $request->ids;
         $reservationJson = Cookie::get('reservation');
@@ -79,7 +83,7 @@ class PaymentController extends Controller
 
             Cookie::queue(Cookie::forget('reservation'));
             Log::info('cancel payment');
-            return redirect()->route('user.choice_yard.index',$reservationCookies->bossId)->with('error','your reservation is cancelled');
+            return redirect()->route($this->redirectName.'.choice_yard.index',$reservationCookies->bossId)->with('error','your reservation is cancelled');
         }
         return redirect()->route('home')->with('error','Something went wrong');
     }
@@ -125,7 +129,6 @@ class PaymentController extends Controller
 
             PaymentTransaction::create([
                 'transaction_id' => $momoResponse['orderId'],
-                'user_id' => $request['userId'],
                 'invoice_id' => $invoice->id,
                 'product_name' => 'Yard reservation payment',
                 'amount' => $totalPrice,
@@ -144,9 +147,10 @@ class PaymentController extends Controller
     }
     public function handleMoMoPaymentCallback(Request $request)
     {
+
         try {
             $payment = PaymentTransaction::where('transaction_id', $request->orderId)->first();
-            if ($payment) {   $invoice= $payment->Invoice()->first();}
+            if ($payment) { $invoice= $payment->Invoice()->first();}
 
             $reservation=Reservation::find($invoice->reservation_id);
             $reservationHistory= $reservation->ReservationHistory()->first();
@@ -172,14 +176,16 @@ class PaymentController extends Controller
                     session()->forget('userVoucherId');
                 }
                 $this->updateYardScheduleAndDeleteCookies(true);
-                return redirect()->route('user.invoice.index', $invoice->id)->with('success', 'Payment successful');
+                return redirect()->route($this->redirectName.'.invoice.index', $invoice->id)->with('success', 'Payment successful');
             }
             //thất bại
             $this->updateYardScheduleAndDeleteCookies(false);
-            return redirect()->route('user.yardlist.index')->with('error', 'Payment ' . $payment->status);
+            return redirect()->route($this->redirectName.'.yardlist.index')->with('error', 'Payment ' . $payment->status);
         }catch (\Exception $exception){
+            Log::info($exception->getMessage());
             return redirect('/')->with('error', 'something went wrong');
-        }
+            }
+
         }
 
 
@@ -219,8 +225,8 @@ class PaymentController extends Controller
                     ]
                 ],
                 'mode' => 'payment',
-                'success_url' => route('user.stripe.payment.success') . '?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => route('user.stripe.payment.cancel'),
+                'success_url' => route($this->redirectName.'.stripe.payment.success') . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route($this->redirectName.'.stripe.payment.cancel'),
             ]);
             if (isset($response['id']) && $response['id'] !== '') {
                 session()->put('product_name', 'Yard reservation payment');
@@ -229,10 +235,10 @@ class PaymentController extends Controller
                 return redirect($response->url);
             }
         } catch (ApiErrorException $exception) {
-            return redirect()->route('user.stripe.payment.cancel')->with('error', $exception->getMessage());
+            return redirect()->route($this->redirectName.'.stripe.payment.cancel')->with('error', $exception->getMessage());
         }
 
-        return redirect()->route('user.stripe.payment.cancel')->with('error', 'Payment failed!');
+        return redirect()->route($this->redirectName.'stripe.payment.cancel')->with('error', 'Payment failed!');
     }
     public function handleStripePaymentCallback(Request $request){
         $productName = session()->get('product_name');
@@ -291,9 +297,9 @@ class PaymentController extends Controller
             //update schedule status
             $this->updateYardScheduleAndDeleteCookies(true);
 
-            return redirect()->route('user.invoice.index',$invoice->id)->with('success', 'Payment successful!');
+            return redirect()->route($this->redirectName.'.invoice.index',$invoice->id)->with('success', 'Payment successful!');
         } catch (ApiErrorException $e) {
-            return redirect()->route('user.stripe.payment.cancel')->with('error', $e->getMessage());
+            return redirect()->route($this->redirectName.'.stripe.payment.cancel')->with('error', $e->getMessage());
         }
     }
 
@@ -302,7 +308,7 @@ class PaymentController extends Controller
         //update schedule status
         $this->updateYardScheduleAndDeleteCookies(false);
 
-        return redirect()->route('user.yardlist.index')->with('error', 'Payment canceled!');
+        return redirect()->route($this->redirectName.'.yardlist.index')->with('error', 'Payment canceled!');
     }
 
     private function updateYardScheduleAndDeleteCookies($isPaidSuccess)
