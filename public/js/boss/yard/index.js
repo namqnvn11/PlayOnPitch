@@ -96,7 +96,7 @@ function showModalPricing(id) {
             }else {
                 makeFormEmpty()
             }
-            _form.find('input[name="defaultPrice"]').val(response.defaultPrice);
+            _form.find('input[name="defaultPrice"]').val(parseFloat(response.defaultPrice).toLocaleString('en-US'));
         },
 
         cache: false,
@@ -144,7 +144,7 @@ function loadOldTimeSetting(timeSlots,containerId,templateId){
         //trường To
         newGroup.children[0].children[3].value = removeSeconds(timesLot.end_time);
         //Price
-        newGroup.children[0].children[5].value = timesLot.price_per_hour;
+        newGroup.children[0].children[5].value = parseFloat(timesLot.price_per_hour).toLocaleString('en-US');
 
         container.appendChild(newGroup);
     })

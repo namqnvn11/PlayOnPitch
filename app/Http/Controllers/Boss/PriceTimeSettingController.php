@@ -42,6 +42,7 @@ class PriceTimeSettingController extends Controller
     //id của yard
     function pricing(Request $request,$id)
     {
+
         $validator= Validator::make($request->all(),[
             'defaultPrice'=> 'required',
         ]);
@@ -60,6 +61,31 @@ class PriceTimeSettingController extends Controller
             //chia thời gian mon-fri và weekend
             $monFriSlots = $this->extractTimeSlots($data, 'mon-fri');
             $weekendSlots = $this->extractTimeSlots($data, 'weekend');
+
+            // kết quả là vd:
+//            [[
+//                "from" => 1734631200
+//                "to" => 1734638400
+//                "price" => "400000"
+//                "fromTime" => "01:00"
+//                "toTime" => "03:00"
+//                "timeSlotId" => "18"
+//            ],[]...]
+
+           //kiểm tra timeslot tối thiểu là 30'
+            if (!$this->hasMinimumInterval($monFriSlots) || !$this->hasMinimumInterval($weekendSlots)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Each time slot must be at least 30 minutes.',
+                ]);
+            }
+            //kiểm tra có kết thúc là 00||30
+            if (!$this->hasValidMinutes($monFriSlots) || !$this->hasValidMinutes($weekendSlots)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Times must end with :00 or :30.',
+                ]);
+            }
 
             //kiểm tra price có hợp lệ
             if(!$this->validatePrice($monFriSlots)||!$this->validatePrice($weekendSlots)){
@@ -158,7 +184,7 @@ class PriceTimeSettingController extends Controller
 
             //lưu giá mặc điịnh
             Yard::find($id)->update([
-                'defaultPrice'=> $request['defaultPrice'],
+                'defaultPrice'=> str_replace(',', '', $request->input('defaultPrice'))
             ]);
 
             return response()->json([
@@ -175,6 +201,36 @@ class PriceTimeSettingController extends Controller
         }
 
     }
+
+
+    //thời gian setup tối thiểu là 30'
+    function hasMinimumInterval($timeSlots) {
+        $minimumInterval = 30 * 60;
+        foreach ($timeSlots as $timeSlot) {
+            //bỏ qua nếu là có tg qua ngày
+            if ($timeSlot['from'] > $timeSlot['to']) {
+                continue;
+            }
+            if (($timeSlot['to'] - $timeSlot['from']) < $minimumInterval) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // kiểm tra thời gian kết thúc phải là 30||00
+    private function hasValidMinutes($timeSlots) {
+        foreach ($timeSlots as $timeSlot) {
+            $fromMinutes = date('i', $timeSlot['from']);
+            $toMinutes = date('i', $timeSlot['to']);
+
+            if (!in_array($fromMinutes, ['00', '30']) || !in_array($toMinutes, ['00', '30'])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     function sortTimeSlotsByFromTime(&$timeSlots)
     {
@@ -206,7 +262,7 @@ class PriceTimeSettingController extends Controller
                     $timeSlots[] = [
                         'from' => $fromTime,
                         'to' => $toTime,
-                        'price'=> $data["{$prefix}-price-{$index}"] ?? null,
+                        'price'=> str_replace(',', '',$data["{$prefix}-price-{$index}"]) ?? null,
                         'fromTime' => $from,
                         'toTime' => $to,
                         'timeSlotId' => $timeSlotId,
@@ -319,6 +375,13 @@ class PriceTimeSettingController extends Controller
                         $yard->PriceTimeSettings()->delete();
                     }
                 }
+                // kiểm tra có kết thúc là 00||30
+                if (!$this->isValidTimeFormat(request('time_open'))||!$this->isValidTimeFormat(request('time_close'))) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => ['Time Times must end with :00 or :30.']
+                    ]);
+                }
 
                 if (!$this->isDurationDivisibleBy1_5(request('time_open'),request('time_close'))) {
                     return response()->json([
@@ -343,6 +406,15 @@ class PriceTimeSettingController extends Controller
             'message'=> 'Price Time Setting Updated Successfully',
         ]);
 
+    }
+
+    private function isValidTimeFormat($time) {
+        $parts = explode(':', $time);
+        if (count($parts) !== 2) {
+            return false;
+        }
+        $minutes = $parts[1];
+        return in_array($minutes, ['00', '30']);
     }
     function isDurationDivisibleBy1_5($time_open, $time_close)
     {
