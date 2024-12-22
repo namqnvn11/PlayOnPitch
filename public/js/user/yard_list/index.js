@@ -10,7 +10,7 @@ $(document).ready(function () {
                 success: function (data) {
                     console.log(data);
                     $('#district_id').empty();
-                    $('#district_id').append('<option value="">Quận/Huyện</option>');
+                    $('#district_id').append('<option value="">District</option>');
                     $.each(data, function (key, district) {
                         $('#district_id').append('<option value="' + district.id + '">' + district.name + '</option>');
                     });
@@ -23,7 +23,7 @@ $(document).ready(function () {
             });
         } else {
             $('#district_id').empty();
-            $('#district_id').append('<option value="">Quận/Huyện</option>');
+            $('#district_id').append('<option value="">District</option>');
 
             $('#district_id').prop('disabled', true);
         }

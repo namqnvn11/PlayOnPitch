@@ -10,22 +10,26 @@
 <body>
 <header>
     <div class="top-section">
-        <a href="{{route('user.home.index')}}"><img src="{{asset('img/logotext.png')}}" alt="" style="width: 350px; height: 50px;"></a>
+        @if(Auth::check())
+            <a href="{{route('user.home.index')}}"><img src="{{asset('img/logotext.png')}}" alt="" style="width: 350px; height: 50px;"></a>
+        @else
+            <a href="{{route('guest.home.index')}}"><img src="{{asset('img/logotext.png')}}" alt="" style="width: 350px; height: 50px;"></a>
+        @endif
     </div>
     <hr class="divider" />
     <nav class="nav-menu">
         <ul>
             <li><a href="{{ Auth::check() ? route('user.home.index') : route('guest.home.index') }}"><i class="fas fa-home"></i></a></li>
             <li>
-                <a href="{{ Auth::check() ? route('user.yardlist.index') : route('guest.yardlist.index') }}">Danh sách sân</a>
+                <a href="{{ Auth::check() ? route('user.yardlist.index') : route('guest.yardlist.index') }}">Yard List</a>
             </li>
             <li>
-                <a href="{{ Auth::check() ? route('user.policy.index') : route('guest.policy.index') }}">Chính sách</a>
+                <a href="{{ Auth::check() ? route('user.policy.index') : route('guest.policy.index') }}">Policy</a>
             </li>
             <li>
-                <a href="{{ Auth::check() ? route('user.clause.index') : route('guest.clause.index') }}">Điều khoản</a>
+                <a href="{{ Auth::check() ? route('user.clause.index') : route('guest.clause.index') }}">Terms</a>
             </li>
-            <li><a href="#footer">Liên hệ</a></li>
+            <li><a href="#footer">Contact</a></li>
         </ul>
 
         <div class="auth-button">
@@ -35,7 +39,7 @@
                 </a>
             @else
                 <a href="{{ route('login') }}">
-                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> Đăng nhập/ Đăng ký</button>
+                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> Login/ Register</button>
                 </a>
             @endauth
         </div>
@@ -50,33 +54,34 @@
 
 <div class="policy-container">
     <div class="policy-header">
-        <h1>Chính sách Kiểm hàng</h1>
+        <h1>Booking Policy</h1>
     </div>
 
     <div class="policy-content">
-        <p>Sau khi đặt sân, PlayOnPitch.com sẽ gửi thông tin đơn hàng về email cho khách hàng với đầy đủ các nội dung đặt hàng bao gồm:</p>
+        <p>After booking a field, <a href="https://www.PlayOnPitch.online">PlayOnPitch.online</a> will send the order information to the customer's email, including the following details:</p>
         <ul>
-            <li>Họ và tên người đặt</li>
-            <li>Tên sân</li>
-            <li>Ngày và giờ </li>
-            <li>Chi tiết giá</li>
-            <li>Thong tin thanh toán</li>
+            <li>Full name of the booker</li>
+            <li>Field name</li>
+            <li>Date and time</li>
+            <li>Price details</li>
+            <li>Payment information</li>
         </ul>
-        <p>Khách hàng kiểm tra lại thông tin trước khi thanh toán. Sau khi thanh toán xong PlayOnPitch.com sẽ gửi email xác nhận thanh toán cho khách hàng. Đến ngày chơi khách hàng lên sân check in và đọc đúng tên đã đăng ký với PlayOnPitch.com.</p>
-        <p>Mọi thông tin đặt sân vui lòng thông báo trước 24h khi lên sân.</p>
-        <p>Loại hàng hóa PlayOnPitch.com cung cấp là DỊCH VỤ ĐẶT SÂN CHƠI không sử dụng hình thức vận chuyển. Nên khách hàng chỉ cần kiểm tra lại thông tin đặt hàng giờ chơi thông qua email xác nhận.</p>
+        <p>Customers should verify the information before making the payment. After payment is completed, <a href="https://www.PlayOnPitch.online">PlayOnPitch.online</a> will send a payment confirmation email to the customer. On the play day, customers should check in at the field and provide the name registered with <a href="https://www.PlayOnPitch.online">PlayOnPitch.online</a>.</p>
+        <p>Please notify us at least 24 hours in advance of your scheduled play time for any booking updates.</p>
+        <p>The service provided by <a href="https://www.PlayOnPitch.online">PlayOnPitch.online</a> is a FIELD BOOKING SERVICE that does not involve shipping. Therefore, customers only need to verify their booking information and play time through the confirmation email.</p>
     </div>
 </div>
+
 <div>
     <form action="{{ Auth::check() ? route('user.storeRegister') : route('guest.storeRegister') }}" method="post">
         @csrf
         <section class="registration">
             <div class="form">
-                <h2 style="margin-right: 250px">Bạn muốn đăng ký sử dụng website quản lý sân bóng MIỄN PHÍ?</h2>
-                <input type="text" placeholder="Nhập họ và tên" name="name">
-                <input type="text" placeholder="Nhập số điện thoại" name="phone">
-                <input type="text" placeholder="Nhập email" name="email">
-                <button type="submit">Gửi</button>
+                <h2 style="margin-right: 250px">Do you want to register to use the FREE football yard management website?</h2>
+                <input type="text" placeholder="Enter full name" name="name">
+                <input type="text" placeholder="Enter phone number" name="phone">
+                <input type="text" placeholder="Enter email" name="email">
+                <button type="submit">Submit</button>
             </div>
         </section>
     </form>
@@ -84,45 +89,51 @@
 
 <footer id="footer">
     <div class="footer-section">
-        <h3>GIỚI THIỆU</h3>
+        <h3>ABOUT US</h3>
         <hr class="dividers" />
-        <p>Công ty Play On Pitch cung cấp nền tảng quản lý sân bóng hiệu quả.</p>
+        <p>Play On Pitch provides an efficient platform for football yard management.</p>
         <ul>
             <li>
                 <a href="{{ Auth::check() ? route('user.privacy_policy.index') : route('guest.privacy_policy.index') }}">
-                    Chính sách bảo mật
+                    Privacy Policy
                 </a>
             </li>
             <li>
                 <a href="{{ Auth::check() ? route('user.cancellation_policy.index') : route('guest.cancellation_policy.index') }}">
-                    Chính sách hủy (đổi trả)
+                    Cancellation Policy (Returns & Exchanges)
                 </a>
             </li>
             <li>
                 <a href="{{ Auth::check() ? route('user.commodity_policy.index') : route('guest.commodity_policy.index') }}">
-                    Chính sách đặt sân
+                    Booking Policy
                 </a>
             </li>
             <li>
                 <a href="{{ Auth::check() ? route('user.payment_policy.index') : route('guest.payment_policy.index') }}">
-                    Chính sách thanh toán
+                    Payment Policy
                 </a>
             </li>
         </ul>
     </div>
 
     <div class="footer-section">
-        <h3>THÔNG TIN</h3>
+        <h3>INFORMATION</h3>
         <hr class="dividers"/>
         <p>Công ty TNHH 3 thành viên</p>
-        <p>MST: 1234567890</p>
-        <p>Email: namhuynhkhachoai@gmail.com</p>
-        <p>Địa chỉ: 184 Lê Đại Hành, Quận 11, TP HCM</p>
-        <p>Điện thoại: 0868.986.143</p>
+        <p>TIN: 1234567890</p>
+        <p>
+            Email:
+            <span style="cursor: pointer;" onclick="navigator.clipboard.writeText('namhuynhkhachoai@gmail.com')">namhuynhkhachoai@gmail.com</span>
+        </p>
+        <p>Address: 184 Lê Đại Hành, Quận 11, TP HCM</p>
+        <p>
+            Phone:
+            <span style="cursor: pointer;" onclick="navigator.clipboard.writeText('0868986143')">0868.986.143</span>
+        </p>
     </div>
 
     <div class="footer-section">
-        <h3>LIÊN HỆ</h3>
+        <h3>CONTACT</h3>
         <hr class="dividers" style="width: 40vh"/>
         <br><br>
         <a href="https://www.facebook.com/profile.php?id=61569828033426" target="_blank"><i class="fa-brands fa-facebook fa-2xl" style="color: #ffffff;"></i></a>
@@ -139,5 +150,21 @@
 <script src="{{asset('assets/libraries/toastr/toastr.min.js' ) }}"></script>
 <script src="{{asset('js/notification.js')}}"></script>
 <script src="{{asset('js/registerBoss.js?t='.config('constants.app_version'))}}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Khi trang bắt đầu tải, thêm lớp 'loading'
+        document.body.classList.add("loading");
+
+        // Khi trang đã tải xong, xóa lớp 'loading'
+        window.onload = function () {
+            document.body.classList.remove("loading");
+        };
+
+        // Khi người dùng rời khỏi trang (chuyển trang hoặc tải lại)
+        window.addEventListener("beforeunload", function () {
+            document.body.classList.add("loading");
+        });
+    });
+</script>
 
 

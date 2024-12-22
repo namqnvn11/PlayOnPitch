@@ -14,16 +14,26 @@
 <body>
 <header>
     <div class="top-section">
-        <a href="{{route('user.home.index')}}"><img src="{{asset('img/logotext.png')}}" alt="" style="width: 350px; height: 50px;"></a>
+        @if(Auth::check())
+            <a href="{{route('user.home.index')}}"><img src="{{asset('img/logotext.png')}}" alt="" style="width: 350px; height: 50px;"></a>
+        @else
+            <a href="{{route('guest.home.index')}}"><img src="{{asset('img/logotext.png')}}" alt="" style="width: 350px; height: 50px;"></a>
+        @endif
     </div>
     <hr class="divider" />
     <nav class="nav-menu">
         <ul>
-            <li><a href="{{route('user.home.index')}}"><i class="fas fa-home"></i></a></li>
-            <li><a href="{{route('user.yardlist.index')}}">Danh sách sân</a></li>
-            <li><a href="{{route('user.policy.index')}}">Chính sách</a></li>
-            <li><a href="{{route('user.clause.index')}}">Điều khoản</a></li>
-            <li><a href="#footer">Liên hệ</a></li>
+            <li><a href="{{ Auth::check() ? route('user.home.index') : route('guest.home.index') }}"><i class="fas fa-home"></i></a></li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.yardlist.index') : route('guest.yardlist.index') }}">Yard List</a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.policy.index') : route('guest.policy.index') }}">Policy</a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.clause.index') : route('guest.clause.index') }}">Terms</a>
+            </li>
+            <li><a href="#footer">Contact</a></li>
         </ul>
 
         <div class="auth-button">
@@ -33,7 +43,7 @@
                 </a>
             @else
                 <a href="{{ route('login') }}">
-                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> Đăng nhập/ Đăng ký</button>
+                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> Login/ Register</button>
                 </a>
             @endauth
         </div>
@@ -49,29 +59,29 @@
 <div class="profile-container">
     <div class="sidebar">
         <div class="user-info">
-            <p>Anh/Chị <strong>{{ Auth::user()->full_name}}</strong></p>
+            <p>Mr./Ms. <strong>{{ Auth::user()->full_name}}</strong></p>
         </div>
         <ul class="menu">
-            <li><a href="{{route("user.history.index")}}"> <i class="fa fa-history"></i>&nbsp;Lịch sử đặt sân</a></li>
-            <li><a href="{{route("user.profile.index")}}"> <i class="fa fa-info-circle"></i>&nbsp;Thông tin cá nhân</a></li>
-            <li><a href="{{route("user.my_voucher.index")}}"><i class="fa-solid fa-ticket"></i>&nbsp;Voucher của bạn</a></li>
-            <li style="background-color: #F4F4F4"><a href="#"  style="color: #4CAF50;"><i class="fa-solid fa-retweet"  style="color: #4CAF50;"></i>&nbsp;Đổi voucher</a></li>
+            <li><a href="{{route("user.history.index")}}"> <i class="fa fa-history"></i>&nbsp;Booking History</a></li>
+            <li><a href="{{route("user.profile.index")}}"> <i class="fa fa-info-circle"></i>&nbsp;Personal Information</a></li>
+            <li><a href="{{route("user.my_voucher.index")}}"><i class="fa-solid fa-ticket"></i>&nbsp;Your Vouchers</a></li>
+            <li style="background-color: #F4F4F4"><a href="#"  style="color: #4CAF50;"><i class="fa-solid fa-retweet"  style="color: #4CAF50;"></i>&nbsp;Redeem Vouchers</a></li>
         </ul>
-        <a href="{{route("user.logout")}}"><button class="logout-btn">Đăng xuất</button></a>
+        <a href="{{route("user.logout")}}"><button class="logout-btn">Logout</button></a>
     </div>
 
     <div class="profile-details">
-        <h2>Đổi voucher</h2>
+        <h2>Redeem Vouchers</h2>
         <table>
             <thead>
             <tr>
-                <th>Hình ảnh</th>
-                <th>Tên voucher</th>
-                <th>Giá trị voucher</th>
-                <th>Ngày bắt đầu</th>
-                <th>Ngày kết thúc</th>
-                <th>Điểm cần dùng</th>
-                <th>Hành động</th>
+                <th>Image</th>
+                <th>Voucher Name</th>
+                <th>Voucher Value</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Points Required</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -89,7 +99,7 @@
                         @csrf
                         <div class="action-btn">
                             <input type="hidden" name="voucher_id" value="{{ $voucher->id }}">
-                            <button class="btn-edit">Đổi</button>
+                            <button class="btn-edit">Change</button>
                         </div>
                     </form>
                 </td>
@@ -111,15 +121,15 @@
 </div>
 
 <div>
-    <form action="{{route('user.storeRegister')}}" method="post">
+    <form action="{{ Auth::check() ? route('user.storeRegister') : route('guest.storeRegister') }}" method="post">
         @csrf
         <section class="registration">
             <div class="form">
-                <h2 style="margin-right: 250px">Bạn muốn đăng ký sử dụng website quản lý sân bóng MIỄN PHÍ?</h2>
-                <input type="text" placeholder="Nhập họ và tên" name="name">
-                <input type="text" placeholder="Nhập số điện thoại" name="phone">
-                <input type="text" placeholder="Nhập email" name="email">
-                <button type="submit">Gửi</button>
+                <h2 style="margin-right: 250px">Do you want to register to use the FREE football yard management website?</h2>
+                <input type="text" placeholder="Enter full name" name="name">
+                <input type="text" placeholder="Enter phone number" name="phone">
+                <input type="text" placeholder="Enter email" name="email">
+                <button type="submit">Submit</button>
             </div>
         </section>
     </form>
@@ -127,29 +137,51 @@
 
 <footer id="footer">
     <div class="footer-section">
-        <h3>GIỚI THIỆU</h3>
+        <h3>ABOUT US</h3>
         <hr class="dividers" />
-        <p>Công ty Play On Pitch cung cấp nền tảng quản lý sân bóng hiệu quả.</p>
+        <p>Play On Pitch provides an efficient platform for football yard management.</p>
         <ul>
-            <li><a href="{{route('user.privacy_policy.index')}}">Chính sách bảo mật</a></li>
-            <li><a href="{{route('user.cancellation_policy.index')}}">Chính sách hủy (đổi trả)</a></li>
-            <li><a href="{{route('user.commodity_policy.index')}}">Chính sách đặt sân</a></li>
-            <li><a href="{{route('user.payment_policy.index')}}">Chính sách thanh toán</a></li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.privacy_policy.index') : route('guest.privacy_policy.index') }}">
+                    Privacy Policy
+                </a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.cancellation_policy.index') : route('guest.cancellation_policy.index') }}">
+                    Cancellation Policy (Returns & Exchanges)
+                </a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.commodity_policy.index') : route('guest.commodity_policy.index') }}">
+                    Booking Policy
+                </a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.payment_policy.index') : route('guest.payment_policy.index') }}">
+                    Payment Policy
+                </a>
+            </li>
         </ul>
     </div>
 
     <div class="footer-section">
-        <h3>THÔNG TIN</h3>
+        <h3>INFORMATION</h3>
         <hr class="dividers"/>
         <p>Công ty TNHH 3 thành viên</p>
-        <p>MST: 1234567890</p>
-        <p>Email: namhuynhkhachoai@gmail.com</p>
-        <p>Địa chỉ: 184 Lê Đại Hành, Quận 11, TP HCM</p>
-        <p>Điện thoại: 0868.986.143</p>
+        <p>TIN: 1234567890</p>
+        <p>
+            Email:
+            <span style="cursor: pointer;" onclick="navigator.clipboard.writeText('namhuynhkhachoai@gmail.com')">namhuynhkhachoai@gmail.com</span>
+        </p>
+        <p>Address: 184 Lê Đại Hành, Quận 11, TP HCM</p>
+        <p>
+            Phone:
+            <span style="cursor: pointer;" onclick="navigator.clipboard.writeText('0868986143')">0868.986.143</span>
+        </p>
     </div>
 
     <div class="footer-section">
-        <h3>LIÊN HỆ</h3>
+        <h3>CONTACT</h3>
         <hr class="dividers" style="width: 40vh"/>
         <br><br>
         <a href="https://www.facebook.com/profile.php?id=61569828033426" target="_blank"><i class="fa-brands fa-facebook fa-2xl" style="color: #ffffff;"></i></a>
@@ -178,4 +210,20 @@
 <script src="{{asset('js/registerBoss.js?t='.config('constants.app_version'))}}"></script>
 
 <script src="{{ asset('js/user/profile/index.js?t='.config('constants.app_version') )}}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Khi trang bắt đầu tải, thêm lớp 'loading'
+        document.body.classList.add("loading");
+
+        // Khi trang đã tải xong, xóa lớp 'loading'
+        window.onload = function () {
+            document.body.classList.remove("loading");
+        };
+
+        // Khi người dùng rời khỏi trang (chuyển trang hoặc tải lại)
+        window.addEventListener("beforeunload", function () {
+            document.body.classList.add("loading");
+        });
+    });
+</script>
 

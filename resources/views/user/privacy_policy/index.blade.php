@@ -10,22 +10,26 @@
 <body>
 <header>
     <div class="top-section">
-        <a href="{{route('user.home.index')}}"><img src="{{asset('img/logotext.png')}}" alt="" style="width: 350px; height: 50px;"></a>
+        @if(Auth::check())
+            <a href="{{route('user.home.index')}}"><img src="{{asset('img/logotext.png')}}" alt="" style="width: 350px; height: 50px;"></a>
+        @else
+            <a href="{{route('guest.home.index')}}"><img src="{{asset('img/logotext.png')}}" alt="" style="width: 350px; height: 50px;"></a>
+        @endif
     </div>
     <hr class="divider" />
     <nav class="nav-menu">
         <ul>
             <li><a href="{{ Auth::check() ? route('user.home.index') : route('guest.home.index') }}"><i class="fas fa-home"></i></a></li>
             <li>
-                <a href="{{ Auth::check() ? route('user.yardlist.index') : route('guest.yardlist.index') }}">Danh sách sân</a>
+                <a href="{{ Auth::check() ? route('user.yardlist.index') : route('guest.yardlist.index') }}">Yard List</a>
             </li>
             <li>
-                <a href="{{ Auth::check() ? route('user.policy.index') : route('guest.policy.index') }}">Chính sách</a>
+                <a href="{{ Auth::check() ? route('user.policy.index') : route('guest.policy.index') }}">Policy</a>
             </li>
             <li>
-                <a href="{{ Auth::check() ? route('user.clause.index') : route('guest.clause.index') }}">Điều khoản</a>
+                <a href="{{ Auth::check() ? route('user.clause.index') : route('guest.clause.index') }}">Terms</a>
             </li>
-            <li><a href="#footer">Liên hệ</a></li>
+            <li><a href="#footer">Contact</a></li>
         </ul>
 
         <div class="auth-button">
@@ -35,7 +39,7 @@
                 </a>
             @else
                 <a href="{{ route('login') }}">
-                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> Đăng nhập/ Đăng ký</button>
+                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> Login/ Register</button>
                 </a>
             @endauth
         </div>
@@ -50,49 +54,49 @@
 
 <div class="policy-container">
     <div class="policy-header">
-        <h1>Chính sách bảo mật thông tin</h1>
+        <h1>Privacy Policy</h1>
     </div>
 
     <div class="policy-content">
-      <h2>Chính sách bảo mật thông tin</h2>
-        <p>Chính sách bảo mật này công bố cách thức mà chúng tôi thu thập, lưu trữ và xử lý thông tin hoặc dữ liệu cá nhân (“Thông tin cá nhân”) của các khách hàng của mình thông qua Website. Chúng tôi cam kết sẽ bảo mật các thông tin cá nhân của khách hàng, đồng thời sẽ nỗ lực hết sức và sử dụng các biện pháp thích hợp để các thông tin mà khách hàng cung cấp cho chúng tôi trong quá trình sử dụng Website được bảo mật và bảo vệ khỏi sự truy cập trái phép.</p>
-        <p>Tuy nhiên, chúng tôi không đảm bảo ngăn chặn được tất cả các truy cập trái phép. Trong trường hợp truy cập trái phép nằm ngoài khả năng kiểm soát của chúng tôi, công ty sẽ không chịu trách nhiệm dưới bất kỳ hình thức nào đối với bất kỳ khiếu nại, tranh chấp hoặc thiệt hại nào phát sinh từ hoặc liên quan đến truy cập trái phép đó.</p>
-        <p>Để hiểu rõ hơn về chính sách trong công tác thu thập, lưu trữ và sử dụng thông tin cá nhân của người sử dụng Website này, vui lòng đọc các chính sách bảo mật dưới đây:</p>
-        <h3>I. Mục đích và phạm vi thu thập thông tin cá nhân</h3>
-        <p>Để truy cập và sử dụng một số dịch vụ tại Website, bạn có thể sẽ được yêu cầu đăng ký với chúng tôi thông tin cá nhân (Email, Họ tên, Số ĐT liên lạc,…). Mọi thông tin khai báo phải đảm bảo tính chính xác và hợp pháp. Website của chúng tôi không chịu mọi trách nhiệm liên quan đến pháp luật của thông tin khai báo. Chúng tôi cũng có thể thu thập thông tin về số lần viếng thăm, bao gồm số trang bạn xem, số links (liên kết) bạn click và những thông tin khác liên quan đến việc kết nối đến Website của chúng tôi. Chúng tôi cũng thu thập các thông tin mà trình duyệt Website bạn sử dụng mỗi khi truy cập vào Website, bao gồm: địa chỉ IP, loại ngôn ngữ sử dụng, thời gian và những địa chỉ mà truy xuất đến</p>
-        <h3>II. Phạm vi sử dụng thông tin</h3>
-        <p>Các thông tin thu thập thông qua Website PlayOnPitch.com sẽ giúp chúng tôi:</p>
+        <h2>Privacy Policy</h2>
+        <p>This privacy policy discloses how we collect, store, and process personal information or data (“Personal Information”) of our customers through the Website. We are committed to protecting customers' personal information and will make every effort to use appropriate measures to ensure the information provided by customers during the use of the Website is kept secure and protected from unauthorized access.</p>
+        <p>However, we cannot guarantee the prevention of all unauthorized access. In cases of unauthorized access beyond our control, the company will not bear any responsibility for any claims, disputes, or damages arising from or related to such unauthorized access.</p>
+        <p>To better understand the policies regarding the collection, storage, and use of personal information from users of this Website, please read the following privacy policies:</p>
+        <h3>I. Purpose and Scope of Personal Information Collection</h3>
+        <p>To access and use certain services on the Website, you may be required to register personal information with us (Email, Full Name, Contact Phone Number, etc.). All declared information must be accurate and lawful. Our Website is not responsible for any legal issues related to the declared information. We may also collect information about the number of visits, including the number of pages you view, the number of links you click, and other information related to your connection to our Website. We also collect information that your browser uses every time you visit the Website, including IP address, language used, access time, and addresses accessed.</p>
+        <h3>II. Scope of Information Use</h3>
+        <p>The information collected through <a href="https://www.PlayOnPitch.online">PlayOnPitch.online</a> will help us:</p>
         <ul>
-            <li>Hỗ trợ khách hàng khi sử dụng dịch vụ đặt sân</li>
-            <li>Giải đáp thắc mắc khách hàng</li>
-            <li>Thực hiện các bản khảo sát khách hàng</li>
-            <li>Thực hiện các hoạt động quảng bá liên quan đến các sản phẩm và dịch vụ của Website PlayOnPitch.com</li>
+            <li>Support customers when using the field booking service</li>
+            <li>Answer customer inquiries</li>
+            <li>Conduct customer surveys</li>
+            <li>Carry out promotional activities related to the products and services of <a href="https://www.PlayOnPitch.online">PlayOnPitch.online</a></li>
         </ul>
-        <p>Khách hàng cần đề nghị hỗ trợ hoặc có thắc mắc cần giải đáp muốn chuyển thông tin đến chúng tôi thông qua Website PlayOnPitch.com, quý khách có thể sẽ được yêu cầu đăng ký với chúng tôi thông tin cá nhân (Email, Họ tên, Số ĐT liên lạc…). Mọi thông tin khai báo phải đảm bảo tính chính xác và hợp pháp. Website PlayOnPitch.com không chịu mọi trách nhiệm liên quan đến pháp luật của thông tin khai báo.</p>
-        <p>Khi cần thiết, chúng tôi có thể sử dụng những thông tin này để liên hệ trực tiếp với bạn dưới các hình thức như: gởi thư ngỏ, đơn đặt hàng, thư cảm ơn, thông tin về kỹ thuật và bảo mật, …..</p>
-        <p>Chúng tôi cam kết về việc sử dụng thông tin cá nhân của Khách hàng đúng với các mục đích và phạm vi đã thông báo. Trong trường hợp có bất kỳ phạm vi sử dụng phát sinh ngoài mục đích và thông báo, chúng tôi sẽ gửi thông báo cho Khách hàng và chỉ sử dụng khi có sự đồng ý của Khách hàng.</p>
-        <h3>III. Thời gian lữu trữ thông tin</h3>
-        <p>Chúng tôi sẽ lưu trữ các thông tin cá nhân do khách hàng cung cấp trên các hệ thống nội bộ của chúng tôi trong quá trình cung cấp dịch vụ cho khách hàng hoặc cho đến khi hoàn thành mục đích thu thập hoặc khi khách hàng có yêu cầu hủy các thông tin đã cung cấp.</p>
-        <h3>IV. Những người hoặc tổ chức có thể được tiếp cận với thông tin</h3>
-        <p>Khách hàng đồng ý rằng: trong trường hợp cần thiết, các cơ quan/tổ chức/cá nhân sau có quyền được tiếp cận và thu thập các thông tin của mình, bao gồm:</p>
+        <p>Customers who request support or have inquiries and wish to provide information to us through <a href="https://www.PlayOnPitch.online">PlayOnPitch.online</a> may be required to register their personal information with us (Email, Full Name, Contact Phone Number, etc.). All declared information must be accurate and lawful. <a href="https://www.PlayOnPitch.online">PlayOnPitch.online</a> is not responsible for any legal issues related to the declared information.</p>
+        <p>When necessary, we may use this information to contact you directly through various forms such as sending open letters, order confirmations, thank-you letters, technical and security information, etc.</p>
+        <p>We commit to using customers' personal information strictly within the purposes and scope announced. In case of any usage outside of the disclosed purposes and scope, we will notify the customer and only use the information with the customer's consent.</p>
+        <h3>III. Information Retention Period</h3>
+        <p>We will store the personal information provided by customers in our internal systems during the service provision period or until the purpose of collection is completed or when customers request to delete the provided information.</p>
+        <h3>IV. Entities or Organizations That May Access the Information</h3>
+        <p>Customers agree that the following entities/organizations/individuals may access and collect their information when necessary:</p>
         <ul>
-            <li>Ban Quản Trị</li>
-            <li>Cơ quan nhà nước có thẩm quyền</li>
-            <li>Bên khiếu nại chứng minh được hành vi vi phạm của Khách hàng (nếu có)</li>
+            <li>Management Board</li>
+            <li>Competent state authorities</li>
+            <li>Complainants proving violations by the customer (if any)</li>
         </ul>
-        <h3>V. Địa chỉ của đơn vị thu thập và quản lý thông tin cá nhân</h3>
-        <p>CÔNG TY TNHH 3 thành viên</p>
-        <p>Địa chỉ: 184 Lê Đại Hành, Phường 17, Quận 11, TP HCM</p>
+        <h3>V. Address of the Unit Collecting and Managing Personal Information</h3>
+        <p>COMPANY LIMITED by 3 Members</p>
+        <p>Address: 184 Le Dai Hanh, Ward 17, District 11, Ho Chi Minh City</p>
         <p>✆Hotline: 0868 988 143</p>
         <p>✉Email: namhuynhkhachoai@gmail.com</p>
-        <h3>VI. Cam kết bảo mật thông tin cá nhân khách hàng</h3>
-        <p>Chúng tôi cam kết bảo mật thông tin cá nhân của bạn bằng mọi cách thức có thể. Chúng tôi sẽ sử dụng nhiều công nghệ bảo mật thông tin khác nhau nhằm bảo vệ thông tin này không bị truy lục, sử dụng hoặc tiết lộ ngoài ý muốn. Chúng tôi khuyến cáo bạn nên bảo mật các thông tin liên quan đến mật khẩu truy xuất của bạn và không nên chia sẻ với bất kỳ người nào khác. Nếu sử dụng máy tính chung nhiều người, bạn nên đăng xuất, hoặc thoát hết tất cả cửa sổ Website đang mở.</p>
-        <h3>VII. Cơ chế tiếp nhận và giải quyết khiếu nại liên quan đến thông tin cá nhân</h3>
-        <p>Khách hàng có quyền gửi khiếu nại về việc lộ thông tin cá nhân cho bên thứ 3 đến ban quản trị của Website PlayOnPitch.com, đến địa chỉ công ty hoặc qua Email: namhuynhkhachoai@gmail.com</p>
-        <p>Công ty có trách nhiệm thực hiện các biện pháp kỹ thuật, nghiệp vụ để xác minh các nội dung được phản ánh.</p>
-        <p>Thời gian xử lý phản ánh liên quan đến thông tin cá nhân là 7 ngày.</p>
-        <h3>VII. Thông tin liên hệ</h3>
-        <p>Chúng tôi luôn hoan nghênh các ý kiến đóng góp, liên hệ và phản hồi thông tin từ bạn về “Chính sách bảo mật” này. Nếu bạn có những thắc mắc liên quan xin vui lòng liên hệ theo Điện thoại: 0868 988 143, Email: namhuynhkhachoai@gmail.com</p>
+        <h3>VI. Commitment to Protect Customers' Personal Information</h3>
+        <p>We are committed to protecting your personal information by all possible means. We will use various information security technologies to protect this information from being retrieved, used, or disclosed unintentionally. We recommend that you protect all information related to your access password and do not share it with anyone. If using a shared computer, you should log out or close all open Website windows.</p>
+        <h3>VII. Mechanism for Receiving and Resolving Complaints Related to Personal Information</h3>
+        <p>Customers have the right to file complaints about personal information being disclosed to third parties to the management board of <a href="https://www.PlayOnPitch.online">PlayOnPitch.online</a>, to the company's address, or via Email: namhuynhkhachoai@gmail.com.</p>
+        <p>The company is responsible for implementing technical and professional measures to verify the reflected content.</p>
+        <p>The time to process complaints related to personal information is 7 days.</p>
+        <h3>VII. Contact Information</h3>
+        <p>We always welcome feedback, contact, and responses regarding this “Privacy Policy.” If you have any questions, please contact us by Phone: 0868 988 143, Email: namhuynhkhachoai@gmail.com</p>
     </div>
 </div>
 <div>
@@ -100,11 +104,11 @@
         @csrf
         <section class="registration">
             <div class="form">
-                <h2 style="margin-right: 250px">Bạn muốn đăng ký sử dụng website quản lý sân bóng MIỄN PHÍ?</h2>
-                <input type="text" placeholder="Nhập họ và tên" name="name">
-                <input type="text" placeholder="Nhập số điện thoại" name="phone">
-                <input type="text" placeholder="Nhập email" name="email">
-                <button type="submit">Gửi</button>
+                <h2 style="margin-right: 250px">Do you want to register to use the FREE football yard management website?</h2>
+                <input type="text" placeholder="Enter full name" name="name">
+                <input type="text" placeholder="Enter phone number" name="phone">
+                <input type="text" placeholder="Enter email" name="email">
+                <button type="submit">Submit</button>
             </div>
         </section>
     </form>
@@ -112,45 +116,51 @@
 
 <footer id="footer">
     <div class="footer-section">
-        <h3>GIỚI THIỆU</h3>
+        <h3>ABOUT US</h3>
         <hr class="dividers" />
-        <p>Công ty Play On Pitch cung cấp nền tảng quản lý sân bóng hiệu quả.</p>
+        <p>Play On Pitch provides an efficient platform for football yard management.</p>
         <ul>
             <li>
                 <a href="{{ Auth::check() ? route('user.privacy_policy.index') : route('guest.privacy_policy.index') }}">
-                    Chính sách bảo mật
+                    Privacy Policy
                 </a>
             </li>
             <li>
                 <a href="{{ Auth::check() ? route('user.cancellation_policy.index') : route('guest.cancellation_policy.index') }}">
-                    Chính sách hủy (đổi trả)
+                    Cancellation Policy (Returns & Exchanges)
                 </a>
             </li>
             <li>
                 <a href="{{ Auth::check() ? route('user.commodity_policy.index') : route('guest.commodity_policy.index') }}">
-                    Chính sách đặt sân
+                    Booking Policy
                 </a>
             </li>
             <li>
                 <a href="{{ Auth::check() ? route('user.payment_policy.index') : route('guest.payment_policy.index') }}">
-                    Chính sách thanh toán
+                    Payment Policy
                 </a>
             </li>
         </ul>
     </div>
 
     <div class="footer-section">
-        <h3>THÔNG TIN</h3>
+        <h3>INFORMATION</h3>
         <hr class="dividers"/>
         <p>Công ty TNHH 3 thành viên</p>
-        <p>MST: 1234567890</p>
-        <p>Email: namhuynhkhachoai@gmail.com</p>
-        <p>Địa chỉ: 184 Lê Đại Hành, Quận 11, TP HCM</p>
-        <p>Điện thoại: 0868.986.143</p>
+        <p>TIN: 1234567890</p>
+        <p>
+            Email:
+            <span style="cursor: pointer;" onclick="navigator.clipboard.writeText('namhuynhkhachoai@gmail.com')">namhuynhkhachoai@gmail.com</span>
+        </p>
+        <p>Address: 184 Lê Đại Hành, Quận 11, TP HCM</p>
+        <p>
+            Phone:
+            <span style="cursor: pointer;" onclick="navigator.clipboard.writeText('0868986143')">0868.986.143</span>
+        </p>
     </div>
 
     <div class="footer-section">
-        <h3>LIÊN HỆ</h3>
+        <h3>CONTACT</h3>
         <hr class="dividers" style="width: 40vh"/>
         <br><br>
         <a href="https://www.facebook.com/profile.php?id=61569828033426" target="_blank"><i class="fa-brands fa-facebook fa-2xl" style="color: #ffffff;"></i></a>
@@ -167,5 +177,21 @@
 <script src="{{asset('assets/libraries/toastr/toastr.min.js' ) }}"></script>
 <script src="{{asset('js/notification.js')}}"></script>
 <script src="{{asset('js/registerBoss.js?t='.config('constants.app_version'))}}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Khi trang bắt đầu tải, thêm lớp 'loading'
+        document.body.classList.add("loading");
+
+        // Khi trang đã tải xong, xóa lớp 'loading'
+        window.onload = function () {
+            document.body.classList.remove("loading");
+        };
+
+        // Khi người dùng rời khỏi trang (chuyển trang hoặc tải lại)
+        window.addEventListener("beforeunload", function () {
+            document.body.classList.add("loading");
+        });
+    });
+</script>
 
 

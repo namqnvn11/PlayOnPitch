@@ -12,8 +12,16 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $District = District::all();
-        $Province = Province::all();
+        $District = District::all()->sortBy('name');
+        $prioritizedProvinces = [' Hà Nội', ' Hồ Chí Minh', ' Đà Nẵng', ' Hải Phòng', ' Cần Thơ'];
+        $prioritized = Province::whereIn('name', $prioritizedProvinces)
+            ->orderByRaw("FIELD(name, '" . implode("','", $prioritizedProvinces) . "')")
+            ->get();
+
+        $otherProvinces = Province::whereNotIn('name', $prioritizedProvinces)
+            ->orderBy('name', 'asc')
+            ->get();
+        $Province = $prioritized->merge($otherProvinces);
         return view('user.home.index', compact( 'District', 'Province'));
     }
 
