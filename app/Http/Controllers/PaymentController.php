@@ -345,5 +345,4 @@ class PaymentController extends Controller
         session()->forget('voucherId');
         Cookie::queue(Cookie::forget('reservation'));
     }
-
 }

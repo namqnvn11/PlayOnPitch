@@ -6,10 +6,8 @@ function paymentTypeChange(event){
     let discount= document.getElementById('discount').innerText;
     let downPaymentElement= document.getElementById('downPaymentDiv');
     let dowPaymentInput= document.getElementById('downPayment');
-    let selectVoucher= document.getElementById('selectVoucher')??null;
-    if (selectVoucher){
-        const defaultOption = selectVoucher.querySelector('option[value="0"]');
-    }
+    let selectVoucher= document.getElementById('selectVoucher');
+    let defaultOption = selectVoucher.querySelector('option[value="0"]');
 
 
     //trả full
@@ -22,7 +20,7 @@ function paymentTypeChange(event){
         }
         dowPaymentInput.value=0;
         downPaymentElement.innerText=0;
-        totalElement.innerText=numberFormat(subTotalElement.innerText-discount);
+        totalElement.innerText=numberFormat(convertStringToNumber(subTotalElement.innerText)-discount);
     }else {
         // trả 20%
         if (selectVoucher){
@@ -133,7 +131,7 @@ function convertStringToNumber(input) {
 
     // Kiểm tra kết quả và trả về
     if (isNaN(result)) {
-        throw new Error("Input không hợp lệ, không thể chuyển đổi thành số.");
+      console.log('convert string to number error')
     }
     return result;
 }

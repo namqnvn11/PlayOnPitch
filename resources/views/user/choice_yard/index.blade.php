@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8">
@@ -20,15 +20,15 @@
         <ul>
             <li><a href="{{ Auth::check() ? route('user.home.index') : route('guest.home.index') }}"><i class="fas fa-home"></i></a></li>
             <li>
-                <a href="{{ Auth::check() ? route('user.yardlist.index') : route('guest.yardlist.index') }}">Danh sách sân</a>
+                <a href="{{ Auth::check() ? route('user.yardlist.index') : route('guest.yardlist.index') }}">Yard List</a>
             </li>
             <li>
-                <a href="{{ Auth::check() ? route('user.policy.index') : route('guest.policy.index') }}">Chính sách</a>
+                <a href="{{ Auth::check() ? route('user.policy.index') : route('guest.policy.index') }}">Policy</a>
             </li>
             <li>
-                <a href="{{ Auth::check() ? route('user.clause.index') : route('guest.clause.index') }}">Điều khoản</a>
+                <a href="{{ Auth::check() ? route('user.clause.index') : route('guest.clause.index') }}">Terms</a>
             </li>
-            <li><a href="#footer">Liên hệ</a></li>
+            <li><a href="#footer">Contact</a></li>
         </ul>
 
         <div class="auth-button">
@@ -38,7 +38,7 @@
                 </a>
             @else
                 <a href="{{ route('login') }}">
-                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> Đăng nhập/ Đăng ký</button>
+                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> Log In/ Register</button>
                 </a>
             @endauth
         </div>
@@ -51,102 +51,100 @@
     </div>
 </a>
 
-    <div class="booking-container">
-        <div class="step-indicator">
-            <div class="step active">
-                <i class="fa fa-th-large"></i>
-                <span>Chọn sân</span>
-            </div>
-            <span class="arrow">></span>
-            <div class="step">
-                <i class="fa fa-credit-card"></i>
-                <span>Thanh toán</span>
-            </div>
-            <span class="arrow">></span>
-            <div class="step">
-                <i class="fa fa-ticket-alt"></i>
-                <span>Thông tin đặt sân</span>
-            </div>
+<div class="booking-container">
+    <div class="step-indicator">
+        <div class="step active">
+            <i class="fa fa-th-large"></i>
+            <span>Choose Yard</span>
         </div>
+        <span class="arrow">></span>
+        <div class="step">
+            <i class="fa fa-credit-card"></i>
+            <span>Payment</span>
+        </div>
+        <span class="arrow">></span>
+        <div class="step">
+            <i class="fa fa-ticket-alt"></i>
+            <span>Booking Info</span>
+        </div>
+    </div>
 
-        <div class="time-selector flex items-center mt-3">
-            <form method="get" id="selectedTime">
-                @php
-                    $selectedDate=$selectTime??now();
-                    $selectedDate= \Carbon\Carbon::parse($selectedDate)->toDateString();
-                 @endphp
-                <select id="dateSelector" name="selectTime" onchange="ChangeSelectTime(this)" class="px-4 rounded w-[120px]">
-                    @foreach ($dates as $date)
-                        <option value="{{ $date }}" {{ $date == $selectedDate ? 'selected' : '' }}>
-                            {{ \Carbon\Carbon::parse($date)->translatedFormat('D d/m') }}
-                        </option>
-                    @endforeach
-                </select>
-            </form>
-            <div class="flex ml-4">
-                <div class="flex mx-2 items-end">
-                    <div>Sân trống</div>
-                    <div class="mx-2 w-[50px] h-[30px] bg-white border-[1px] border-black"></div>
-                </div>
-                <div class="flex mx-2 items-end">
-                    <div>Đã đặt</div>
-                    <div class="w-[50px] h-[30px] bg-red-400 border-[1px] border-black mx-2"></div>
-                </div>
+    <div class="time-selector flex items-center mt-3">
+        <form method="get" id="selectedTime">
+            @php
+                $selectedDate=$selectTime??now();
+                $selectedDate= \Carbon\Carbon::parse($selectedDate)->toDateString();
+            @endphp
+            <select id="dateSelector" name="selectTime" onchange="ChangeSelectTime(this)" class="px-4 rounded w-[120px]">
+                @foreach ($dates as $date)
+                    <option value="{{ $date }}" {{ $date == $selectedDate ? 'selected' : '' }}>
+                        {{ \Carbon\Carbon::parse($date)->translatedFormat('D d/m') }}
+                    </option>
+                @endforeach
+            </select>
+        </form>
+        <div class="flex ml-4">
+            <div class="flex mx-2 items-end">
+                <div>Available</div>
+                <div class="mx-2 w-[50px] h-[30px] bg-white border-[1px] border-black"></div>
+            </div>
+            <div class="flex mx-2 items-end">
+                <div>Booked</div>
+                <div class="w-[50px] h-[30px] bg-red-400 border-[1px] border-black mx-2"></div>
             </div>
         </div>
-        @php
-         $name= Auth::check()?'user':'guest';
-         $makeReservationLink= route($name.'.choice_yard.makeReservation');
-        @endphp
-        <form id="bookingForm" action="{{$makeReservationLink}}" method="POST" onsubmit="preparePayment(event)">
-            @csrf
+    </div>
+    @php
+        $name= Auth::check()?'user':'guest';
+        $makeReservationLink= route($name.'.choice_yard.makeReservation');
+    @endphp
+    <form id="bookingForm" action="{{$makeReservationLink}}" method="POST" onsubmit="preparePayment(event)">
+        @csrf
         <div class="booking-content">
             <div class="booking-table">
                 @if(count($timeSlots)==0)
-                    <div>sân chưa có lịch</div>
+                    <div>No schedule available for this yard.</div>
                 @else
-                <table class="booking-table1">
-                    <thead>
-                    <tr>
-                        <th></th>
-                        @foreach ($timeSlots as $slot)
-                            <th class="">{{ $slot->time_slot }}</th>
-                        @endforeach
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @php
-                        $currentDateTime = \Carbon\Carbon::now()->addMinutes(30);
-                    @endphp
-
-                    @foreach($yards as $yard)
+                    <table class="booking-table1">
+                        <thead>
                         <tr>
-                            <td class="sticky left-0">{{ $yard->yard_name }}</td>
-                            @foreach($yard->YardSchedules as $time)
-                                @php
-                                    $timeSlotParts = explode('-', $time->time_slot);
-                                    $startTime = $timeSlotParts[0];
-
-                                    // Tạo đối tượng Carbon từ date và time_slot
-                                    $scheduleDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $time->date . ' ' . $startTime);
-                                    $isPast = $scheduleDateTime->lessThan($currentDateTime);
-                                    $isUnavailable = $time->status !== 'available';
-                                @endphp
-
-                                <td
-                                    class="{{ $isPast || $isUnavailable ? 'bg-red-400' : 'selectable' }}"
-                                    scheduleId="{{ $time->id }}"
-                                    timeSlot="{{ $time->time_slot }}"
-                                    price="{{ $time->price_per_hour }}"
-                                    date="{{ $time->date }}"
-                                    yard="{{ $yard->yard_name }}"
-                                >
-                                </td>
+                            <th></th>
+                            @foreach ($timeSlots as $slot)
+                                <th class="">{{ $slot->time_slot }}</th>
                             @endforeach
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        @php
+                            $currentDateTime = \Carbon\Carbon::now()->addMinutes(30);
+                        @endphp
+
+                        @foreach($yards as $yard)
+                            <tr>
+                                <td class="sticky left-0">{{ $yard->yard_name }}</td>
+                                @foreach($yard->YardSchedules as $time)
+                                    @php
+                                        $timeSlotParts = explode('-', $time->time_slot);
+                                        $startTime = $timeSlotParts[0];
+                                        $scheduleDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $time->date . ' ' . $startTime);
+                                        $isPast = $scheduleDateTime->lessThan($currentDateTime);
+                                        $isUnavailable = $time->status !== 'available';
+                                    @endphp
+
+                                    <td
+                                        class="{{ $isPast || $isUnavailable ? 'bg-red-400' : 'selectable' }}"
+                                        scheduleId="{{ $time->id }}"
+                                        timeSlot="{{ $time->time_slot }}"
+                                        price="{{ $time->price_per_hour }}"
+                                        date="{{ $time->date }}"
+                                        yard="{{ $yard->yard_name }}"
+                                    >
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
                 @endif
             </div>
             <div class="booking-info pt-2">
@@ -155,28 +153,26 @@
                 <p id="selectedDate"></p>
                 <p id="selected-yard"></p>
                 <p id="selected-timeslot"></p>
-                <div id="scheduleListContainer">
-{{--                    chứa danh sách id của lịch sân đã chọn--}}
-                </div>
+                <div id="scheduleListContainer"></div>
                 @if(Auth::check())
-                <input type="hidden" name="boss_id" value="{{$boss->id}}">
-                <input type="hidden" name="user_id" value="{{Auth::user()->id??null}}">
-                <input type="text" placeholder="Họ và tên" value="{{Auth::user()->full_name}}" name="userName" id="userName" oninput="clearError()">
-                <input type="text" placeholder="Số điện thoại" value="{{Auth::user()->phone}}" name="phone" id="userPhone" oninput="clearError()">
+                    <input type="hidden" name="boss_id" value="{{$boss->id}}">
+                    <input type="hidden" name="user_id" value="{{Auth::user()->id??null}}">
+                    <input type="text" placeholder="Full Name" value="{{Auth::user()->full_name}}" name="userName" id="userName" oninput="clearError()">
+                    <input type="text" placeholder="Phone Number" value="{{Auth::user()->phone}}" name="phone" id="userPhone" oninput="clearError()">
                 @else
                     <input type="hidden" name="boss_id" value="{{$boss->id}}">
                     <input type="hidden" name="user_id">
-                    <input type="text" placeholder="Họ và tên" name="userName" id="userName" oninput="clearError()">
-                    <input type="text" placeholder="Số điện thoại" name="phone" id="userPhone" oninput="clearError()">
+                    <input type="text" placeholder="Full Name" name="userName" id="userName" oninput="clearError()">
+                    <input type="text" placeholder="Phone Number" name="phone" id="userPhone" oninput="clearError()">
                 @endif
-                <div class="text-[16px] my-2">Tổng tiền: <strong id="totalPrice">0 đ</strong></div>
+                <div class="text-[16px] my-2">Total: <strong id="totalPrice">0 </strong> <span>VND</span></div>
                 <input type="hidden" name="total_price" id="totalPrice-hidden" value="0">
                 <span class="text-red-700" id="errorText"></span>
-                <button type="submit" class="mt-3">Tiếp tục</button>
+                <button type="submit" class="mt-3">Continue</button>
             </div>
         </div>
-        </form>
-    </div>
+    </form>
+</div>
 
 
 <div>
@@ -184,11 +180,11 @@
         @csrf
         <section class="registration">
             <div class="form">
-                <h2 style="margin-right: 250px">Bạn muốn đăng ký sử dụng website quản lý sân bóng MIỄN PHÍ?</h2>
-                <input type="text" placeholder="Nhập họ và tên" name="name">
-                <input type="text" placeholder="Nhập số điện thoại" name="phone">
-                <input type="text" placeholder="Nhập email" name="email">
-                <button type="submit">Gửi</button>
+                <h2 style="margin-right: 250px">Do you want to register to use the soccer field management website for FREE?</h2>
+                <input type="text" placeholder="Full Name" name="name">
+                <input type="text" placeholder="Phone Number" name="phone">
+                <input type="text" placeholder="Your Email" name="email">
+                <button type="submit">Send</button>
             </div>
         </section>
     </form>
@@ -196,50 +192,54 @@
 
 <footer id="footer">
     <div class="footer-section">
-        <h3>GIỚI THIỆU</h3>
+        <h3>ABOUT US</h3>
         <hr class="dividers" />
-        <p>Công ty Play On Pitch cung cấp nền tảng quản lý sân bóng hiệu quả.</p>
+        <p>Play On Pitch provides an efficient soccer field management platform.</p>
         <ul>
             <li>
                 <a href="{{ Auth::check() ? route('user.privacy_policy.index') : route('guest.privacy_policy.index') }}">
-                    Chính sách bảo mật
+                    Privacy Policy
                 </a>
             </li>
             <li>
                 <a href="{{ Auth::check() ? route('user.cancellation_policy.index') : route('guest.cancellation_policy.index') }}">
-                    Chính sách hủy (đổi trả)
+                    Cancellation Policy
                 </a>
             </li>
             <li>
                 <a href="{{ Auth::check() ? route('user.commodity_policy.index') : route('guest.commodity_policy.index') }}">
-                    Chính sách đặt sân
+                    Booking Policy
                 </a>
             </li>
             <li>
                 <a href="{{ Auth::check() ? route('user.payment_policy.index') : route('guest.payment_policy.index') }}">
-                    Chính sách thanh toán
+                    Payment Policy
                 </a>
             </li>
         </ul>
     </div>
 
     <div class="footer-section">
-        <h3>THÔNG TIN</h3>
-        <hr class="dividers"/>
-        <p>Công ty TNHH 3 thành viên</p>
-        <p>MST: 1234567890</p>
+        <h3>INFORMATION</h3>
+        <hr class="dividers" />
+        <p>Three-Member Limited Liability Company</p>
+        <p>Tax Code: 1234567890</p>
         <p>Email: namhuynhkhachoai@gmail.com</p>
-        <p>Địa chỉ: 184 Lê Đại Hành, Quận 11, TP HCM</p>
-        <p>Điện thoại: 0868.986.143</p>
+        <p>Address: 184 Le Dai Hanh, District 11, Ho Chi Minh City</p>
+        <p>Phone: 0868.986.143</p>
     </div>
 
     <div class="footer-section">
-        <h3>LIÊN HỆ</h3>
-        <hr class="dividers" style="width: 40vh"/>
+        <h3>CONTACT US</h3>
+        <hr class="dividers" style="width: 40vh" />
         <br><br>
-        <a href="https://www.facebook.com/profile.php?id=61569828033426" target="_blank"><i class="fa-brands fa-facebook fa-2xl" style="color: #ffffff;"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=61569828033426" target="_blank">
+            <i class="fa-brands fa-facebook fa-2xl" style="color: #ffffff;"></i>
+        </a>
         &nbsp;&nbsp;
-        <a href="https://www.tiktok.com/@playonpitch.sg" target="_blank"><i class="fa-brands fa-tiktok fa-2xl" style="color: #000000;"></i></a>
+        <a href="https://www.tiktok.com/@playonpitch.sg" target="_blank">
+            <i class="fa-brands fa-tiktok fa-2xl" style="color: #000000;"></i>
+        </a>
     </div>
 </footer>
 </body>
@@ -247,11 +247,11 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     const STORE_URL = "{{ route('user.storeRegister') }}";
-    const CHOICE_YARD_INDEX_URL="{{route('user.choice_yard.index',$boss->id)}}";
+    const CHOICE_YARD_INDEX_URL = "{{ route('user.choice_yard.index', $boss->id) }}";
 </script>
 
-<script src="{{asset('assets/libraries/toastr/toastr.min.js' ) }}"></script>
-<script src="{{asset('js/notification.js')}}"></script>
-<script src="{{asset('js/registerBoss.js?t='.config('constants.app_version'))}}"></script>
+<script src="{{ asset('assets/libraries/toastr/toastr.min.js') }}"></script>
+<script src="{{ asset('js/notification.js') }}"></script>
+<script src="{{ asset('js/registerBoss.js?t=' . config('constants.app_version')) }}"></script>
+<script src="{{ asset('js/user/choice_yard/index.js?t=' . config('constants.app_version')) }}"></script>
 
-<script src="{{ asset('js/user/choice_yard/index.js?t='.config('constants.app_version') )}}"></script>

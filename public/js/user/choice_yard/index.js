@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const scheduleListContainer = document.getElementById('scheduleListContainer');
     let selectedCells = []; // Lưu trữ các ô được chọn
 
-    // Cập nhật giao diện và dữ liệu dựa trên các ô được chọn
     function updateSelection() {
         scheduleListContainer.innerHTML = '';
         let total = 0;
@@ -38,10 +37,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // Cập nhật giao diện
-        totalPrice.innerText = total.toLocaleString() + ' đ';
+        totalPrice.innerText = total.toLocaleString();
         selectedTimeSlots.innerText = timeSlots.join(', ');
-        selectedDate.innerText = 'Ngày: ' + Array.from(dates).join(', ');
-        selectedYard.innerText = 'Sân: ' + Array.from(yards).join(', ');
+        selectedDate.innerText = 'Day: ' + Array.from(dates).join(', ');
+        selectedYard.innerText = 'Yards: ' + Array.from(yards).join(', ');
         totalPriceHidden.value = total;
     }
 
@@ -88,17 +87,17 @@ function preparePayment(event){
 
     // Kiểm tra nếu input rỗng
     if (!userName || !phone) {
-        errorElement.innerText='Vui lòng nhập đầy đủ thông tin liên hệ';
+        errorElement.innerText='Please enter full contact information';
         return;
     }
     if (totalPrice==='0'){
-        errorElement.innerText='Vui lòng thời gian muốn đặt sân';
+        errorElement.innerText='Please take the time to reserve';
         return;
     }
     // Nếu muốn kiểm tra thêm điều kiện khác (vd: số điện thoại hợp lệ)
     const phoneRegex = /^[0-9]{10}$/; // Ví dụ: số điện thoại có 10 chữ số
     if (!phoneRegex.test(phone)) {
-        errorElement.innerText='Vui lòng nhập số điện thoại hợp lệ';
+        errorElement.innerText='Please enter a valid phone number';
         return;
     }
 

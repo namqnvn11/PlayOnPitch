@@ -20,15 +20,15 @@
         <ul>
             <li><a href="{{ Auth::check() ? route('user.home.index') : route('guest.home.index') }}"><i class="fas fa-home"></i></a></li>
             <li>
-                <a href="{{ Auth::check() ? route('user.yardlist.index') : route('guest.yardlist.index') }}">Danh sách sân</a>
+                <a href="{{ Auth::check() ? route('user.yardlist.index') : route('guest.yardlist.index') }}">Yard List</a>
             </li>
             <li>
-                <a href="{{ Auth::check() ? route('user.policy.index') : route('guest.policy.index') }}">Chính sách</a>
+                <a href="{{ Auth::check() ? route('user.policy.index') : route('guest.policy.index') }}">Policy</a>
             </li>
             <li>
-                <a href="{{ Auth::check() ? route('user.clause.index') : route('guest.clause.index') }}">Điều khoản</a>
+                <a href="{{ Auth::check() ? route('user.clause.index') : route('guest.clause.index') }}">Terms</a>
             </li>
-            <li><a href="#footer">Liên hệ</a></li>
+            <li><a href="#footer">Contact</a></li>
         </ul>
 
         <div class="auth-button">
@@ -38,7 +38,7 @@
                 </a>
             @else
                 <a href="{{ route('login') }}">
-                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> Đăng nhập/ Đăng ký</button>
+                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> Login/ Register</button>
                 </a>
             @endauth
         </div>
@@ -55,28 +55,28 @@
     <div class="steps">
         <div class="step">
             <i class="fa fa-th-large"></i>
-            <span>Chọn sân</span>
+            <span>Choose Yard</span>
         </div>
         <div class="arrow">></div>
         <div class="step">
             <i class="fa fa-credit-card"></i>
-            <span>Thanh toán</span>
+            <span>Payment</span>
         </div>
         <div class="arrow">></div>
         <div class="step active">
             <i class="fa fa-ticket-alt"></i>
-            <span>Thông tin đặt sân</span>
+            <span>Booking Info</span>
         </div>
     </div>
 
     <div class="invoice">
-        <h2>Hóa đơn</h2>
+        <h2>Invoice</h2>
         <hr>
         <div class="invoice-info">
-            <p><strong>Sân:</strong> <span>{{ $boss->company_name }}</span></p>
-            <p><strong>Địa chỉ:</strong> <span>{{ $boss->company_address }}, {{$boss->District->name}}, {{$boss->District->Province->name}}</span></p>
+            <div class="mt-2 text-[24px] w-[500px]"><strong>{{ $boss->company_name }}</strong></div>
+            <p><strong>Address:</strong> <span>{{ $boss->company_address }}, {{$boss->District->name}}, {{$boss->District->Province->name}}</span></p>
             <div class="flex justify-between">
-                <div class="font-bold">Vị trí:</div>
+                <div class="font-bold">Yards:</div>
                 <div class="w-[64%]">
                     @foreach($groupedSchedules as $aYardSchedule)
                         <div class="mb-1">
@@ -88,25 +88,25 @@
                     @endforeach
                 </div>
             </div>
-            <p><strong>Thanh toán lúc:</strong> <span>{{ $invoice->created_at }}</span></p>
-            <p><strong>Trạng thái:</strong> <span>Đã thanh toán bằng {{$invoice->payment_method}}</span></p>
+            <p><strong>Payment at</strong> <span>{{ $invoice->created_at }}</span></p>
+            <p><strong>Status:</strong> <span>Paid via {{$invoice->payment_method}}</span></p>
         </div>
         <hr>
         <div class="customer-info">
-            <p><strong>Người đặt:</strong> <span>{{ $reservation->Contact->name??''}}</span></p>
-            <p><strong>Số điện thoại:</strong> <span>{{ $reservation->Contact->phone??'' }}</span></p>
-            <p><strong>Email:</strong> <span>{{ $reservation->user->email??'trống' }}</span></p>
+            <p><strong>Customer:</strong> <span>{{ $reservation->Contact->name??''}}</span></p>
+            <p><strong>Phone Number:</strong> <span>{{ $reservation->Contact->phone??'' }}</span></p>
+            <p><strong>Email:</strong> <span>{{ $reservation->user->email??'Not provide' }}</span></p>
         </div>
         <hr>
         <div class="total-info">
-            <p><strong>Tổng tiền:</strong> <span>{{ number_format($reservation->total_price, 0, ',', '.') }}</span></p>
+            <p><strong>Total:</strong> <span>{{ number_format($reservation->total_price, 0, ',') }} VND</span></p>
 
-                <p><strong>Loại thanh toán:</strong> <span>{{$reservation->deposit_amount!=0?'Đặt cọc 20%':'Trả toàn bộ'}}</span></p>
+                <p><strong>Payment Type:</strong> <span>{{$reservation->deposit_amount!=0?'Deposit 20%':'Pay in Full'}}</span></p>
 
-            <p><strong>Đã thanh toán:</strong> <span>{{ number_format($reservation->deposit_amount==0?$reservation->total_price:$reservation->deposit_amount, 0, ',', '.') }}</span></p>
+            <p><strong>Paid Amount:</strong> <span>{{ number_format($reservation->deposit_amount==0?$reservation->total_price:$reservation->deposit_amount, 0, ',') }} VND</span></p>
         </div>
         <hr>
-        <button class="export-invoice rounded" id="export-invoice">Xuất hóa đơn</button>
+        <button class="export-invoice rounded" id="export-invoice">Export Invoice</button>
     </div>
 </div>
 
@@ -115,62 +115,65 @@
         @csrf
         <section class="registration">
             <div class="form">
-                <h2 style="margin-right: 250px">Bạn muốn đăng ký sử dụng website quản lý sân bóng MIỄN PHÍ?</h2>
-                <input type="text" placeholder="Nhập họ và tên" name="name">
-                <input type="text" placeholder="Nhập số điện thoại" name="phone">
-                <input type="text" placeholder="Nhập email" name="email">
-                <button type="submit">Gửi</button>
+                <h2 style="margin-right: 250px">Do you want to register to use the soccer field management website for FREE?</h2>
+                <input type="text" placeholder="Full Name" name="name">
+                <input type="text" placeholder="Phone Number" name="phone">
+                <input type="text" placeholder="Your Email" name="email">
+                <button type="submit">Send</button>
             </div>
         </section>
     </form>
 </div>
-
 <footer id="footer">
     <div class="footer-section">
-        <h3>GIỚI THIỆU</h3>
+        <h3>ABOUT US</h3>
         <hr class="dividers" />
-        <p>Công ty Play On Pitch cung cấp nền tảng quản lý sân bóng hiệu quả.</p>
+        <p>Play On Pitch provides an efficient soccer field management platform.</p>
         <ul>
             <li>
                 <a href="{{ Auth::check() ? route('user.privacy_policy.index') : route('guest.privacy_policy.index') }}">
-                    Chính sách bảo mật
+                    Privacy Policy
                 </a>
             </li>
             <li>
                 <a href="{{ Auth::check() ? route('user.cancellation_policy.index') : route('guest.cancellation_policy.index') }}">
-                    Chính sách hủy (đổi trả)
+                    Cancellation Policy
                 </a>
             </li>
             <li>
                 <a href="{{ Auth::check() ? route('user.commodity_policy.index') : route('guest.commodity_policy.index') }}">
-                    Chính sách đặt sân
+                    Booking Policy
                 </a>
             </li>
             <li>
                 <a href="{{ Auth::check() ? route('user.payment_policy.index') : route('guest.payment_policy.index') }}">
-                    Chính sách thanh toán
+                    Payment Policy
                 </a>
             </li>
         </ul>
     </div>
 
     <div class="footer-section">
-        <h3>THÔNG TIN</h3>
-        <hr class="dividers"/>
-        <p>Công ty TNHH 3 thành viên</p>
-        <p>MST: 1234567890</p>
+        <h3>INFORMATION</h3>
+        <hr class="dividers" />
+        <p>Three-Member Limited Liability Company</p>
+        <p>Tax Code: 1234567890</p>
         <p>Email: namhuynhkhachoai@gmail.com</p>
-        <p>Địa chỉ: 184 Lê Đại Hành, Quận 11, TP HCM</p>
-        <p>Điện thoại: 0868.986.143</p>
+        <p>Address: 184 Le Dai Hanh, District 11, Ho Chi Minh City</p>
+        <p>Phone: 0868.986.143</p>
     </div>
 
     <div class="footer-section">
-        <h3>LIÊN HỆ</h3>
-        <hr class="dividers" style="width: 40vh"/>
+        <h3>CONTACT US</h3>
+        <hr class="dividers" style="width: 40vh" />
         <br><br>
-        <a href="https://www.facebook.com/profile.php?id=61569828033426" target="_blank"><i class="fa-brands fa-facebook fa-2xl" style="color: #ffffff;"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=61569828033426" target="_blank">
+            <i class="fa-brands fa-facebook fa-2xl" style="color: #ffffff;"></i>
+        </a>
         &nbsp;&nbsp;
-        <a href="https://www.tiktok.com/@playonpitch.sg" target="_blank"><i class="fa-brands fa-tiktok fa-2xl" style="color: #000000;"></i></a>
+        <a href="https://www.tiktok.com/@playonpitch.sg" target="_blank">
+            <i class="fa-brands fa-tiktok fa-2xl" style="color: #000000;"></i>
+        </a>
     </div>
 </footer>
 </body>

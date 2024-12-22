@@ -242,10 +242,8 @@ Route::middleware(['auth:web'])->group(function () {
         Route::prefix('history')->name('history.')->group(function () {
             Route::get('/index', [HistoryController::class, 'index'])->name('index');
         });
-        // MOMO
-//        Route::post('momo/payment', [PaymentController::class, 'createMoMoPayment'])->name('momo.payment.create');
-//        Route::get('momo/payment/callback', [PaymentController::class, 'handleMoMoPaymentCallback'])->name('momo.payment.callback');
-//        //STRIPE
+
+        //STRIPE
         Route::post('stripe/payment', [PaymentController::class, 'createStripePayment'])->name('stripe.payment.create');
         Route::get('stripe/payment/callback', [PaymentController::class, 'handleStripePaymentCallback'])->name('stripe.payment.success');
         Route::get('stripe/payment/cancel',[PaymentController::class,'cancel'])->name('stripe.payment.cancel');
