@@ -195,4 +195,20 @@
 <script src="{{asset('assets/libraries/toastr/toastr.min.js' ) }}"></script>
 <script src="{{asset('js/notification.js')}}"></script>
 <script src="{{asset('js/registerBoss.js?t='.config('constants.app_version'))}}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Khi trang bắt đầu tải, thêm lớp 'loading'
+        document.body.classList.add("loading");
+
+        // Khi trang đã tải xong, xóa lớp 'loading'
+        window.onload = function () {
+            document.body.classList.remove("loading");
+        };
+
+        // Khi người dùng rời khỏi trang (chuyển trang hoặc tải lại)
+        window.addEventListener("beforeunload", function () {
+            document.body.classList.add("loading");
+        });
+    });
+</script>
 
