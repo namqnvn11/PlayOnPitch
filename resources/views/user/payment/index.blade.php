@@ -131,14 +131,16 @@
                                 </x-select>
                             </div>
                                 <div class="mt-6 flex {{auth::check()?'':'hidden'}}">
-                                    <x-select name="voucher_id" id="selectVoucher" onchange="voucherSelectOnchange(this)">
-                                        <option value="0">Choose Your Voucher</option>
-                                        @foreach($currentUser->User_Voucher as $userVoucher)
-                                            @if(!$userVoucher->Voucher->block)
-                                                <option value="{{$userVoucher->id}}" price="{{$userVoucher->Voucher->price}}">{{$userVoucher->Voucher->name}}</option>
-                                            @endif
-                                        @endforeach
-                                    </x-select>
+                                    @if(auth::check()&&$currentUser)
+                                        <x-select name="voucher_id" id="selectVoucher" onchange="voucherSelectOnchange(this)">
+                                            <option value="0">Choose Your Voucher</option>
+                                            @foreach($currentUser->User_Voucher as $userVoucher)
+                                                @if(!$userVoucher->Voucher->block)
+                                                    <option value="{{$userVoucher->id}}" price="{{$userVoucher->Voucher->price}}">{{$userVoucher->Voucher->name}}</option>
+                                                @endif
+                                            @endforeach
+                                        </x-select>
+                                    @endif
                                 </div>
                             <div class="payment_method mt-6">
                                 <div id="momoContainer" onclick="chooseMomo()" class="flex border rounded h-[60px] p-4 mt-4 justify-between items-center border-green-500">

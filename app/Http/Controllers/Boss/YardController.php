@@ -18,14 +18,12 @@ class YardController extends Controller
 {
     public function index()
     {
-        $currenBoss = Auth::guard('boss')->user();
-        $yards = Yard::where('block', 0)
-            ->where('boss_id', $currenBoss->id)
-            ->orderBy('yard_name', 'asc')
+        $currentBoss = Auth::guard('boss')->user();
+        $yards = Yard::where('block', 0)->orderBy('yard_name', 'asc')
             ->paginate(10);
         $District = District::all();
         $Province = Province::all();
-        return view('boss.yard.index', compact('yards', 'District', 'Province', 'currenBoss'));
+        return view('boss.yard.index', compact('yards', 'District', 'Province', 'currentBoss'));
     }
 
     public function store(Request $request)
@@ -231,10 +229,10 @@ class YardController extends Controller
     public function search(Request $request)
     {
 
-        $currenBoss = Auth::guard('boss')->user();
+        $currentBoss = Auth::guard('boss')->user();
         $block = $request->input('block', 'active');
         $query = Yard::query();
-        $query->where('boss_id', $currenBoss->id);
+        $query->where('boss_id', $currentBoss->id);
 
         if ($request->searchText !== null) {
             $searchText = $request->input('searchText');
@@ -255,7 +253,7 @@ class YardController extends Controller
         $District = District::all();
         $Province = Province::all();
 
-        return view('boss.yard.index', compact('yards', 'District', 'Province'));
+        return view('boss.yard.index', compact('yards', 'District', 'Province','currentBoss'));
     }
 
 

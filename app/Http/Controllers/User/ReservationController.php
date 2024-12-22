@@ -32,15 +32,13 @@ class ReservationController extends Controller
        $phone= $request->phone;
        $total_price= $request->total_price;
 
-       $contact = Contact::firstOrCreate(
-           ['phone' => $phone],
+       $contact = Contact::create(
            [
                'name' => $userName,
                'phone' => $phone,
                'user_id' => $userId??null,
            ]
        );
-       $contact->update(['name' => $userName]);
 
        $reservation = Reservation::create([
            'user_id' => $userId??null,

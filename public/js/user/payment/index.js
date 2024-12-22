@@ -7,7 +7,7 @@ function paymentTypeChange(event){
     let downPaymentElement= document.getElementById('downPaymentDiv');
     let dowPaymentInput= document.getElementById('downPayment');
     let selectVoucher= document.getElementById('selectVoucher');
-    let defaultOption = selectVoucher.querySelector('option[value="0"]');
+    let defaultOption = selectVoucher?.querySelector('option[value="0"]');
 
 
     //trả full

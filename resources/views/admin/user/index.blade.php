@@ -90,11 +90,11 @@
 
                                         </td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->phone }}</td>
+                                        <td>{{ $user->phone? $user->phone :'Not provide' }}</td>
                                         @if($user->address)
                                         <td>{{$user->address . ', ' . $user->District->name . ", " . $user->District->Province->name }}</td>
                                         @else
-                                            <td></td>
+                                            <td>Not Provide</td>
                                         @endif
                                         <td class="text-center" onclick="event.stopPropagation()">
                                             <div class="dropdown">
@@ -155,7 +155,7 @@
         const RESET_PASSWORD_URL= '{{url('admin/user/reset-password')}}'
     </script>
     <script src="{{ asset('js/admin/user/index.js?t='.config('constants.app_version') )}}"></script>
-    <script src="{{ asset('js/admin/admin.js?t='.config('constants.app_version'))}}"></script>
+{{--    <script src="{{ asset('js/admin/admin.js?t='.config('constants.app_version'))}}"></script>--}}
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 

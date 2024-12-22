@@ -45,15 +45,9 @@
                         </select>
                     </div>
 
-{{--                    <div class="form-group">--}}
-{{--                        <label for="description">Description</label>--}}
-{{--                        <textarea type="text" name="description" class="form-control" placeholder="Enter Description">--}}
-{{--                        <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description"></textarea>--}}
-{{--                    </div>--}}
-
                     <div class="form-group">
                         <label for="province">Province</label>
-                        <select class="form-control" name="province" id="province_id" province-id="{{$provinceId}}">
+                        <select class="form-control" name="province" id="province_id" province-id="{{$provinceId}}" disabled>
                             @foreach($Province as $province)
                                 <option value="{{ $province->id }}" {{$provinceId==$province->id?'selected':''}}>{{ $province->name }}</option>
                             @endforeach
@@ -62,10 +56,7 @@
 
                     <div class="form-group">
                         <label for="district">District</label>
-                        <select class="form-control" name="district" id="district_id" district-id="{{$districtId}}">
-{{--                            @foreach($districtList as $district)--}}
-{{--                                <option value="{{ $district->id }}" {{$districtId==$district->id?'selected':''}}>{{ $district->name }}</option>--}}
-{{--                            @endforeach--}}
+                        <select class="form-control" name="district" id="district_id" district-id="{{$districtId}}" disabled>
                         </select>
                     </div>
                 </div>

@@ -24,7 +24,6 @@ $(document).ready(function () {
         var id = $(this).attr('data-id');
         _form.find('input[name="id"]').val(id);
         _modal.modal('show');
-
     });
 
     $(document).ready(function () {
@@ -89,17 +88,22 @@ function viewDetail(event) {
                 $('input[name="full_name"]').val(data.full_name).prop('disabled', true);
                 $('input[name="email"]').val(data.email).prop('disabled', true);
                 $('#passwordGroup').hide();
-                $('input[name="phone"]').val(data.phone).prop('disabled', true);
-                $('input[name="address"]').val(data.address).prop('disabled', true);
-                $('select[name="province"]').val(response.province.id).prop('disabled', true);
-                $('#submitAddNewUser').hide();
-                fetchDistricts($('#province').val())
-                    .then(()=>{
-                        $('select[name="district"]').val(response.district.id).prop('disabled', true);
-                        $('#modal-edit').modal('show');
-                    }).catch(()=>{
-                    Notification.showError('Error when retrieving district data.');
-                })
+                $('input[name="phone"]').val(data.phone?data.phone:'Not provide').prop('disabled', true);
+                $('input[name="address"]').val(data.address?data.address:'Not provide').prop('disabled', true);
+                if (response.province){
+                    $('select[name="province"]').val(response.province.id).prop('disabled', true);
+                    $('#submitAddNewUser').hide();
+                    fetchDistricts($('#province').val())
+                        .then(()=>{
+                            $('select[name="district"]').val(response.district.id).prop('disabled', true);
+                            $('#modal-edit').modal('show');
+                        }).catch(()=>{
+                        Notification.showError('Error when retrieving district data.');
+                    })
+                }else {
+                    $('select[name="province"]').prop('disabled',true);
+                    $('select[name="district"]').prop('disabled',true);
+                }
             }else{
                 Notification.showError(response.message);
             }

@@ -25,7 +25,7 @@ class UserController extends Controller
         $passwordValidateRule= ($request->has('id') && $request->input('id') != null) ? 'nullable' : 'required';
         $validator = Validator::make($request->all(), [
             'full_name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $request->input('id'), //keèm id để bỏ qua email của chính nó khi cập nhật (khi update)
+            'email' => 'required|email|unique:users,email,' . $request->input('id'),
             'password'=> $passwordValidateRule . '|min:8',
             'phone' => ['required', 'string', 'regex:/^((\+84|0)(\d{9,10}))|((0\d{2,3})\d{7,8})$/'],
             'address' => 'required',
@@ -146,13 +146,17 @@ class UserController extends Controller
     public function detail(Request $request, $id)
     {
         $response = User::findOrFail($id);
-        $district = District::findOrFail($response->district_id);
+        $district=null;
+        if ($response->district_id&&$response->district_id!==0) {
+            $district = District::findOrFail($response->district_id);
+        }
+
         if($response){
             return response()->json([
                 'success'   => true,
                 'data'      => $response,
                 'district' => $district,
-                'province' => $district->province,
+                'province' => $district->province??null,
             ]);
         }
 

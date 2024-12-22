@@ -2,7 +2,6 @@
 @section('title', $title ?? 'Yard')
 @section("content")
 @php
-$currentBoss=\Illuminate\Support\Facades\Auth::guard('boss')->user();
 $districtId= $currentBoss->District->id;
 $provinceId= $currentBoss->Province->id;
 $districtList= $currentBoss->Province->Districts;

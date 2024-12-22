@@ -13,7 +13,7 @@
                 <div class="px-4 py-4">
                     <div class="flex flex-col">
                        <label>Description</label>
-                        <input type="hidden" id="inputYardDescription" value="{{$currenBoss->description}}">
+                        <input type="hidden" id="inputYardDescription" value="{{$currentBoss->description}}">
                         <textarea class="rounded h-[130px]" name="description" placeholder="Enter your yards description" id="yardDescription" ></textarea>
                     </div>
                 </div>
