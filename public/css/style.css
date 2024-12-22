@@ -9,6 +9,10 @@ body {
     background-color: white;
 }
 
+body.loading {
+    cursor: wait;
+}
+
 /* Header */
 header {
     width: 100%;
@@ -20,7 +24,6 @@ header {
 .divider {
     border: 0;
     border-top: 1px solid #026464;
-    margin: 0 5%;
 }
 
 .dividers {
@@ -49,10 +52,11 @@ header {
     color: white;
     font-size: 1rem;
     transition: color 0.3s;
+    padding-right: 0.8rem;
 }
 
 .nav-menu a:hover {
-    color: #ddd;
+    color: #246A2C;
 }
 
 /* Authentication Button */
@@ -281,9 +285,8 @@ footer {
     font-size: 16px;
 }
 
-.footer-section button:hover {
-    background-color: #246A2C;
-    color: white;
+.footer-section a:hover {
+    color: black;
 }
 
 .banner {

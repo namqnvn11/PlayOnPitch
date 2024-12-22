@@ -13,8 +13,16 @@ class YardListController extends Controller
 {
     public function index(Request $request)
     {
-        $District = District::all();
-        $Province = Province::all();
+        $District = District::all()->sortBy('name');
+        $prioritizedProvinces = [' Hà Nội', ' Hồ Chí Minh', ' Đà Nẵng', ' Hải Phòng', ' Cần Thơ'];
+        $prioritized = Province::whereIn('name', $prioritizedProvinces)
+            ->orderByRaw("FIELD(name, '" . implode("','", $prioritizedProvinces) . "')")
+            ->get();
+
+        $otherProvinces = Province::whereNotIn('name', $prioritizedProvinces)
+            ->orderBy('name', 'asc')
+            ->get();
+        $Province = $prioritized->merge($otherProvinces);
         $yardName = $request->input('yard_name');
         $provinceId = $request->input('province_id');
         $districtId = $request->input('district_id');

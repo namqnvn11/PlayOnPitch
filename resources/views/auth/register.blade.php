@@ -18,18 +18,18 @@
             background-color: white;
         }
         .btn-custom {
-            background-color: #28A745; /* Màu nền xanh lá cây */
-            color: white; /* Màu chữ trắng */
+            background-color: #28A745; /* Green background color */
+            color: white; /* White text color */
         }
         .btn-custom:hover {
-            background-color: #218838; /* Màu nền khi hover */
+            background-color: #218838; /* Background color on hover */
         }
     </style>
 </head>
 <body class="d-flex justify-content-center align-items-center vh-100">
 <div class="register-container text-center">
-    <h2 class="mb-3">ĐĂNG KÝ TÀI KHOẢN</h2>
-    <p class="text-muted mb-4">Vui lòng điền thông tin dưới đây để tạo tài khoản mới</p>
+    <h2 class="mb-3">REGISTER AN ACCOUNT</h2>
+    <p class="text-muted mb-4">Please fill in the information below to create a new account</p>
 
     <!-- Registration Form -->
     <form method="POST" action="{{ route('register') }}">
@@ -37,14 +37,14 @@
 
         <!-- Name Input -->
         <div class="mb-3">
-            <input type="text" class="form-control" id="name" name="name" placeholder="Nhập tên" value="{{ old('name') }}">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="{{ old('name') }}">
             @foreach ($errors->get('name') as $error)
                 <p class="text-danger" style="float: left">{{ $error }}</p>
             @endforeach
         </div>
 
         <div class="mb-3">
-            <input type="text" class="form-control" id="phone" name="phone" placeholder="Nhập số điện thoại" value="{{ old('phone') }}">
+            <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number" value="{{ old('phone') }}">
             @foreach ($errors->get('phone') as $error)
                 <p class="text-danger" style="float: left">{{ $error }}</p>
             @endforeach
@@ -52,7 +52,7 @@
 
         <!-- Email Input -->
         <div class="mb-3">
-            <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email" value="{{ old('email') }}" >
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="{{ old('email') }}" >
             @foreach ($errors->get('email') as $error)
                 <p class="text-danger" style="float: left">{{ $error }}</p>
             @endforeach
@@ -60,7 +60,7 @@
 
         <!-- Password Input -->
         <div class="mb-3">
-            <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
             @foreach ($errors->get('password') as $error)
                 <p class="text-danger" style="float: left">{{ $error }}</p>
             @endforeach
@@ -68,20 +68,20 @@
 
         <!-- Confirm Password Input -->
         <div class="mb-3">
-            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Xác nhận mật khẩu">
+            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm password">
             @foreach ($errors->get('password_confirmation') as $error)
                 <p class="text-danger" style="float: left">{{ $error }}</p>
             @endforeach
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" class="btn btn-custom w-100">Đăng ký</button>
+        <button type="submit" class="btn btn-custom w-100">Register</button>
 
         <!-- Separator -->
-        <div class="my-3 text-muted">Hoặc</div>
+        <div class="my-3 text-muted">Or</div>
 
         <!-- Login Link -->
-        <p class="mt-4 text-muted">Đã có tài khoản? <a href="{{ route('login') }}" class="text-primary">Đăng nhập</a></p>
+        <p class="mt-4 text-muted">Already have an account? <a href="{{ route('login') }}" class="text-primary">Log in</a></p>
     </form>
 </div>
 
