@@ -31,7 +31,7 @@ class YardDetailController extends Controller
             ->paginate(10);
 
         $User = User::all();
-        $averageRating = Rating::where('boss_id', $firstYard->id)->avg('point');
+        $averageRating = Rating::where('boss_id', $boss->id)->avg('point');
         return view('user.yard_detail.index', compact( 'District', 'Province', 'ratings', 'User', 'averageRating', 'boss'));
     }
 

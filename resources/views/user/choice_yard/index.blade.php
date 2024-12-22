@@ -38,7 +38,7 @@
                 </a>
             @else
                 <a href="{{ route('login') }}">
-                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> Log In/ Register</button>
+                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> Login/ Register</button>
                 </a>
             @endauth
         </div>
@@ -180,11 +180,11 @@
         @csrf
         <section class="registration">
             <div class="form">
-                <h2 style="margin-right: 250px">Do you want to register to use the soccer field management website for FREE?</h2>
-                <input type="text" placeholder="Full Name" name="name">
-                <input type="text" placeholder="Phone Number" name="phone">
-                <input type="text" placeholder="Your Email" name="email">
-                <button type="submit">Send</button>
+                <h2 style="margin-right: 250px">Do you want to register to use the FREE football yard management website?</h2>
+                <input type="text" placeholder="Enter full name" name="name">
+                <input type="text" placeholder="Enter phone number" name="phone">
+                <input type="text" placeholder="Enter email" name="email">
+                <button type="submit">Submit</button>
             </div>
         </section>
     </form>
@@ -194,7 +194,7 @@
     <div class="footer-section">
         <h3>ABOUT US</h3>
         <hr class="dividers" />
-        <p>Play On Pitch provides an efficient soccer field management platform.</p>
+        <p>Play On Pitch provides an efficient platform for football yard management.</p>
         <ul>
             <li>
                 <a href="{{ Auth::check() ? route('user.privacy_policy.index') : route('guest.privacy_policy.index') }}">
@@ -203,7 +203,7 @@
             </li>
             <li>
                 <a href="{{ Auth::check() ? route('user.cancellation_policy.index') : route('guest.cancellation_policy.index') }}">
-                    Cancellation Policy
+                    Cancellation Policy (Returns & Exchanges)
                 </a>
             </li>
             <li>
@@ -221,16 +221,22 @@
 
     <div class="footer-section">
         <h3>INFORMATION</h3>
-        <hr class="dividers" />
-        <p>Three-Member Limited Liability Company</p>
+        <hr class="dividers"/>
+        <p>Công ty TNHH 3 thành viên</p>
         <p>Tax Code: 1234567890</p>
-        <p>Email: namhuynhkhachoai@gmail.com</p>
-        <p>Address: 184 Le Dai Hanh, District 11, Ho Chi Minh City</p>
-        <p>Phone: 0868.986.143</p>
+        <p>
+            Email:
+            <span style="cursor: pointer;" onclick="navigator.clipboard.writeText('namhuynhkhachoai@gmail.com')">namhuynhkhachoai@gmail.com</span>
+        </p>
+        <p>Address: 184 Lê Đại Hành, District 11, TP HCM</p>
+        <p>
+            Phone:
+            <span style="cursor: pointer;" onclick="navigator.clipboard.writeText('0868986143')">0868.986.143</span>
+        </p>
     </div>
 
     <div class="footer-section">
-        <h3>CONTACT US</h3>
+        <h3>CONTACT</h3>
         <hr class="dividers" style="width: 40vh" />
         <br><br>
         <a href="https://www.facebook.com/profile.php?id=61569828033426" target="_blank">

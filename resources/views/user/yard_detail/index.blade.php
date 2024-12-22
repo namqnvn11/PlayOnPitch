@@ -22,11 +22,17 @@
     <hr class="divider" />
     <nav class="nav-menu">
         <ul>
-            <li><a href="{{route('user.home.index')}}"><i class="fas fa-home"></i></a></li>
-            <li><a href="{{route('user.yardlist.index')}}">Danh sách sân</a></li>
-            <li><a href="{{route('user.policy.index')}}">Chính sách</a></li>
-            <li><a href="{{route('user.clause.index')}}">Điều khoản</a></li>
-            <li><a href="#footer">Liên hệ</a></li>
+            <li><a href="{{ Auth::check() ? route('user.home.index') : route('guest.home.index') }}"><i class="fas fa-home"></i></a></li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.yardlist.index') : route('guest.yardlist.index') }}">Yard List</a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.policy.index') : route('guest.policy.index') }}">Policy</a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.clause.index') : route('guest.clause.index') }}">Terms</a>
+            </li>
+            <li><a href="#footer">Contact</a></li>
         </ul>
 
         <div class="auth-button">
@@ -36,7 +42,7 @@
                 </a>
             @else
                 <a href="{{ route('login') }}">
-                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> Đăng nhập/ Đăng ký</button>
+                    <button><i class="fa-solid fa-user" style="color: #ffffff;"></i> Login/ Register</button>
                 </a>
             @endauth
         </div>
@@ -101,10 +107,10 @@
                     $name= Auth::check()? 'user':'guest';
                     $bookingLink= url( $name . '/choice_yard/index',[$boss->id]);
                 @endphp
-                <a href="{{ $bookingLink }}?selectTime={{ \Carbon\Carbon::now()->toDateString() }}" class="book-now">Đặt sân ngay</a>
+                <a href="{{ $bookingLink }}?selectTime={{ \Carbon\Carbon::now()->toDateString() }}" class="book-now">Book now</a>
             </div>
             <div class="owner-info">
-                <h3>THÔNG TIN CHỦ SÂN</h3>
+                <h3>FOOTBALL FIELD OWNER INFORMATION</h3>
                 <p><i class="fa fa-user"></i> {{ $boss->full_name}} </p>
                 <p><i class="fa fa-phone"></i> {{ $boss->phone}} </p>
                 <p><i class="fa fa-envelope"></i> {{ $boss->email}} </p>
@@ -114,12 +120,12 @@
         </div>
     </div>
     <div class="general-info w-[65%]">
-        <h3>Giới thiệu chung</h3>
+        <h3>General Overview</h3>
         <div class="text-[17px] mt-2 text-justify">{{$boss->description}}</div>
     </div>
 
     <div class="review-section">
-        <h3>Đánh giá</h3>
+        <h3>Ratings</h3>
         @if(Auth::check())
             <form action="{{route('user.yarddetail.rating')}}" method="post" id="review-form">
                 @csrf
@@ -133,8 +139,8 @@
                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                 <input type="hidden" name="boss_id" value="{{$boss->id}}">
                 <input type="hidden" id="rating-value" value="0" name="point">
-                <textarea id="review-input" placeholder="Nhập đánh giá của bạn..." rows="3" name="comment"></textarea>
-                <button type="submit">Gửi đánh giá</button>
+                <textarea id="review-input" placeholder="Enter your rating..." rows="3" name="comment"></textarea>
+                <button type="submit">Submit rating</button>
             </form>
         @endif
 
@@ -158,14 +164,14 @@
                         </div>
 
                     </div>
-                    <div class="ellipsis-menu" style="float: right">
-                        @if(Auth::user() && Auth::user()->id!==$rating->user_id)
-                        <span class="ellipsis">...</span>
-                            <div class="dropdown-content">
-                                <a href="#" class="report-link" data-bs-toggle="modal" data-bs-target="#modalReport" data-rating-id="{{ $rating->id }}">Báo cáo bài viết</a>
+                    @if(Auth::check())
+                        <div class="ellipsis-menu" style="float: right">
+                            <span class="ellipsis">...</span>
+                            <div class="dropdown-content" style="display: none;">
+                                <a href="#" class="report-link" data-bs-toggle="modal" data-bs-target="#modalReport" data-rating-id="{{$rating->id}}">Report post</a>
                             </div>
-                        @endif
-                    </div>
+                        </div>
+                    @endif
                     <div class="review-comment">
                         <p>{{ $rating->comment }}</p>
                     </div>
@@ -182,15 +188,15 @@
 
 
 <div>
-    <form action="{{route('user.storeRegister')}}" method="post">
+    <form action="{{ Auth::check() ? route('user.storeRegister') : route('guest.storeRegister') }}" method="post">
         @csrf
         <section class="registration">
             <div class="form">
-                <h2 style="margin-right: 200px">Bạn muốn đăng ký sử dụng website quản lý sân bóng MIỄN PHÍ?</h2>
-                <input type="text" placeholder="Nhập họ và tên" name="name">
-                <input type="text" placeholder="Nhập số điện thoại" name="phone">
-                <input type="text" placeholder="Nhập email" name="email">
-                <button type="submit">Gửi</button>
+                <h2 style="margin-right: 250px">Do you want to register to use the FREE football yard management website?</h2>
+                <input type="text" placeholder="Enter full name" name="name">
+                <input type="text" placeholder="Enter phone number" name="phone">
+                <input type="text" placeholder="Enter email" name="email">
+                <button type="submit">Submit</button>
             </div>
         </section>
     </form>
@@ -198,29 +204,51 @@
 
 <footer id="footer">
     <div class="footer-section">
-        <h3>GIỚI THIỆU</h3>
+        <h3>ABOUT US</h3>
         <hr class="dividers" />
-        <p>Công ty Play On Pitch cung cấp nền tảng quản lý sân bóng hiệu quả.</p>
+        <p>Play On Pitch provides an efficient platform for football yard management.</p>
         <ul>
-            <li><a href="{{route('user.privacy_policy.index')}}">Chính sách bảo mật</a></li>
-            <li><a href="{{route('user.cancellation_policy.index')}}">Chính sách hủy (đổi trả)</a></li>
-            <li><a href="{{route('user.commodity_policy.index')}}">Chính sách đặt sân</a></li>
-            <li><a href="{{route('user.payment_policy.index')}}">Chính sách thanh toán</a></li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.privacy_policy.index') : route('guest.privacy_policy.index') }}">
+                    Privacy Policy
+                </a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.cancellation_policy.index') : route('guest.cancellation_policy.index') }}">
+                    Cancellation Policy (Returns & Exchanges)
+                </a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.commodity_policy.index') : route('guest.commodity_policy.index') }}">
+                    Booking Policy
+                </a>
+            </li>
+            <li>
+                <a href="{{ Auth::check() ? route('user.payment_policy.index') : route('guest.payment_policy.index') }}">
+                    Payment Policy
+                </a>
+            </li>
         </ul>
     </div>
 
     <div class="footer-section">
-        <h3>THÔNG TIN</h3>
+        <h3>INFORMATION</h3>
         <hr class="dividers"/>
         <p>Công ty TNHH 3 thành viên</p>
-        <p>MST: 1234567890</p>
-        <p>Email: namhuynhkhachoai@gmail.com</p>
-        <p>Địa chỉ: 184 Lê Đại Hành, Quận 11, TP HCM</p>
-        <p>Điện thoại: 0868.986.143</p>
+        <p>Tax Code: 1234567890</p>
+        <p>
+            Email:
+            <span style="cursor: pointer;" onclick="navigator.clipboard.writeText('namhuynhkhachoai@gmail.com')">namhuynhkhachoai@gmail.com</span>
+        </p>
+        <p>Address: 184 Lê Đại Hành, District 11, TP HCM</p>
+        <p>
+            Phone:
+            <span style="cursor: pointer;" onclick="navigator.clipboard.writeText('0868986143')">0868.986.143</span>
+        </p>
     </div>
 
     <div class="footer-section">
-        <h3>LIÊN HỆ</h3>
+        <h3>CONTACT</h3>
         <hr class="dividers" style="width: 40vh"/>
         <br><br>
         <a href="https://www.facebook.com/profile.php?id=61569828033426" target="_blank"><i class="fa-brands fa-facebook fa-2xl" style="color: #ffffff;"></i></a>

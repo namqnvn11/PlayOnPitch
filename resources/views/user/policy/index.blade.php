@@ -193,12 +193,12 @@
         <h3>INFORMATION</h3>
         <hr class="dividers"/>
         <p>Công ty TNHH 3 thành viên</p>
-        <p>TIN: 1234567890</p>
+        <p>Tax Code: 1234567890</p>
         <p>
             Email:
             <span style="cursor: pointer;" onclick="navigator.clipboard.writeText('namhuynhkhachoai@gmail.com')">namhuynhkhachoai@gmail.com</span>
         </p>
-        <p>Address: 184 Lê Đại Hành, Quận 11, TP HCM</p>
+        <p>Address: 184 Lê Đại Hành, District 11, TP HCM</p>
         <p>
             Phone:
             <span style="cursor: pointer;" onclick="navigator.clipboard.writeText('0868986143')">0868.986.143</span>
