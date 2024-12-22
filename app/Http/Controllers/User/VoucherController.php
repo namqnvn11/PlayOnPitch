@@ -29,7 +29,7 @@ class VoucherController extends Controller
 
             if ($user->score < $voucher->conditions_apply) {
                 DB::rollBack();
-                flash()->error("Bạn không đủ điểm để đổi voucher này");
+                flash()->error("You don't have enough points to redeem this voucher.");
                 return redirect()->back();
             }
 
@@ -43,11 +43,11 @@ class VoucherController extends Controller
 
             DB::commit();
 
-            flash()->success("Đổi voucher thành công");
+            flash()->success("Voucher redeemed successfully.");
             return redirect()->back();
         } catch (\Exception $e) {
             DB::rollBack();
-            flash()->error("Đã xảy ra lỗi: " . $e->getMessage());
+            flash()->error("An error has occurred:" . $e->getMessage());
             return redirect()->back();
         }
     }

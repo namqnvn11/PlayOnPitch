@@ -15,8 +15,16 @@ class UserController extends Controller
     public function index()
     {
         $users= User::orderby('created_at')->where('block',0)->paginate(10);
+        $prioritizedProvinces = [' Hà Nội', ' Hồ Chí Minh', ' Đà Nẵng', ' Hải Phòng', ' Cần Thơ'];
+        $prioritized = Province::whereIn('name', $prioritizedProvinces)
+            ->orderByRaw("FIELD(name, '" . implode("','", $prioritizedProvinces) . "')")
+            ->get();
+
+        $otherProvinces = Province::whereNotIn('name', $prioritizedProvinces)
+            ->orderBy('name', 'asc')
+            ->get();
+        $Province = $prioritized->merge($otherProvinces);
         $District = District::all();
-        $Province = Province::all();
         return view('admin.user.index', compact('users', 'District', 'Province'));
     }
 

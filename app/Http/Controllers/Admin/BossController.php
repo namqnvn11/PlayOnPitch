@@ -17,8 +17,17 @@ class BossController extends Controller
         $bosses = Boss::where('block', 0)
             ->orderBy('created_at', 'desc')
             ->paginate(15);
+
+        $prioritizedProvinces = [' Hà Nội', ' Hồ Chí Minh', ' Đà Nẵng', ' Hải Phòng', ' Cần Thơ'];
+        $prioritized = Province::whereIn('name', $prioritizedProvinces)
+            ->orderByRaw("FIELD(name, '" . implode("','", $prioritizedProvinces) . "')")
+            ->get();
+
+        $otherProvinces = Province::whereNotIn('name', $prioritizedProvinces)
+            ->orderBy('name', 'asc')
+            ->get();
+        $Province = $prioritized->merge($otherProvinces);
         $District = District::all();
-        $Province = Province::all();
         return view('admin.boss.index', compact('bosses',  'Province', 'District'));
     }
 

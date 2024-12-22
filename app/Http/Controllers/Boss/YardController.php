@@ -19,10 +19,20 @@ class YardController extends Controller
     public function index()
     {
         $currentBoss = Auth::guard('boss')->user();
-        $yards = Yard::where('block', 0)->orderBy('yard_name', 'asc')
+        $yards = Yard::where('block', 0)
+            ->where('boss_id', $currentBoss->id)
+            ->orderBy('yard_name', 'asc')
             ->paginate(10);
+        $prioritizedProvinces = [' Hà Nội', ' Hồ Chí Minh', ' Đà Nẵng', ' Hải Phòng', ' Cần Thơ'];
+        $prioritized = Province::whereIn('name', $prioritizedProvinces)
+            ->orderByRaw("FIELD(name, '" . implode("','", $prioritizedProvinces) . "')")
+            ->get();
+
+        $otherProvinces = Province::whereNotIn('name', $prioritizedProvinces)
+            ->orderBy('name', 'asc')
+            ->get();
+        $Province = $prioritized->merge($otherProvinces);
         $District = District::all();
-        $Province = Province::all();
         return view('boss.yard.index', compact('yards', 'District', 'Province', 'currentBoss'));
     }
 

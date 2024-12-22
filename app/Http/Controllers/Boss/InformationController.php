@@ -17,7 +17,15 @@ class InformationController extends Controller
     public function index(){
         $boss = Auth::user();
         $districts = District::all();
-        $provinces = Province::all();
+        $prioritizedProvinces = [' Hà Nội', ' Hồ Chí Minh', ' Đà Nẵng', ' Hải Phòng', ' Cần Thơ'];
+        $prioritized = Province::whereIn('name', $prioritizedProvinces)
+            ->orderByRaw("FIELD(name, '" . implode("','", $prioritizedProvinces) . "')")
+            ->get();
+
+        $otherProvinces = Province::whereNotIn('name', $prioritizedProvinces)
+            ->orderBy('name', 'asc')
+            ->get();
+        $provinces = $prioritized->merge($otherProvinces);
         return view('boss.information.index',compact('boss','districts','provinces'));
     }
 
