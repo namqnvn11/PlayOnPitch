@@ -40,7 +40,6 @@
                         <div class="mb-2 pt-1">Monday to Friday</div>
                         <x-circle-plus-button class="mx-2" onclick="addTimeSlot('mon-fri-time-container','mon-fri-template')" type="button"></x-circle-plus-button>
                         <x-clear-with-tooltip-button onclick="clearAllTime('mon-fri-time-container')"></x-clear-with-tooltip-button>
-
                     </div>
 
                     <div class="mt-2" id="mon-fri-time-container">
@@ -50,7 +49,7 @@
                             <label for="" id="pricing-label" class="mx-2">To</label>
                             <x-time-input name="mon-fri-to-time-1" />
                             <label for="" id="pricing-label" class="mx-2">Price</label>
-                            <input oninput="changeFormat(event)" class="w-[70px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" name="mon-fri-price-1"/>&nbsp;VND/H
+                            <input value="" oninput="changeFormat(event)" class="w-[70px] border-gray-300 p-2 h-10 focus:border-green-500 rounded-md shadow-sm" type="text" name="mon-fri-price-1"/>&nbsp;VND/H
                             <x-circle-minus-button class="absolute right-0" onclick="monToFriMinus(this)" type="button"></x-circle-minus-button>
                         </div>
                     </div>

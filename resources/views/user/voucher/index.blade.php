@@ -90,7 +90,7 @@
             <tr>
                 <td class=""><img class="max-w-[200px] mx-auto rounded" src="{{$voucher->image->img??asset('img/voucher.jpg')}}" onclick="openImageLayer('{{$voucher->image->img??asset('img/voucher.jpg')}}')"></td>
                 <td>{{$voucher->name}}</td>
-                <td>{{$voucher->price}}</td>
+                <td>{{number_format($voucher->price,0,',')}} VND</td>
                 <td>{{ \Carbon\Carbon::parse($voucher->release_date)->format('d/m/Y') }}</td>
                 <td>{{ \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y') }}</td>
                 <td>{{$voucher->conditions_apply}}</td>

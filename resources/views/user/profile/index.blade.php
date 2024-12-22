@@ -87,7 +87,13 @@
         <div class="details-box">
             <div class="info-row">
                 <label>Email:</label>
-                <span>{{ Auth::user()->email}}</span>
+                <span>
+                    {{ Auth::user()->email}}
+                    @if(Auth::user()->email_verified_at!==null)
+                        <i class="bi bi-patch-check-fill text-green-600 text-[24px] ml-2"></i>
+                        <p class="inline text-green-700">Verified</p>
+                    @endif
+                </span>
             </div>
             <div class="info-row">
                 <label>Name:</label>
@@ -95,17 +101,21 @@
             </div>
             <div class="info-row">
                 <label>Phone Number:</label>
-                <span>{{ Auth::user()->phone}}</span>
+                <span>{{ Auth::user()->phone?Auth::user()->phone:'Not Provide'}}</span>
             </div>
             <div class="info-row">
                 <label>Address:</label>
-                <span>{{ Auth::user()->address?(Auth::user()->address . ", " . Auth::user()->District?->name . ", " . Auth::user()->District?->Province?->name) : ''}}</span>
+                <span>{{ Auth::user()->address?(Auth::user()->address . ", " . Auth::user()->District?->name . ", " . Auth::user()->District?->Province?->name) : 'Not Provide'}}</span>
             </div>
 
-            <button class="edit-btn js-on-edit" data-bs-toggle="modal" data-bs-target="#editInfoModal" onclick="openEditModal()">Edit</button>
-            <button class="edit-btn js-on-edit" data-bs-toggle="modal" data-bs-target="#changePasswordModal" style="width: 21%">Change Password</button>
         </div>
-
+        <div class="flex w-full">
+            <button class="edit-btn js-on-edit" data-bs-toggle="modal" data-bs-target="#editInfoModal" onclick="openEditModal()">Edit Info</button>
+            <button class="edit-btn js-on-edit ml-2" data-bs-toggle="modal" data-bs-target="#changePasswordModal" style="width: 21%">Change Password</button>
+            @if(Auth::user()->email_verified_at===null)
+                <a href="{{route('verification.notice')}}"><button class="edit-btn ml-2" type="submit">Verify you account</button></a>
+            @endif
+        </div>
     </div>
 </div>
 

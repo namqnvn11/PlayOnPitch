@@ -84,7 +84,7 @@ $timeCloseInModal = $currentBoss->time_close
                                     <th>Company</th>
                                     <th>Yard Name</th>
                                     <th>Yard Type</th>
-                                    <th>District</th>
+                                    <th>Default Price</th>
                                     <th class="text-center" style="width: 170px;">Action</th>
                                 </tr>
                                 </thead>
@@ -101,7 +101,7 @@ $timeCloseInModal = $currentBoss->time_close
                                                 <i class="bi bi-ban mr-1"></i>
                                             @endif{{ $yard->yard_name }}</td>
                                         <td>{{ $yard->yard_type }}</td>
-                                        <td>{{ $yard->District->name }}</td>
+                                        <td>{{number_format($yard->defaultPrice,0,',')}} VND</td>
                                         <td class="text-center" onclick="event.stopPropagation()">
                                             <div class="dropdown">
                                                 <button  type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">

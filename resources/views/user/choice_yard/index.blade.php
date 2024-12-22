@@ -122,9 +122,11 @@
                         @foreach($yards as $yard)
                             <tr>
                                 <td class="sticky left-0">{{ $yard->yard_name }}</td>
-                                @foreach($yard->YardSchedules as $time)
+
+                                @forelse($yard->YardSchedules as $time)
                                     @php
                                         $timeSlotParts = explode('-', $time->time_slot);
+                                        $count=$yard->YardSchedules->count();
                                         $startTime = $timeSlotParts[0];
                                         $scheduleDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $time->date . ' ' . $startTime);
                                         $isPast = $scheduleDateTime->lessThan($currentDateTime);
@@ -140,7 +142,11 @@
                                         yard="{{ $yard->yard_name }}"
                                     >
                                     </td>
-                                @endforeach
+                                @empty
+                                    <td colspan="{{$count}}" class="bg-red-400">
+
+                                    </td>
+                                @endforelse
                             </tr>
                         @endforeach
                         </tbody>

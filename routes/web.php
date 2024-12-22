@@ -46,10 +46,6 @@ Route::get('admin-boss/login', [LoginController::class, 'showLoginForm'])
     ->name('admin.boss/login');
 Route::post('admin-boss/login', [LoginController::class, 'login'])->name('admin-boss.login');
 
-Route::get('login', [LoginController::class, 'showLoginUser'])
-    ->middleware(RedirectIfAuthenticated::class)
-    ->name('login');
-
 Route::middleware(['auth:admin'])->group(function () {
 
     Route::prefix('admin')->name('admin.')->group(function () {

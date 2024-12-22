@@ -140,7 +140,7 @@
                 <input type="hidden" name="boss_id" value="{{$boss->id}}">
                 <input type="hidden" id="rating-value" value="0" name="point">
                 <textarea id="review-input" placeholder="Enter your rating..." rows="3" name="comment"></textarea>
-                <button type="submit">Submit rating</button>
+                <button type="submit">Submit Rating</button>
             </form>
         @endif
 
@@ -149,11 +149,11 @@
                 <div class="review-item">
                     <div class="review-header">
                         <div class="review-user-info">
-                            <img src="{{$rating->User->image->img??'https://www.gravatar.com/avatar/'. md5(strtolower($rating->User->full_name)) .'?s=100&d=identicon'}}" alt="{{ $rating->User->name }}'s avatar" class="user-avatar">
+                            <img src="{{$rating->User->image->img??'https://www.gravatar.com/avatar/'. md5(strtolower($rating->User->full_name??'aa')) .'?s=100&d=identicon'}}" alt="{{ $rating->User->name??'aa' }}'s avatar" class="user-avatar">
                             @if(Auth::user() && Auth::user()->id==$rating->user_id)
                                 <span class="review-user">You</span>
                             @else
-                                <span class="review-user">{{ $rating->User->full_name }}</span>
+                                <span class="review-user">{{ $rating->User->full_name??'' }}</span>
                             @endif
                         </div>
                         <div class="review-rating">

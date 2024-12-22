@@ -86,7 +86,7 @@ function showModalPricing(id) {
             if (response.isTimeSet){
                 let monFri= response.MonFri;
                 let weekend= response.Weekend;//=> array of date time setting
-
+                    console.log(weekend)
                 if (monFri.length!==0){
                     loadOldTimeSetting(monFri, 'mon-fri-time-container',"mon-fri-template");
                 }
@@ -144,8 +144,8 @@ function loadOldTimeSetting(timeSlots,containerId,templateId){
         //trường To
         newGroup.children[0].children[3].value = removeSeconds(timesLot.end_time);
         //Price
-        newGroup.children[0].children[5].value = parseFloat(timesLot.price_per_hour).toLocaleString('en-US');
-
+        let pricePerHour = timesLot.price_per_hour;
+        newGroup.children[0].children[5].value =  pricePerHour ? parseFloat(pricePerHour).toLocaleString('en-US') : '';
         container.appendChild(newGroup);
     })
 }
@@ -169,14 +169,6 @@ function removeSeconds(timeString) {
                 $('select[name="yard_name"]').val(data.yard_name);
                 $('select[name="yard_type"]').val(data.yard_type);
                 $('textarea[name="description"]').val(data.description);
-                $('select[name="province"]').val(response.province.id);
-                fetchDistricts($('#province_id').val())
-                    .then(()=>{
-                        $('select[name="district"]').val(response.district.id);
-                        $('#modal-edit').modal('show');
-                    }).catch(()=>{
-                    Notification.showError('Error when retrieving district data.');
-                })
             } else {
                 Notification.showError(response.message);
             }
@@ -254,6 +246,9 @@ function pricing() {
                     // Reset form
                     $("form#form-pricing")[0].reset();
                     $('#modal-pricing').modal('hide');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1200);
                 }else{
                     Notification.showError(response.message);
                 }
@@ -261,7 +256,6 @@ function pricing() {
             error: function(xhr) {
                 if (xhr.status === 422) { // Xử lý lỗi validate
                     let errors = xhr.responseJSON.errors;
-                    console.log(errors);
                     // Xóa các thông báo lỗi cũ
                     $('.error-message').remove();
 

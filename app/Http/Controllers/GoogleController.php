@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Services\GiveVoucherService;
-use Illuminate\Container\Attributes\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
 
@@ -49,11 +49,10 @@ class GoogleController extends Controller
                     'exception' => $exception,
                 ]);
             }
-
             $newUser->email_verified_at=now();
             $newUser->save();
             Auth::login($newUser);
         }
-        return redirect()->intended('/user/home/index');
+        return redirect()->intended('/user/home/index')->with('success', 'You are now logged in with Google!');
     }
 }

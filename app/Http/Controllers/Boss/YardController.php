@@ -49,9 +49,6 @@ class YardController extends Controller
                 })
             ],
             'yard_type' => 'required',
-//            'description' => 'required',
-            'district' => 'required|exists:districts,id',
-            'province' => 'required|exists:provinces,id',
         ]);
 
         if ($validator->fails()) {
@@ -83,8 +80,6 @@ class YardController extends Controller
 
             $yard->yard_name = $request->input('yard_name');
             $yard->yard_type = $request->input('yard_type');
-//            $yard->description = $request->input('description');
-            $yard->district_id = $request->input('district');
 
             $yard->save();
 
@@ -204,13 +199,10 @@ class YardController extends Controller
     public function detail(Request $request, $id)
     {
         $response = Yard::findOrFail($id);
-        $district = District::findOrFail($response->district_id);
         if ($response) {
             return response()->json([
                 'success' => true,
                 'data' => $response,
-                'district' => $district,
-                'province' => $district->province,
             ]);
         }
 

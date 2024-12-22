@@ -44,21 +44,6 @@
                             <option value="Sân 11">Sân 11</option>
                         </select>
                     </div>
-
-                    <div class="form-group">
-                        <label for="province">Province</label>
-                        <select class="form-control" name="province" id="province_id" province-id="{{$provinceId}}" disabled>
-                            @foreach($Province as $province)
-                                <option value="{{ $province->id }}" {{$provinceId==$province->id?'selected':''}}>{{ $province->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="district">District</label>
-                        <select class="form-control" name="district" id="district_id" district-id="{{$districtId}}" disabled>
-                        </select>
-                    </div>
                 </div>
 
                 <div class="modal-footer">
