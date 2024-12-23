@@ -37,8 +37,8 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default mr-1" data-dismiss="modal" onclick="$(`#${'modal-image'}`).modal('hide')" >Close</button>
-                    <button type="submit" class="btn btn-danger">Confirm</button>
+                    <button type="button" class="btn btn-default mr-1 border hover:bg-gray-100 text-xs font-bold py-[10px] text-gray-500" data-dismiss="modal" onclick="$(`#${'modal-image'}`).modal('hide')" >CLOSE</button>
+                    <x-green-button type="submit" class="btn">Confirm</x-green-button>
                 </div>
             </form>
         </div>

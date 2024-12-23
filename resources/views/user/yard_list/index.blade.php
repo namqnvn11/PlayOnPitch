@@ -65,7 +65,7 @@
 
                 <div class="filters">
 
-                    <select name="province_id" id="province_id" onchange="this.form.submit()">
+                    <select name="province_id" id="province_id" onchange="this.form.submit()" class="focus:ring-1 focus:ring-green-600 focus:border-green-600">
                         <option value="">Province</option>
                         @foreach($Province as $province)
                             <option value="{{ $province->id }}" {{ request('province_id') == $province->id ? 'selected' : '' }}>
@@ -74,7 +74,7 @@
                         @endforeach
                     </select>
 
-                    <select name="district_id" id="district_id" onchange="this.form.submit()" class="w-[160px]" style="width: auto; padding-right: 30px">
+                    <select name="district_id" id="district_id" onchange="this.form.submit()" class="w-[160px] focus:ring-1 focus:ring-green-600 focus:border-green-600" style="width: auto; padding-right: 30px">
                         <option value="">District</option>
                         @if(request('province_id'))
                             @foreach($District->where('province_id', request('province_id')) as $district)

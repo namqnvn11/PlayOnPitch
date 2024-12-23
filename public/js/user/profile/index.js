@@ -1,75 +1,8 @@
 $(document).ready(function () {
-    Notification.showSuccess('asdasas');
-    const $modalEdit = $('#modal-edit');
-    const $formData = $('#form-data');
-    const $formDelete = $('#form-delete');
-    const $provinceSelect = $('#province_id');
-    const $districtSelect = $('#district_id');
-    const $changePasswordForm = $('#changePasswordForm');
-
-    // Load Districts on Province Change
-    $provinceSelect.on('change', function () {
-        const provinceId = $(this).val();
-        $districtSelect.empty().append('<option value="">Chọn Huyện</option>');
-
-        if (provinceId) {
-            $.ajax({
-                url: '/user/profile/get-districts',
-                type: 'GET',
-                data: { province_id: provinceId },
-                success: function (data) {
-                    if (data.length > 0) {
-                        data.forEach(district => {
-                            $districtSelect.append(`<option value="${district.id}">${district.name}</option>`);
-                        });
-                    } else {
-                        $districtSelect.append('<option value="">Không có huyện nào</option>');
-                    }
-                },
-                error: function () {
-                    Notification.showError('Lỗi khi lấy dữ liệu huyện.');
-                }
-            });
-        }
-    });
-
-    // Open Edit Modal and Load Data
-    $(document).on('click', '.js-on-edit', function () {
-        const url = $(this).data('url');
-        $('#form-data')[0].reset();
-        $modalEdit.find('h4').text('Chỉnh sửa');
-
-        // Gửi yêu cầu AJAX để lấy dữ liệu và hiển thị modal
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: "json",
-            success: function (response) {
-                if (response.success) {
-                    const data = response.data;
-
-                    // Cập nhật dữ liệu vào form
-                    $formData.find('input[name="id"]').val(data.id);
-                    $formData.find('input[name="full_name"]').val(data.full_name);
-                    $formData.find('input[name="email"]').val(data.email);
-                    $formData.find('input[name="phone"]').val(data.phone);
-                    $formData.find('input[name="address"]').val(data.address);
-                    $('#district_id').val(data.district_id); // Cập nhật district_id nếu có
-
-                    // Hiển thị modal
-                    $modalEdit.modal('show');
-                } else {
-                    Notification.showError(response.message);
-                }
-            },
-            error: function () {
-                Notification.showError('Lỗi khi lấy dữ liệu người dùng.');
-            }
-        });
-    });
-
+    const changePasswordForm = $('#changePasswordForm');
+    const modalEditProfile=$('#modal-edit-user-profile');
     // Submit Change Password Form
-    $changePasswordForm.submit(function (e) {
+    changePasswordForm.submit(function (e) {
         e.preventDefault(); // Ngừng việc gửi form
         const formData = new FormData(this); // Lấy dữ liệu từ form
 
@@ -88,14 +21,10 @@ $(document).ready(function () {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function (response) {
+                console.log(response)
                 if (response.success) {
-                    Notification.showSuccess(response.message);
                     $('#changePasswordModal').modal('hide');
-                    setTimeout(function () {
-                        window.location.href = '/user/profile/index';
-                    }, 1200);
-                } else {
-                    Notification.showError(response.message || 'Đã xảy ra lỗi.');
+                    window.location.reload();
                 }
             },
             error: function (xhr) {
@@ -108,7 +37,7 @@ $(document).ready(function () {
     });
 
     // Submit Edit Form
-    $('#form-edit').submit(function (event) {
+    $('#form-edit-user-profile').submit(function (event) {
         event.preventDefault();
         const form = this;
         const url = form.getAttribute('action');
@@ -121,13 +50,8 @@ $(document).ready(function () {
             data: formData,
             success: function (response) {
                 if (response.success) {
-                    Notification.showSuccess(response.message);
-                    $modalEdit.modal('hide');
-                    setTimeout(function () {
-                        window.location.reload();
-                    }, 1200);
-                } else {
-                    Notification.showError(response.message);
+                    modalEditProfile.modal('hide');
+                    window.location.reload();
                 }
             },
             error: function (xhr) {
@@ -158,6 +82,64 @@ $(document).ready(function () {
         }
     }
 });
+function provinceOnchange (event) {
+    var provinceId = event.currentTarget.value
+    fetchDistricts(provinceId)
+}
+
+function fetchDistricts(provinceId) {
+    return new Promise((resolve,reject)=>{
+        if (provinceId) {
+            $.ajax({
+                url: GET_DISTRICT_URL,
+                type: 'GET',
+                data: { province_id: provinceId },
+                success: function (data) {
+                    $('#district_id').empty();
+                    $('#district_id').append('<option value="">Select District</option>');
+                    $.each(data, function (key, district) {
+                        console.log(district)
+                        $('#district_id').append('<option value="' + district.id + '">' + district.name + '</option>');
+                    });
+                    resolve();
+                },
+                error: function () {
+                    Notification.showError('Error when retrieving district data.');
+                    reject();
+                }
+            });
+        } else {
+            $('#district_id').empty();
+            $('#district_id').append('<option value="">Select District</option>');
+        }
+    })
+}
+
+function openEditProfileForm(){
+    let modalEditProfile = $('#modal-edit-user-profile');
+
+    // Gửi yêu cầu AJAX để lấy dữ liệu và hiển thị modal
+    $.ajax({
+        url: GET_USER_INFO_URL,
+        type: 'GET',
+        dataType: "json",
+        success: function (response) {
+            if (response.success) {
+                const data = response.data;
+                // Cập nhật dữ liệu vào form
+                modalEditProfile.find('input[name="id"]').val(data.id);
+                modalEditProfile.find('input[name="full_name"]').val(data.full_name);
+                modalEditProfile.find('input[name="email"]').val(data.email);
+                modalEditProfile.find('input[name="phone"]').val(data.phone);
+                modalEditProfile.find('input[name="address"]').val(data.address);
+                // Hiển thị modal
+                modalEditProfile.modal('show');
+            }
+        },
+        error: function () {
+        }
+    });
+}
 
 
 // phần hình ảnh ======================

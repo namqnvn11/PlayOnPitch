@@ -10,7 +10,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
 </head>
 <body>
 <header>
@@ -110,7 +109,7 @@
 
         </div>
         <div class="flex w-full">
-            <button class="edit-btn js-on-edit" data-bs-toggle="modal" data-bs-target="#editInfoModal" onclick="openEditModal()">Edit Info</button>
+            <button class="edit-btn js-on-edit" onclick="openEditProfileForm()">Edit Info</button>
             <button class="edit-btn js-on-edit ml-2" data-bs-toggle="modal" data-bs-target="#changePasswordModal" style="width: 21%">Change Password</button>
             @if(Auth::user()->email_verified_at===null)
                 <a href="{{route('verification.notice')}}"><button class="edit-btn ml-2" type="submit">Verify you account</button></a>
@@ -193,24 +192,15 @@
 </html>
 
 @include('user.profile.elements.modal_edit')
-<script>
-    function openEditModal() {
-        var myModal = new bootstrap.Modal(document.getElementById('modal-edit'));
-        myModal.show();
-    }
 
-    function closeModal() {
-        var myModal = new bootstrap.Modal(document.getElementById('modal-edit'));
-        myModal.hide();
-    }
-
-</script>
 @include('user.profile.elements.changePassword')
 @include('user.profile.elements.modal_image')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const STORE_URL = "{{ route('user.storeRegister') }}";
+    const GET_USER_INFO_URL= "{{route('user.profile.detail',Auth::user()->id)}}"
+    const GET_DISTRICT_URL="{{route('user.profile.getDistricts')}}"
 </script>
 <!-- jQuery -->
 <script src="{{asset('assets/templates/adminlte3/plugins/jquery/jquery.min.js' ) }}"></script>

@@ -6,6 +6,7 @@
     <title>Play On Pitch</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
 <header>
@@ -56,7 +57,7 @@
     <div class="search-container">
         <img src="{{ asset('img/360_F_355288042_An4jhyVFELBAY05m97yMQYDTDpNKeeJf.jpg') }}" alt="">
         <form action="{{ route(Auth::check() ? 'user.yardlist.index' : 'guest.yardlist.index') }}" method="GET" class="search-bar">
-        <select name="province_id" id="province_id">
+        <select name="province_id" id="province_id" class="focus:ring-0 focus:border-0">
                 <option value="">Province</option>
                 @foreach($Province as $province)
                     <option value="{{ $province->id }}" {{ request('province_id') == $province->id ? 'selected' : '' }}>
@@ -65,7 +66,7 @@
                 @endforeach
             </select>
 
-            <select name="district_id" id="district_id">
+            <select name="district_id" id="district_id" class="focus:ring-0 focus:border-0">
                 <option value="">District</option>
                 @if(request('province_id'))
                     @foreach($District->where('province_id', request('province_id')) as $district)
@@ -76,7 +77,7 @@
                 @endif
             </select>
 
-            <input type="text" placeholder="Yard Name" name="yard_name" value="{{ request('yard_name') }}">
+            <input type="text" placeholder="Yard Name" name="yard_name" value="{{ request('yard_name') }}" class="focus:ring-0 focus:border-0">
             <button type="submit">Search</button>
         </form>
     </div>
