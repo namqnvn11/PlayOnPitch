@@ -12,17 +12,13 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\User\HistoryController;
 use App\Http\Controllers\User\ReservationController;
 use App\Http\Middleware\RedirectIfAuthenticated;
-use App\Models\District;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\RegisterBossController;
-
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\BossController;
-
 use App\Http\Controllers\Boss\YardController;
-
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\YardListController;

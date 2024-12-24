@@ -24,7 +24,8 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $provinces = Province::all();
-        $districts = District::where('province_id', $user->province_id)->get();
+        $currentProvince= $user->District->Province;
+        $districts = $currentProvince->Districts;
         return view('user.profile.index', compact('user', 'provinces', 'districts'));
     }
 
@@ -32,7 +33,6 @@ class ProfileController extends Controller
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
-
         // Validate input data
         $request->validate([
             'full_name' => 'required|string|max:255',
@@ -56,10 +56,9 @@ class ProfileController extends Controller
                 'district_id' => $request->district,
                 'address' => $request->address,
             ]);
-
+            flash()->success('Your profile has been updated.');
             return response()->json([
                 'success' => true,
-                'message' => 'Profile updated successfully.',
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -130,7 +129,7 @@ class ProfileController extends Controller
                 auth()->user()->update([
                     'password' => bcrypt($request->new_password),
                 ]);
-
+                flash()->success('Password updated successfully.');
                 return response()->json([
                     'success' => true,
                     'message' => 'Password updated successfully.',

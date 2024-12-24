@@ -147,7 +147,6 @@ class PaymentController extends Controller
     }
     public function handleMoMoPaymentCallback(Request $request)
     {
-
         try {
             $payment = PaymentTransaction::where('transaction_id', $request->orderId)->first();
             if ($payment) { $invoice= $payment->Invoice()->first();}
@@ -251,7 +250,7 @@ class PaymentController extends Controller
             $status = $response['payment_status'];
             $invoiceStatus = $status === 'paid' ? 'success' : 'failed';
 
-            //duùng model payment để lưu thanh toán
+            //dùng model payment để lưu thanh toán
             $invoice= Invoice::create([
                 'reservation_id'=>$reservationId,
                 'invoice_date'=> now(),
