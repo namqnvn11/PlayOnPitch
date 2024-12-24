@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Boss;
+use App\Models\Invoice;
+use App\Models\PaymentTransaction;
+use App\Models\Reservation;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Voucher;
@@ -29,5 +32,9 @@ class DatabaseSeeder extends Seeder
         Boss::factory(20)->create();
         Yard::factory(20)->create();
         Voucher::factory(20)->create();
+        Reservation::factory(20)->create();
+        Invoice::factory(20)->create();
+        PaymentTransaction::factory(20)->create();
+        User::factory(20)->create();
     }
 }
