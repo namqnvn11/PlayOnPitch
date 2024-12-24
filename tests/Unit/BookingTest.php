@@ -75,7 +75,6 @@ class BookingTest extends TestCase
 
         // Kiểm tra cookie
         $cookie = Cookie::get('reservation');
-//        $this->assertNotNull($cookie);
 
         // Kiểm tra job đã được dispatch
         Queue::assertPushed(ExpireReservationJob::class, 2);
@@ -95,8 +94,6 @@ class BookingTest extends TestCase
         ];
 
         $response = $this->post(route('user.choice_yard.makeReservation'), $data);
-
-//        $response->assertSessionHas('error', 'something went wrong, please try again');
 
         $this->assertDatabaseCount('reservations', 0);
         $this->assertDatabaseCount('yard_schedules', 2);
