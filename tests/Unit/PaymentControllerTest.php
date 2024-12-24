@@ -95,7 +95,6 @@ class PaymentControllerTest extends TestCase
         // Lưu PaymentTransaction với thông tin từ MoMo
         PaymentTransaction::create([
             'transaction_id' => $momoResponse['orderId'], // Sử dụng orderId từ MoMo
-            'user_id' => $user->id, // Sử dụng user_id từ người dùng đã tạo
             'invoice_id' => $invoice->id,
             'product_name' => 'Yard reservation payment',
             'amount' => 100000,
@@ -114,7 +113,6 @@ class PaymentControllerTest extends TestCase
 
         $this->assertDatabaseHas('payment_transactions', [
             'transaction_id' => $momoResponse['orderId'],
-            'user_id' => $user->id,
             'invoice_id' => $invoice->id,
             'amount' => 100000,
             'status' => 'Pending',
@@ -145,17 +143,11 @@ class PaymentControllerTest extends TestCase
             'resultCode' => '0', // Thành công
         ]);
 
-        // Kiểm tra kết quả sau khi thanh toán thành công
-//        $response->assertRedirect(route('user.invoice.index', ['id' => $invoice->id]));
-
         // Kiểm tra cập nhật trạng thái của các bảng liên quan
         $this->assertDatabaseHas('payment_transactions');
         $this->assertDatabaseHas('invoices');
         $this->assertDatabaseHas('reservations');
         $this->assertDatabaseHas('reservation_histories');
-
-        // Kiểm tra xem voucher đã bị xóa
-//        $this->assertDatabaseMissing('user_vouchers', ['id' => $voucher->id]);
     }
 
     /** @test */
@@ -172,9 +164,6 @@ class PaymentControllerTest extends TestCase
             'orderId' => '12345',
             'resultCode' => '1',
         ]);
-
-        // Kiểm tra kết quả sau khi thanh toán thất bại
-//        $response->assertRedirect(route('user.yardlist.index'));  // Chuyển hướng đến danh sách sân
 
         // Kiểm tra cập nhật trạng thái của các bảng liên quan
         $this->assertDatabaseHas('payment_transactions');

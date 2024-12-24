@@ -22,9 +22,7 @@ class YardFactory extends Factory
             'boss_id'=> Boss::pluck('id')->random(),
             'yard_name'=> 'sân số '. rand(1,10),
             'yard_type'=> $this->faker->randomElement([5,7,11]),
-            'description'=> $this->faker->text,
             'block'=> 0,
-            'district_id'=> 1,
         ];
     }
 }

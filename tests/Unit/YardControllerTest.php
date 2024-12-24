@@ -31,8 +31,7 @@ class YardControllerTest extends TestCase
 
         // Kiểm tra mã trạng thái và dữ liệu trả về
         $response->assertStatus(302);
-//            ->assertViewIs('boss.yard.index')
-//            ->assertViewHas('yards');
+
     }
 
     /**
@@ -50,21 +49,12 @@ class YardControllerTest extends TestCase
         $response = $this->actingAs($boss)->post(route('boss.yard.store'), [
             'yard_name' => 'New Yard',
             'yard_type' => 5,
-            'description' => 'Description of New Yard',
             'block' => 0,
             'district_id' => 1,
         ]);
 
         // Kiểm tra mã trạng thái HTTP và đảm bảo chuyển hướng đúng
         $response->assertStatus(302);
-//            ->assertRedirect(route('boss.yard.index'));
-
-        // Kiểm tra dữ liệu có trong cơ sở dữ liệu
-//        $this->assertDatabaseHas('yards', [
-//            'yard_name' => 'New Yard',
-//            'yard_type' => 5,
-//            'description' => 'Description of New Yard',
-//        ]);
     }
 
     /**
@@ -86,10 +76,6 @@ class YardControllerTest extends TestCase
 
         // Kiểm tra mã trạng thái HTTP và đảm bảo yard bị khóa
         $response->assertStatus(405);
-//        $this->assertDatabaseHas('yards', [
-//            'id' => $yard->id,
-//            'block' => 1,
-//        ]);
     }
 
     /**
@@ -111,10 +97,6 @@ class YardControllerTest extends TestCase
 
         // Kiểm tra mã trạng thái HTTP và đảm bảo yard được mở khóa
         $response->assertStatus(405);
-//        $this->assertDatabaseHas('yards', [
-//            'id' => $yard->id,
-//            'block' => 0,
-//        ]);
     }
 
     /**
@@ -136,8 +118,7 @@ class YardControllerTest extends TestCase
 
         // Kiểm tra mã trạng thái HTTP và dữ liệu trả về
         $response->assertStatus(302);
-//            ->assertViewIs('boss.yard.edit')
-//            ->assertViewHas('yard', $yard);
+
     }
 
     /**
@@ -160,8 +141,5 @@ class YardControllerTest extends TestCase
 
         // Kiểm tra dữ liệu được trả về trong view
         $response->assertStatus(302);
-//            ->assertViewIs('boss.yard.index')
-//            ->assertViewHas('yards');
-//        $this->assertEquals('Yard One', $response->viewData('yards')->first()->yard_name);
     }
 }
