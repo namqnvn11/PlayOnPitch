@@ -84,17 +84,17 @@
 </section>
 
 <section class="features">
-    <div class="feature">
+    <div class="feature flex flex-col justify-center items-center">
         <img src="{{asset('img/san.jpg')}}" alt="Search" style="margin-bottom: 16px">
         <p>Search for Yard Locations</p>
         <span>A rich and continuously updated database of sports yards helps you easily search by your desired area.</span>
     </div>
-    <div class="feature">
+    <div class="feature flex flex-col justify-center items-center">
         <img src="{{asset('img/lich.jpg')}}" alt="Book Schedule">
         <p>Online Booking</p>
         <span>No need to visit in person or call to book; you can book a yard from anywhere with internet access.</span>
     </div>
-    <div class="feature">
+    <div class="feature flex flex-col justify-center items-center">
         <img src="{{asset('img/dabong.jpg')}}" alt="Find Match Opponent">
         <p>Find Match Opponents</p>
         <span>Search and connect with sports teams, fostering interaction and building a vibrant, strong sports community.</span>

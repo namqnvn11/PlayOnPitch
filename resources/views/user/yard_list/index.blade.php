@@ -100,7 +100,7 @@
                     $bossId = 1;  // Giả sử bạn muốn lấy các sân của Boss có ID = 1
                     $yardTypes = $boss->yards()
                                     ->where('block', false)
-                                    ->distinct('yard_type')
+                                    ->distinct('yard_type') 
                                     ->pluck('yard_type')
                                     ->implode(', ');
                     $count = $boss->yards()->where('block', false)->count();
