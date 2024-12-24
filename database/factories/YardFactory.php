@@ -23,8 +23,8 @@ class YardFactory extends Factory
             'yard_name'=> 'sân số '. rand(1,10),
             'yard_type'=> $this->faker->randomElement([5,7,11]),
             'description'=> $this->faker->text,
-            'block'=> rand(0,1),
-            'district_id'=> District::pluck('id')->random(),
+            'block'=> 0,
+            'district_id'=> 1,
         ];
     }
 }

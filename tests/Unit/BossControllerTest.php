@@ -92,12 +92,10 @@ class BossControllerTest extends TestCase
 
     public function test_search_boss()
     {
-        // Tạo một request giả lập
         $request = Request::create('/admin/boss/search', 'GET', [
             'searchText' => 'Boss One',
         ]);
 
-        // Mô phỏng hành vi của controller
         $bossController = Mockery::mock(BossController::class)->makePartial();
         $bossController->shouldReceive('search')
             ->once()
@@ -108,10 +106,10 @@ class BossControllerTest extends TestCase
                 ])
             ]));
 
-        // Gọi phương thức search của controller
         $response = $bossController->search($request);
 
-        // Kiểm tra nội dung trả về trong view
-        $this->assertStringContainsString('Boss One', $response->get('full_name'));
+        // Kiểm tra dữ liệu được truyền tới view
+        $viewData = $response->getData();
+        $this->assertEquals('Boss One', $viewData['bosses']->first()->full_name);
     }
 }

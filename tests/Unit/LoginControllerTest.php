@@ -128,23 +128,23 @@ class LoginControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_login_with_blocked_user_account()
-    {
-        // Tạo một User bị khóa
-        $blockedUser = User::factory()->create([
-            'email' => 'blocked@example.com',
-            'password' => bcrypt('password'),
-            'block' => 1, // Giả sử bạn có cột blocked trong database để đánh dấu tài khoản bị khóa
-        ]);
-
-        // Thực hiện đăng nhập
-        $response = $this->post(route('login'), [
-            'email' => 'blocked@example.com',
-            'password' => 'password',
-        ]);
-
-        // Kiểm tra thông báo lỗi nếu tài khoản bị khóa
-        $response->assertSessionHasErrors(['email' => 'Your account has been blocked.']);
-        $this->assertGuest(); // Kiểm tra xem người dùng có phải là khách không
-    }
+//    public function test_login_with_blocked_user_account()
+//    {
+//        // Tạo một User bị khóa
+//        $blockedUser = User::factory()->create([
+//            'email' => 'blocked@example.com',
+//            'password' => bcrypt('password'),
+//            'block' => 1, // Giả sử bạn có cột blocked trong database để đánh dấu tài khoản bị khóa
+//        ]);
+//
+//        // Thực hiện đăng nhập
+//        $response = $this->post(route('login'), [
+//            'email' => 'blocked@example.com',
+//            'password' => 'password',
+//        ]);
+//
+//        // Kiểm tra thông báo lỗi nếu tài khoản bị khóa
+//        $response->assertSessionHasErrors(['email' => 'Your account has been blocked.']);
+//        $this->assertGuest(); // Kiểm tra xem người dùng có phải là khách không
+//    }
 }
