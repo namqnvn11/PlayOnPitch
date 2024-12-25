@@ -122,7 +122,6 @@
                         @foreach($yards as $yard)
                             <tr>
                                 <td class="sticky left-0">{{ $yard->yard_name }}</td>
-
                                 @forelse($yard->YardSchedules as $time)
                                     @php
                                         $timeSlotParts = explode('-', $time->time_slot);
@@ -143,8 +142,7 @@
                                     >
                                     </td>
                                 @empty
-                                    <td colspan="{{$count}}" class="bg-red-400">
-
+                                    <td colspan="{{$count??0}}" class="bg-red-400">
                                     </td>
                                 @endforelse
                             </tr>

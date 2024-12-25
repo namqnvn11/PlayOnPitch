@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admin;
 use App\Models\Boss;
 use App\Models\Invoice;
 use App\Models\PaymentTransaction;
@@ -39,7 +40,7 @@ class DatabaseSeeder extends Seeder
 //                'password' => Hash::make('password1234'),
 //            ],
 //        ];
-//        DB::table('admins')->insert($list);
+//\        DB::table('admins')->insert($list);
         Boss::factory(20)->create();
         Yard::factory(20)->create();
         Voucher::factory(20)->create();
