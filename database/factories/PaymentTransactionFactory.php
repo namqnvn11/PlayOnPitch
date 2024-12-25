@@ -17,7 +17,6 @@ class PaymentTransactionFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
             'invoice_id' => Invoice::factory(),
             'transaction_id' => $this->faker->uuid(),
             'amount' => $this->faker->randomFloat(2, 1, 10000),
