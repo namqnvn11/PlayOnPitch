@@ -57,7 +57,7 @@ class LoginRequest extends FormRequest
             Auth::logout(); // Đăng xuất ngay lập tức nếu bị block
 
             throw ValidationException::withMessages([
-                'email' => trans('Your account has been locked.'), // Thông báo tài khoản bị khóa
+                'email' => trans('Your account has been blocked.'), // Thông báo tài khoản bị khóa
             ]);
         }
 
