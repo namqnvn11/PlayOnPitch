@@ -41,7 +41,9 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        // Thử đăng nhập
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+            // Tăng số lần thử đăng nhập thất bại
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -49,6 +51,17 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Kiểm tra trạng thái block
+        $user = Auth::user();
+        if ($user->block == 1) {
+            Auth::logout(); // Đăng xuất ngay lập tức nếu bị block
+
+            throw ValidationException::withMessages([
+                'email' => trans('Your account has been locked.'), // Thông báo tài khoản bị khóa
+            ]);
+        }
+
+        // Nếu mọi thứ ổn, xóa giới hạn đăng nhập
         RateLimiter::clear($this->throttleKey());
     }
 
