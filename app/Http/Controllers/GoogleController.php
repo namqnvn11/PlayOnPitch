@@ -22,6 +22,10 @@ class GoogleController extends Controller
 
         $findUser= User::where('google_id', $user->id)->first();
         if($findUser){
+            // Kiểm tra xem người dùng đã bị block chưa
+            if ($findUser->block == 1) {
+                return redirect()->route('login')->with('error', 'Your account has been blocked.');
+            }
             Auth::login($findUser);
         }
         else{
@@ -51,6 +55,12 @@ class GoogleController extends Controller
             }
             $newUser->email_verified_at=now();
             $newUser->save();
+
+            // Kiểm tra nếu người dùng bị block
+            if ($newUser->block == 1) {
+                return redirect()->route('login')->with('error', 'Your account has been blocked.');
+            }
+            
             Auth::login($newUser);
         }
         return redirect()->intended('/user/home/index')->with('success', 'You are now logged in with Google!');
