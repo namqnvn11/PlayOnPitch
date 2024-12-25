@@ -215,6 +215,7 @@ header {
     text-align: center;
     line-height: 45px;
     font-size: 12px; /* Kích thước chữ cố định */
+    color: black;
 }
 
 .registration button {
