@@ -24,7 +24,7 @@ class RegisterBossController extends Controller
                 ], 422);
             }
             flash()->error('Registration failed, please check your information.');
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back();
         }
 
         try {

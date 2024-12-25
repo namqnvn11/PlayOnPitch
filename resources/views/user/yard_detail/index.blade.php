@@ -309,10 +309,10 @@
             // Xử lý link báo cáo
             if (target.classList.contains('report-link')) {
                 const ratingId = target.dataset.ratingId;
-                console.log('Báo cáo bài viết với ID:', ratingId);
+                console.log('Report post with ID:', ratingId);
 
                 if (!ratingId) {
-                    console.log('Không tìm thấy ratingId');
+                    console.log('RatingId not found');
                 }
             }
         });
@@ -328,67 +328,6 @@
                 });
             }
         });
-
-        // Sự kiện load more
-        loadMoreButton.addEventListener('click', function () {
-            const currentPage = parseInt(loadMoreButton.getAttribute('data-current-page'), 10);
-            const nextPage = currentPage + 1;
-            const url = "{{ route('user.yarddetail.loadMore', ['id' => $boss->Yards()->first()->id]) }}?page=" + nextPage;
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    if (data.reviews && data.reviews.length > 0) {
-                        data.reviews.forEach(review => {
-                            const reviewItem = document.createElement('div');
-                            reviewItem.classList.add('review-item');
-                            reviewItem.innerHTML = `
-                            <div class="review-header">
-                                <div class="review-user-info">
-                                    <img src="https://www.gravatar.com/avatar/${review.user.full_name}?s=100&d=identicon" alt="${review.user.full_name}'s avatar" class="user-avatar">
-                                    <span class="review-user">${review.user.full_name}</span>
-                                </div>
-                                <div class="review-rating">
-                                    ${[...Array(5)].map((_, i) => `
-                                        <span class="star1 ${review.point >= i + 1 ? 'filled' : ''}">★</span>
-                                    `).join('')}
-                                    <span class="rating-point">(${review.point})</span>
-                                </div>
-                            </div>
-                            <div class="ellipsis-menu" style="float: right">
-                                <span class="ellipsis">...</span>
-                                <div class="dropdown-content" style="display: none;">
-                                    <a href="#" class="report-link" data-bs-toggle="modal" data-bs-target="#modalReport" data-rating-id="${review.id}">Báo cáo bài viết</a>
-                                </div>
-                            </div>
-                            <div class="review-comment">
-                                <p>${review.comment}</p>
-                            </div>
-                        `;
-                            reviewsContainer.appendChild(reviewItem);
-                        });
-
-                        loadMoreButton.setAttribute('data-current-page', nextPage);
-                    }
-
-                    if (data.averageRating !== undefined) {
-                        averageRatingDisplay.innerHTML = `
-                        Average Rating:
-                        ${[...Array(5)].map((_, i) => `
-                            <span class="star1 ${data.averageRating >= i + 1 ? 'filled' : ''}">★</span>
-                        `).join('')}
-                        (${data.averageRating.toFixed(2)})
-                    `;
-                    }
-
-                    if (!data.hasMorePages) {
-                        loadMoreButton.style.display = 'none';
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        });
-
 
         document.addEventListener('click', function(event) {
             const target = event.target;
