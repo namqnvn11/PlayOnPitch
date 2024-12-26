@@ -35,8 +35,8 @@ class YardScheduleController extends Controller
         $currentDate = now()->startOfDay();
         $endDate = $currentDate->copy()->addDays(6)->endOfDay();
         $query->whereBetween('date', [$currentDate, $endDate]);
-
-        $yardSchedules = $query->paginate(200);
+        $baseUrl = app()->environment('production') ? env('APP_URL') : url('/');
+        $yardSchedules = $query->paginate(200)->withPath($baseUrl.'/boss/yard_schedule/index');
 
         $Dates = $yardSchedules->getCollection()->unique('date')->sortBy('date')->values();
         $TimeSlots = $yardSchedules->getCollection()->unique('time_slot');

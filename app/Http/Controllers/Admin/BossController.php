@@ -14,9 +14,10 @@ class BossController extends Controller
 {
     public function index()
     {
+        $baseUrl = app()->environment('production') ? env('APP_URL') : url('/');
         $bosses = Boss::where('block', 0)
             ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->paginate(15)->withPath($baseUrl.'/admin/boss/index');
 
         $prioritizedProvinces = [' Hà Nội', ' Hồ Chí Minh', ' Đà Nẵng', ' Hải Phòng', ' Cần Thơ'];
         $prioritized = Province::whereIn('name', $prioritizedProvinces)
@@ -214,8 +215,9 @@ class BossController extends Controller
             $query->where('status', false);
         }
 
+        $baseUrl = app()->environment('production') ? env('APP_URL') : url('/');
         $bosses = $query->orderByDesc('created_at')
-            ->paginate(10)
+            ->paginate(10)->withPath($baseUrl.'/admin/boss/search')
             ->appends($request->input());
         $District = District::all();
         $Province = Province::all();

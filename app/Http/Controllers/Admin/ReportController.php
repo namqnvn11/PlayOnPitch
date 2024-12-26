@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 class ReportController extends Controller
 {
     function index(){
-            $ratings = Rating::where('report_count','>=',5)->where('status','pending')->paginate(15);
+        $baseUrl = app()->environment('production') ? env('APP_URL') : url('/');
+            $ratings = Rating::where('report_count','>=',5)->where('status','pending')->paginate(15)->withPath($baseUrl.'/admin/reported/index');
         return view('admin.reportedRatings.index', compact('ratings'));
     }
 

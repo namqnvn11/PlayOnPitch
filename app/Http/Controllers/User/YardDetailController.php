@@ -24,11 +24,13 @@ class YardDetailController extends Controller
         $boss = Boss::find($id);
         $firstYard= $boss->Yards()->first();
 
+        $baseUrl = app()->environment('production') ? env('APP_URL') : url('/');
+
         $ratings = Rating::with('User')
             ->where('boss_id', $boss->id)
             ->where('block', 0)
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath($baseUrl.'/user/yarddetail/index/'.$id);
 
         $User = User::all();
         $averageRating = Rating::where('boss_id', $boss->id)->avg('point');

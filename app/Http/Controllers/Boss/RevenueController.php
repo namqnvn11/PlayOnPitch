@@ -58,7 +58,7 @@ class RevenueController extends Controller
         ->get();
 
     // Trả về view với dữ liệu đã tổng hợp
-    return view('boss.revenue.index', compact('data'));
+    return view('boss.Revenue.index', compact('data'));
 }
 
     private function getMonthsByQuarter($quarter)

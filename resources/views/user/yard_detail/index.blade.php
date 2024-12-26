@@ -164,7 +164,7 @@
                         </div>
 
                     </div>
-                    @if(Auth::check())
+                    @if(Auth::check() && Auth::user()->id !== $rating->user_id)
                         <div class="ellipsis-menu" style="float: right">
                             <span class="ellipsis">...</span>
                             <div class="dropdown-content" style="display: none;">
