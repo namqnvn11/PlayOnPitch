@@ -36,7 +36,7 @@ class GoogleController extends Controller
                 'google_id'=> $user->id,
                 'phone' => '',
                 'address' => '',
-                'district_id' => 1,
+                'district_id' => 0,
                 'block' => 0,
                 'password' => bcrypt('abcd1234'),
             ]);
@@ -60,7 +60,7 @@ class GoogleController extends Controller
             if ($newUser->block == 1) {
                 return redirect()->route('login')->with('error', 'Your account has been blocked.');
             }
-            
+
             Auth::login($newUser);
         }
         return redirect()->intended('/user/home/index')->with('success', 'You are now logged in with Google!');

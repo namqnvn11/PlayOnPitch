@@ -22,10 +22,9 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
-
         $provinces = Province::all();
-        $currentProvince= $user->District->Province;
-        $districts = $currentProvince->Districts;
+        $currentProvince= $user->District->Province??null;
+        $districts = $currentProvince->Districts??null;
         return view('user.profile.index', compact('user', 'provinces', 'districts'));
     }
 
@@ -90,13 +89,13 @@ class ProfileController extends Controller
     public function detail(Request $request, $id)
     {
         $response = User::findOrFail($id);
-        $district = District::findOrFail($response->district_id);
+        $district = District::find($response->district_id)??null;
         if ($response) {
             return response()->json([
                 'success'   => true,
                 'data'      => $response,
                 'district' => $district,
-                'province' => $district->province,
+                'province' => $district->province??null,
             ]);
         }
 
