@@ -110,19 +110,22 @@
                 <a href="{{ $bookingLink }}?selectTime={{ \Carbon\Carbon::now()->toDateString() }}" class="book-now">Book now</a>
             </div>
             <div class="owner-info">
-                <h3>FOOTBALL FIELD OWNER INFORMATION</h3>
+                <h3>INFORMATION</h3>
                 <p><i class="fa fa-user"></i> {{ $boss->full_name}} </p>
                 <p><i class="fa fa-phone"></i> {{ $boss->phone}} </p>
                 <p><i class="fa fa-envelope"></i> {{ $boss->email}} </p>
-                <p><i class="fa fa-map-marker"></i> {{ $boss->company_address}} </p>
-                <img class="map" src="{{asset('img/sanbong.jpg')}}" alt="Map Image">
+                <p><i class="fa fa-map-marker"></i> {{ $boss->company_address .', ' . $boss->district->name . ', ' . $boss->district->province->name}} </p>
+            </div>
+            <div class="owner-info">
+                <h3>Description</h3>
+                <p>{{$boss->description}}</p>
             </div>
         </div>
     </div>
-    <div class="general-info w-[65%]">
-        <h3>General Overview</h3>
-        <div class="text-[17px] mt-2 text-justify">{{$boss->description}}</div>
-    </div>
+{{--    <div class="general-info w-[65%]">--}}
+{{--        <h3>General Overview</h3>--}}
+{{--        <div class="text-[17px] mt-2 text-justify">{{$boss->description}}</div>--}}
+{{--    </div>--}}
 
     <div class="review-section">
         <h3>Ratings</h3>
