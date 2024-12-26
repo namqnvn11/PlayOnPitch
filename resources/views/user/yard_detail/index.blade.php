@@ -117,7 +117,7 @@
                 <p><i class="fa fa-map-marker"></i> {{ $boss->company_address .', ' . $boss->district->name . ', ' . $boss->district->province->name}} </p>
             </div>
             <div class="owner-info">
-                <h3>Description</h3>
+                <h3>DESCRIPTION</h3>
                 <p>{{$boss->description}}</p>
             </div>
         </div>
