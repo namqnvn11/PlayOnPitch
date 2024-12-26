@@ -51,14 +51,18 @@
                         <label for="province" class="mb-1">Province</label>
                         <x-green-select name="province" id="province_id" class="form-control py-2" onchange="provinceOnchange(event)">
                             <option value="">Select Province</option>
-                            @foreach ($provinces as $province)
-                                <option
-                                    value="{{ $province->id }}"
-                                    {{ $user->District->Province->id == $province->id ? 'selected' : '' }}
-                                >
-                                    {{ $province->name }}
-                                </option>
-                            @endforeach
+
+                                @foreach ($provinces as $province)
+                                    <option
+                                        value="{{ $province->id }}"
+                                        @if($districts!==null)
+                                            {{ $user->District->Province->id == $province->id ? 'selected' : '' }}
+                                        @endif
+                                    >
+                                        {{ $province->name }}
+                                    </option>
+                                @endforeach
+
                         </x-green-select>
                         @error('province')
                         <div class="text-danger">{{ $message }}</div>
@@ -70,14 +74,16 @@
                         <label for="district" class="mb-1">District</label>
                         <x-green-select name="district" id="district_id" class="form-control py-2">
                             <option value="">Select District</option>
-                            @foreach ($districts as $district)
-                                <option
-                                    value="{{ $district->id }}"
-                                    {{ $user->district_id== $district->id ? 'selected' : '' }}
-                                >
-                                    {{ $district->name }}
-                                </option>
-                            @endforeach
+                            @if($districts!==null)
+                                @foreach ($districts as $district)
+                                    <option
+                                        value="{{ $district->id }}"
+                                        {{ $user->district_id== $district->id ? 'selected' : '' }}
+                                    >
+                                        {{ $district->name }}
+                                    </option>
+                                @endforeach
+                            @endif
                         </x-green-select>
                         @error('district')
                         <div class="text-danger">{{ $message }}</div>
