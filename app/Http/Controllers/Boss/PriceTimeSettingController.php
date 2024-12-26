@@ -492,8 +492,11 @@ class PriceTimeSettingController extends Controller
                     $openTime = Carbon::createFromFormat('H:i:s', $yard->Boss->time_open);
 
                     $timeClose = $yard->Boss->time_close;
-
-                    $closeTime = Carbon::createFromFormat('H:i:s', $timeClose)->addDay();
+                    if ($timeClose =='00:00:00') {
+                        $closeTime = Carbon::createFromFormat('H:i:s', $timeClose)->addDay();
+                    }else{
+                        $closeTime = Carbon::createFromFormat('H:i:s', $timeClose);
+                    }
                 }
                 $currentTime = $openTime;
                 $priceTimeSettings = PriceTimeSetting::
@@ -645,15 +648,18 @@ class PriceTimeSettingController extends Controller
                 $openTime = Carbon::createFromFormat('H:i:s', $yard->Boss->time_open);
 
                 $timeClose = $yard->Boss->time_close;
+                if ($timeClose =='00:00:00') {
+                    $closeTime = Carbon::createFromFormat('H:i:s', $timeClose)->addDay();
+                }else{
+                    $closeTime = Carbon::createFromFormat('H:i:s', $timeClose);
+                }
 
-                $closeTime = Carbon::createFromFormat('H:i:s', $timeClose)->addDay();
             }
             $currentTime = $openTime;
             $priceTimeSettings = PriceTimeSetting::
             where('yard_id', $yard->id)
                 ->where('day_of_week',$currentDayOfWeekNumber<6?'MonFri':'Weekend')
                 ->get();
-
             while ($currentTime->lt($closeTime)) {
                 // Tạo bản sao của $currentTime để truyền vào hàm getPriceInTime
                 $timeForCalculation = $currentTime->copy();
@@ -672,6 +678,7 @@ class PriceTimeSettingController extends Controller
 
                 // Tăng thời gian $currentTime lên 90 phút
                 $currentTime->addMinutes(90);
+                Log::info($currentTime->format('Y-m-d H:i:s'));
             }
 
         }

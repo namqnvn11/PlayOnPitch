@@ -15,7 +15,7 @@ class UserController extends Controller
     public function index()
     {
         $baseUrl = app()->environment('production') ? env('APP_URL') : url('/');
-        $users= User::orderby('created_at')->where('block',0)->paginate(10)->withPath($baseUrl.'/admin/users/index');
+        $users= User::orderby('created_at')->where('block',0)->paginate(10)->withPath($baseUrl.'/admin/user/index');
         $prioritizedProvinces = [' Hà Nội', ' Hồ Chí Minh', ' Đà Nẵng', ' Hải Phòng', ' Cần Thơ'];
         $prioritized = Province::whereIn('name', $prioritizedProvinces)
             ->orderByRaw("FIELD(name, '" . implode("','", $prioritizedProvinces) . "')")

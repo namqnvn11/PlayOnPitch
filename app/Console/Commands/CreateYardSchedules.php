@@ -58,7 +58,11 @@ class CreateYardSchedules extends Command
 
                     $timeClose = $yard->Boss->time_close;
 
-                    $closeTime = Carbon::createFromFormat('H:i:s', $timeClose)->addDay();
+                    if ($timeClose =='00:00:00') {
+                        $closeTime = Carbon::createFromFormat('H:i:s', $timeClose)->addDay();
+                    }else{
+                        $closeTime = Carbon::createFromFormat('H:i:s', $timeClose);
+                    }
                 }
                 $currentTime = $openTime;
                 $priceTimeSettings = PriceTimeSetting::
