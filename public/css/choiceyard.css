@@ -298,10 +298,17 @@ footer {
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    max-width: 100%; /* Giới hạn chiều rộng bảng trong phần tử cha */
-    overflow-x: auto; /* Tạo thanh cuộn ngang nếu nội dung quá rộng */
-    white-space: nowrap; /* Giữ các cột không bị xuống dòng */
-    border: 1px solid #ddd; /* Đường viền để làm nổi bật bảng */
+    max-width: 100%;
+    overflow: hidden;
+    border: 1px solid #ddd;
+}
+
+.booking-table1 {
+    max-width: 100%;
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+    border-spacing: 0;
 }
 
 .time-selector {
