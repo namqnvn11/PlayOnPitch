@@ -26,7 +26,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <x-green-button type="submit" class="btn btn-primary">Save</x-green-button>
                     </div>
                 </form>
             </div>
