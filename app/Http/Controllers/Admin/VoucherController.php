@@ -19,7 +19,8 @@ class VoucherController extends Controller
     }
     public function index()
     {
-        $vouchers = Voucher::where('block', 0)->paginate(10);
+        $baseUrl = app()->environment('production') ? env('APP_URL') : url('/');
+        $vouchers = Voucher::where('block', 0)->paginate(10)->withPath($baseUrl.'/admin/voucher/index');
         $Users = User::all();
         return view('admin.voucher.index', compact('vouchers', 'Users'));
     }
@@ -188,9 +189,10 @@ class VoucherController extends Controller
         if ($fromExpireDate !== null && $toExpireDate !== null) {
             $query->whereBetween('end_date', [$fromExpireDate, $toExpireDate]);
         }
-
+        $baseUrl = app()->environment('production') ? env('APP_URL') : url('/');
         $vouchers = $query->orderByDesc('created_at')
             ->paginate(10)
+            ->withPath($baseUrl.'/admin/voucher/search')
             ->appends($request->input());
 
         $Users = User::all();

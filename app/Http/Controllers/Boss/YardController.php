@@ -18,11 +18,12 @@ class YardController extends Controller
 {
     public function index()
     {
+        $baseUrl = app()->environment('production') ? env('APP_URL') : url('/');
         $currentBoss = Auth::guard('boss')->user();
         $yards = Yard::where('block', 0)
             ->where('boss_id', $currentBoss->id)
             ->orderBy('yard_name', 'asc')
-            ->paginate(10);
+            ->paginate(10)->withPath($baseUrl.'boss/yard/index');
         $prioritizedProvinces = [' Hà Nội', ' Hồ Chí Minh', ' Đà Nẵng', ' Hải Phòng', ' Cần Thơ'];
         $prioritized = Province::whereIn('name', $prioritizedProvinces)
             ->orderByRaw("FIELD(name, '" . implode("','", $prioritizedProvinces) . "')")
@@ -249,8 +250,9 @@ class YardController extends Controller
             $query->where('block', true);
         }
 
+        $baseUrl = app()->environment('production') ? env('APP_URL') : url('/');
         $yards = $query->orderByDesc('created_at')
-            ->paginate(10)
+            ->paginate(10)->withPath($baseUrl.'/boss/yard/search')
             ->appends($request->input());
         $District = District::all();
         $Province = Province::all();

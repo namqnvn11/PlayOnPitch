@@ -42,12 +42,14 @@ class YardListController extends Controller
             $query->where('company_name', 'LIKE', '%' . $yardName . '%');
         }
 
+        $baseUrl = app()->environment('production') ? env('APP_URL') : url('/');
+
         // Chỉ lấy những boss có ít nhất 1 sân không bị chặn
         $bosses = $query->whereHas('yards', function ($q) {
             $q->where('block', false);
         })
             ->orderBy('created_at', 'desc')
-            ->paginate(8);
+            ->paginate(8)->withPath($baseUrl . '/user/yardlist/index' );
 
         return view('user.yard_list.index', compact('bosses', 'District', 'Province'));
     }

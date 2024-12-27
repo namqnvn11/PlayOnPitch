@@ -312,5 +312,5 @@ Route::post('/momo/payment', [PaymentController::class, 'createMoMoPayment'])->n
 Route::get('/momo/payment/callback', [PaymentController::class, 'handleMoMoPaymentCallback'])->name('momo.payment.callback');
 
 Route::get('test', function () {
-    return '12312312';
+    return env('APP_URL');
 })->name('test');
