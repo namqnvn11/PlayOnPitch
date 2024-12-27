@@ -121,7 +121,7 @@
 
                         @foreach($yards as $yard)
                             <tr>
-                                <td class="sticky left-0">{{ $yard->yard_name }}</td>
+                                <td class="sticky left-0">{{ $yard->yard_name }} ({{$yard->yard_type}})</td>
                                 @forelse($yard->YardSchedules as $time)
                                     @php
                                         $timeSlotParts = explode('-', $time->time_slot);
