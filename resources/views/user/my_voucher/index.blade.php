@@ -93,7 +93,7 @@
                 @php
                     $voucher = $group->first()->voucher;
                 @endphp
-                @if($voucher->block == 0 && $voucher->end_date > now())
+                @if($voucher && $voucher->block == 0 && $voucher->end_date > now())
                 <tr>
                     <td class=""><img class="max-w-[200px] mx-auto rounded" src="{{$voucher->image->img??asset('img/voucher.jpg')}}" onclick="openImageLayer('{{$voucher->image->img??asset('img/voucher.jpg')}}')"></td>
                     <td>{{ $voucher->name }}</td>
