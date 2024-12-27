@@ -35,7 +35,7 @@ class ProfileController extends Controller
         // Validate input data
         $request->validate([
             'full_name' => 'required|string|max:255',
-            'phone' => 'required|string|max:15',
+            'phone' => ['required', 'string', 'regex:/^((\+84|0)(\d{9,10}))|((0\d{2,3})\d{7,8})$/'],
             'province' => 'required|integer',
             'district' => 'required|integer',
             'address' => 'required|string|max:255',

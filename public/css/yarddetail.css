@@ -108,15 +108,16 @@ header {
     font-family: Arial, sans-serif;
     font-weight: bold;
     font-size: 22px; /* Kích thước chữ cố định */
-    line-height: 30px; /* Chiều cao dòng */
+    line-height: 3vh; /* Chiều cao dòng */
 }
 
 .registration .form {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    height: 100px;
+    gap: 5px;
+    width: 100%;
+    height: 6vw;
 }
 
 .registration input,
@@ -124,8 +125,9 @@ header {
     padding: 10px;
     border: none;
     border-radius: 10px;
-    width: 250px;
-    height: 45px;
+    width: 23%;
+    max-width: 400px;
+    height: 5vh;
     text-align: center;
     line-height: 45px;
     font-size: 12px; /* Kích thước chữ cố định */
@@ -136,8 +138,8 @@ header {
     padding: 0;
     border: none;
     border-radius: 10px;
-    width: 133px;
-    height: 45px;
+    width: 10vw;
+    height: 5vh;
     color: white;
     background-color: #3F9C4B;
     display: flex;
@@ -303,16 +305,21 @@ footer {
 }
 
 .book-now {
-    padding: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    border-radius: 10px;
-    cursor: pointer;
-    border: none;
-    text-align: center;
-    width: 100%;
-    height: 5vh;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex; /* Kích hoạt Flexbox để dễ dàng căn chỉnh */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    padding: 10px; /* Khoảng cách bên trong */
+    font-size: calc(1.2vw); /* Kích thước chữ co giãn theo kích thước màn hình */
+    font-weight: bold; /* Tăng độ đậm cho chữ */
+    border-radius: 10px; /* Bo tròn góc nút */
+    cursor: pointer; /* Thay đổi con trỏ khi hover */
+    border: none; /* Xóa viền */
+    text-align: center; /* Căn giữa nội dung */
+    width: 100%; /* Chiếm toàn bộ chiều rộng container */
+    height: 5vh; /* Đặt chiều cao cố định hoặc linh hoạt */
+    line-height: normal; /* Chiều cao dòng linh hoạt */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+    white-space: nowrap; /* Ngăn chữ bị xuống dòng */
 }
 
 .time-select {
