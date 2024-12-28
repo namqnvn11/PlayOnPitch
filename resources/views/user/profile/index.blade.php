@@ -56,33 +56,37 @@
     </div>
 </a>
 
-<div class="profile-container">
+<div class="profile-container justify-center">
     <div class="sidebar">
         <div class="user-info">
             <p>Mr./Ms. <strong>{{ Auth::user()->full_name}}</strong></p>
         </div>
-        <ul class="menu">
-            <li><a href="{{route('user.history.index')}}"> <i class="fa fa-history"></i>&nbsp;Booking History</a></li>
-            <li style="background-color: #F4F4F4"><a style="color: #4CAF50;" href="{{route("user.profile.index")}}"> <i class="fa fa-info-circle"></i>&nbsp;Personal Information</a></li>
-            <li><a href="{{route("user.my_voucher.index")}}"><i class="fa-solid fa-ticket"></i>&nbsp;Your Vouchers</a></li>
-            <li><a href="{{route("user.voucher.index")}}"><i class="fa-solid fa-retweet"></i>&nbsp;Redeem Vouchers</a></li>
-        </ul>
-        <a href="{{route("user.logout")}}"><button class="logout-btn">Logout</button></a>
+        <div class="w-full">
+            <ul class="menu">
+                <li><a href="{{route('user.history.index')}}"> <i class="fa fa-history"></i>&nbsp;Booking History</a></li>
+                <li class="rounded" style="background-color: #F4F4F4"><a style="color: #4CAF50;" href="{{route("user.profile.index")}}"> <i class="fa fa-info-circle"></i>&nbsp;Personal Information</a></li>
+                <li><a href="{{route("user.my_voucher.index")}}"><i class="fa-solid fa-ticket"></i>&nbsp;Your Vouchers</a></li>
+                <li><a href="{{route("user.voucher.index")}}"><i class="fa-solid fa-retweet"></i>&nbsp;Redeem Vouchers</a></li>
+                <li class="border-green-600 border-1 rounded"><a href="{{route("user.logout")}}" class="flex justify-center text-green-600" style="color: #0b2e13 !important;"><div class="text-[#4CAF50]">Logout</div></a></li>
+            </ul>
+        </div>
     </div>
 
-    <div class="profile-details relative bg-gray-200">
-        <div class="absolute top-10 right-[100px]">
-            <div class="">
-                <img src="{{Auth::user()->image->img??"https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg"}}" class="rounded-full w-[100px] h-[100px]" width="100px">
-                <div
-                    class="bg-black absolute bottom-[4px] right-0 rounded-full w-[28px] h-[28px] hover:bg-gray-700 hover:scale-110 transition-all duration-300 cursor-pointer flex items-center justify-center"
-                    onclick="showModalUpdateImage()"
-                >
-                    <i class="bi bi-pencil text-[20px] text-white hover:text-yellow-500 transition-colors duration-300"></i>
+    <div class="profile-details relative bg-gray-200 max-w-[970px]">
+        <div class="flex justify-between">
+            <h2 class="mt-4 text-[24px] font-bold">Personal Information</h2>
+            <div class="relative">
+                <div class="">
+                    <img src="{{Auth::user()->image->img??"https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg"}}" class="rounded-full w-[100px] h-[100px]" width="100px">
+                    <div
+                        class="bg-black absolute bottom-[4px] right-0 rounded-full w-[28px] h-[28px] hover:bg-gray-700 hover:scale-110 transition-all duration-300 cursor-pointer flex items-center justify-center"
+                        onclick="showModalUpdateImage()"
+                    >
+                        <i class="bi bi-pencil text-[20px] text-white hover:text-yellow-500 transition-colors duration-300"></i>
+                    </div>
                 </div>
             </div>
         </div>
-        <h2>Personal Information</h2>
         <div class="details-box">
             <div class="info-row">
                 <label>Email:</label>
@@ -110,7 +114,7 @@
         </div>
         <div class="flex w-full">
             <button class="edit-btn js-on-edit" onclick="openEditProfileForm()">Edit Info</button>
-            <button class="edit-btn js-on-edit ml-2" data-bs-toggle="modal" data-bs-target="#changePasswordModal" style="width: 21%">Change Password</button>
+            <button class="edit-btn js-on-edit ml-2 w-[200px]" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change Password</button>
             @if(Auth::user()->email_verified_at===null)
                 <a href="{{route('verification.notice')}}"><button class="edit-btn ml-2" type="submit">Verify you account</button></a>
             @endif
@@ -121,13 +125,13 @@
 <div>
     <form action="{{ Auth::check() ? route('user.storeRegister') : route('guest.storeRegister') }}" method="post">
         @csrf
-        <section class="registration">
+        <section class="registration py-6">
             <div class="form">
-                <h2 style="margin-right: 250px">Do you want to register to use the FREE football yard management website?</h2>
+                <div class="leading-6 text-[24px] font-bold max-w-[500px]">Do you want to register to use the FREE football yard management website?</div>
                 <input type="text" placeholder="Enter full name" name="name">
                 <input type="text" placeholder="Enter phone number" name="phone">
                 <input type="text" placeholder="Enter email" name="email">
-                <button type="submit">Submit</button>
+                <button type="submit" class="min-w-[80px]">Submit</button>
             </div>
         </section>
     </form>
