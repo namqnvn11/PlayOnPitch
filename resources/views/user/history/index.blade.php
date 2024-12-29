@@ -9,6 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 <body>
 <header>
@@ -65,10 +67,9 @@
             <li><a href="{{route("user.profile.index")}}"> <i class="fa fa-info-circle"></i>&nbsp;Personal Information</a></li>
             <li><a href="{{route("user.my_voucher.index")}}"><i class="fa-solid fa-ticket"></i>&nbsp;Your Vouchers</a></li>
             <li><a href="{{route("user.voucher.index")}}"><i class="fa-solid fa-retweet"></i>&nbsp;Redeem Vouchers</a></li>
+            <li class="border-green-600 border-1 rounded"><a href="{{route("user.logout")}}" class="flex justify-center text-green-600" style="color: #0b2e13 !important;"><div class="text-[#4CAF50]">Logout12312</div></a></li>
         </ul>
-        <a href="{{route("user.logout")}}"><button class="logout-btn">Logout</button></a>
     </div>
-
     <div class="history-section">
         <h2 class="section-title">Booking History</h2>
         <div class="booking-list">
@@ -77,7 +78,7 @@
                     @php
                         $boss=$history->Reservation->YardSchedules->first()->Yard->Boss
                     @endphp
-                    <div class="booking-item">
+                    <div class="booking-item min-w-[560px]">
                         <div class="booking-details">
                             <img src="{{$boss->images->first()->img??asset('img/sanbong.jpg')}}" alt="Field Image">
                             <div></div>
@@ -95,8 +96,10 @@
                             <p class="status success">Successful</p>
                             <p><strong>Total Amount:</strong> {{ number_format($history->reservation->total_price ?? 0, 0, ',', '.') }}đ</p>
                             <p><strong>Deposit Paid:</strong> {{ number_format($history->reservation->deposit_amount ?? 0, 0, ',', '.') }}đ</p>
-                            <button class="reorder-btn" onclick="redirectToInvoice({{ $history->reservation->invoice->id ?? '' }})">View Invoice</button>
-                            <button class="reorder-btn" onclick="redirectToYardDetail({{ $history->reservation->YardSchedules->first()->yard->boss->id ?? '' }})">Book Again</button>
+                           <div class="flex flex-row">
+                               <button class="reorder-btn mr-2 w-[130px] py-2" onclick="redirectToInvoice({{ $history->reservation->invoice->id ?? '' }})">View Invoice</button>
+                               <button class="reorder-btn w-[130px] py-2" onclick="redirectToYardDetail({{ $history->reservation->YardSchedules->first()->yard->boss->id ?? '' }})">Book Again</button>
+                           </div>
                         </div>
                     </div>
                 @endif
@@ -109,17 +112,20 @@
 </div>
 <button id="showMoreBtn" class="show-more-btn" style="border-radius: 10px">Show More</button>
 
-
 <div>
     <form action="{{ Auth::check() ? route('user.storeRegister') : route('guest.storeRegister') }}" method="post">
         @csrf
-        <section class="registration">
+        <section class="registration py-6">
             <div class="form">
-                <h2 style="margin-right: 250px">Do you want to register to use the FREE football yard management website?</h2>
+                <div
+                    class="leading-6 text-[24px] font-bold"
+                >
+                    Do you want to register to use the FREE football yard management website?
+                </div>
                 <input type="text" placeholder="Enter full name" name="name">
                 <input type="text" placeholder="Enter phone number" name="phone">
                 <input type="text" placeholder="Enter email" name="email">
-                <button type="submit">Submit</button>
+                <button type="submit" class="min-w-[80px]">Submit</button>
             </div>
         </section>
     </form>

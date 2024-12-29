@@ -66,8 +66,8 @@
             <li><a href="{{route("user.profile.index")}}"> <i class="fa fa-info-circle"></i>&nbsp;Personal Information</a></li>
             <li><a href="{{route("user.my_voucher.index")}}"><i class="fa-solid fa-ticket"></i>&nbsp;Your Vouchers</a></li>
             <li style="background-color: #F4F4F4"><a href="#"  style="color: #4CAF50;"><i class="fa-solid fa-retweet"  style="color: #4CAF50;"></i>&nbsp;Redeem Vouchers</a></li>
+            <li class="border-green-600 border-1 rounded"><a href="{{route("user.logout")}}" class="flex justify-center text-green-600" style="color: #0b2e13 !important;"><div class="text-[#4CAF50]">Logout</div></a></li>
         </ul>
-        <a href="{{route("user.logout")}}"><button class="logout-btn">Logout</button></a>
     </div>
 
     <div class="profile-details">
@@ -123,13 +123,13 @@
 <div>
     <form action="{{ Auth::check() ? route('user.storeRegister') : route('guest.storeRegister') }}" method="post">
         @csrf
-        <section class="registration">
+        <section class="registration py-6">
             <div class="form">
-                <h2 style="margin-right: 250px">Do you want to register to use the FREE football yard management website?</h2>
+                <div class="leading-6 text-[24px] font-bold max-w-[500px]">Do you want to register to use the FREE football yard management website?</div>
                 <input type="text" placeholder="Enter full name" name="name">
                 <input type="text" placeholder="Enter phone number" name="phone">
                 <input type="text" placeholder="Enter email" name="email">
-                <button type="submit">Submit</button>
+                <button type="submit" class="min-w-[80px]">Submit</button>
             </div>
         </section>
     </form>
