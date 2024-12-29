@@ -623,3 +623,153 @@ button#submit-rating:hover {
     color: #FFFFFF;
     background-color: #008347;
 }
+
+
+@media (max-width: 768px) {
+    .nav-menu {
+        flex-direction: row; /* Đảm bảo menu chính vẫn ngang */
+        justify-content: space-between;
+        flex-wrap: wrap; /* Để đảm bảo nội dung không bị tràn */
+        padding: 10px;
+    }
+
+    .nav-menu ul {
+        flex-direction: row; /* Hiển thị danh sách theo chiều ngang */
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        width: 100%; /* Đảm bảo chiếm toàn bộ chiều ngang */
+    }
+
+    .nav-menu a {
+        font-size: 1rem;
+        padding-right: 0;
+    }
+
+    .auth-button button {
+        width: auto; /* Tự động điều chỉnh kích thước theo nội dung */
+        margin-top: 10px;
+    }
+}
+@media (max-width: 768px) {
+    .features {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .feature {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .registration {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .registration .form {
+        flex-direction: column;
+        gap: 10px;
+        height: auto;
+    }
+
+    .registration input,
+    .registration button {
+        width: 100%;
+        height: auto;
+        font-size: 10px;
+    }
+    .registration h2 {
+        position: relative;
+        left: 125px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    footer {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        padding: 20px;
+    }
+
+    .footer-section {
+        margin-bottom: 20px;
+    }
+
+    .footer-section button {
+        width: 100%;
+        height: auto;
+    }
+}
+@media (max-width: 768px) {
+    .banner img {
+        width: 90%;
+        height: auto;
+    }
+}
+
+
+@media only screen and (max-width: 768px) {
+    /* Main Section */
+    .main-section {
+        flex-direction: column; /* Xếp các phần theo chiều dọc */
+        gap: 15px;
+    }
+
+    .image-gallery {
+        flex: unset; /* Loại bỏ độ rộng cố định */
+    }
+
+    .main-image {
+        height: auto; /* Tự động điều chỉnh chiều cao */
+    }
+
+    .thumbnails img {
+        width: 100px; /* Điều chỉnh kích thước nhỏ hơn */
+        height: 80px;
+    }
+
+    .booking-info {
+        margin-top: 20px;
+        width: 100%; /* Chiếm hết chiều ngang */
+    }
+
+    .book-now {
+        font-size: 1rem; /* Giảm kích thước chữ */
+        height: auto; /* Chiều cao tự động */
+    }
+
+    /* Filters */
+    .filters-container {
+        flex-direction: column; /* Chuyển filters thành cột */
+        align-items: flex-start; /* Căn trái */
+    }
+
+    .filters select {
+        width: 100%; /* Chiếm toàn bộ chiều ngang */
+    }
+
+    /* Reviews */
+    #review-form {
+        gap: 5px;
+    }
+
+    #review-input {
+        width: 100%; /* Chiếm hết chiều ngang */
+    }
+
+    #reviews {
+        margin: 10px;
+    }
+    .review-item {
+        padding: 10px; /* Giảm padding để tiết kiệm không gian */
+        margin-bottom: 15px; /* Giảm khoảng cách giữa các phần tử */
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Nhẹ nhàng hơn trên màn hình nhỏ */
+        border-radius: 5px; /* Bo tròn ít hơn để cân đối */
+
+    }
+}
+

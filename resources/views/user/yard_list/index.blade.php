@@ -91,7 +91,7 @@
     </div>
 
 
-    <div class="grid grid-cols-4 gap-x-1 gap-y-4 m-3">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-1 gap-y-4 m-3">
         @if($bosses->isEmpty())
             <p class="w-[120%] ml-[12px]">No venue matches the search criteria.</p>
         @else
@@ -100,7 +100,7 @@
                     $bossId = 1;  // Giả sử bạn muốn lấy các sân của Boss có ID = 1
                     $yardTypes = $boss->yards()
                                     ->where('block', false)
-                                    ->distinct('yard_type') 
+                                    ->distinct('yard_type')
                                     ->pluck('yard_type')
                                     ->implode(', ');
                     $count = $boss->yards()->where('block', false)->count();
@@ -126,7 +126,6 @@
             {!! $bosses->appends(request()->input())->links('pagination::bootstrap-4') !!}
         </x-paginate-container >
     @endif
-
 
 
 </div>

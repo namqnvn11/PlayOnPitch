@@ -122,8 +122,8 @@ header {
 }
 
 .search-bar select,
-.search-bar input,
-.search-bar button {
+.search-bar input
+ {
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 20px;
@@ -137,7 +137,10 @@ header {
     color: white;
     border: none;
     cursor: pointer;
-    max-width: 150px;
+    font-size: 1rem;
+    border-radius: 20px;
+    padding: 10px 15px;
+    height: 70px;
 }
 
 /* Features Section */
@@ -306,4 +309,113 @@ footer {
     object-fit: cover;
 }
 
+@media (max-width: 768px) {
+    .nav-menu {
+        flex-direction: row; /* Đảm bảo menu chính vẫn ngang */
+        justify-content: space-between;
+        flex-wrap: wrap; /* Để đảm bảo nội dung không bị tràn */
+        padding: 10px;
+    }
 
+    .nav-menu ul {
+        flex-direction: row; /* Hiển thị danh sách theo chiều ngang */
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        width: 100%; /* Đảm bảo chiếm toàn bộ chiều ngang */
+    }
+
+    .nav-menu a {
+        font-size: 1rem;
+        padding-right: 0;
+    }
+
+    .auth-button button {
+        width: auto; /* Tự động điều chỉnh kích thước theo nội dung */
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-container {
+        width: 90%;
+        height: auto; /* Để chiều cao tự động */
+        margin: 10px auto;
+    }
+
+    .search-bar {
+        flex-direction: column;
+        width: 90%;
+        gap: 10px;
+        transform: translate(-50%, 0); /* Căn chỉnh cho phù hợp */
+        top: 10%; /* Điều chỉnh vị trí */
+    }
+
+    .search-bar input,
+    .search-bar select,
+    .search-bar button {
+        width: 250px;
+        height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .features {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .feature {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .registration {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .registration .form {
+        flex-direction: column;
+        gap: 10px;
+        height: auto;
+    }
+
+    .registration input,
+    .registration button {
+        width: 100%;
+        height: auto;
+        font-size: 10px;
+    }
+    .registration h2 {
+        position: relative;
+        left: 125px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    footer {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        padding: 20px;
+    }
+
+    .footer-section {
+        margin-bottom: 20px;
+    }
+
+    .footer-section button {
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .banner img {
+        width: 90%;
+        height: auto;
+    }
+}

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 <header>
@@ -78,7 +79,7 @@
             </select>
 
             <input type="text" placeholder="Yard Name" name="yard_name" value="{{ request('yard_name') }}" class="focus:ring-0 focus:border-0">
-            <button type="submit">Search</button>
+            <button type="submit" class="w-full md:w-[150px]">Search</button>
         </form>
     </div>
 </section>
