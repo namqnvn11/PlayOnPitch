@@ -717,6 +717,7 @@ button#submit-rating:hover {
     .main-section {
         flex-direction: column; /* Xếp các phần theo chiều dọc */
         gap: 15px;
+        width: 100%;
     }
 
     .image-gallery {
@@ -769,7 +770,41 @@ button#submit-rating:hover {
         margin-bottom: 15px; /* Giảm khoảng cách giữa các phần tử */
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Nhẹ nhàng hơn trên màn hình nhỏ */
         border-radius: 5px; /* Bo tròn ít hơn để cân đối */
+    }
 
+    .review-user{
+        font-size:10px ;
+    }
+
+    .content-wrapper {
+        max-width: 95%; /* Giảm max-width hơn nữa để sử dụng tối đa không gian */
+        padding: 10px;  /* Giảm padding cho màn hình nhỏ hơn */
     }
 }
+
+/* Responsive styles cho điện thoại */
+@media only screen and (max-width: 768px) {
+    .mr-3 {
+        margin-right: 8px; /* Giảm khoảng cách giữa các thành phần */
+    }
+    .average-rating-container {
+        margin-top: 0; /* Giảm khoảng cách trên màn hình nhỏ */
+    }
+    .star1 {
+        font-size: 20px; /* Giảm kích thước sao */
+    }
+}
+
+/*@media only screen and (max-width: 480px) {*/
+/*    .flex {*/
+/*        flex-direction: column; !* Chuyển các thành phần sang cột *!*/
+/*        align-items: flex-start; !* Căn lề trái cho các thành phần *!*/
+/*    }*/
+/*    .star1 {*/
+/*        font-size: 18px; !* Giảm thêm kích thước sao trên màn hình rất nhỏ *!*/
+/*    }*/
+/*    .mr-3 {*/
+/*        margin-right: 0; !* Loại bỏ khoảng cách ngang nếu không cần thiết *!*/
+/*    }*/
+/*}*/
 

@@ -60,7 +60,7 @@
     <div class="main-section">
         <div class="image-gallery">
             <div class="flex items-center mb-3">
-                <div class="text-[24px] font-bold mr-3">{{$boss->company_name}} </div>
+                <div class="text-[20px] md:text-[24px] font-bold mr-3">{{$boss->company_name}} </div>
                 <div class="average-rating-container flex items-center mt-1">
                     <h3 id="averageRating">
                         @php
