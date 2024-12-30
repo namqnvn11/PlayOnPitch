@@ -126,7 +126,6 @@
 {{--        <h3>General Overview</h3>--}}
 {{--        <div class="text-[17px] mt-2 text-justify">{{$boss->description}}</div>--}}
 {{--    </div>--}}
-
     <div class="review-section">
         <h3>Ratings</h3>
         @if(Auth::check())
@@ -188,7 +187,6 @@
         @endif
     </div>
 </div>
-
 
 <div>
     <form action="{{ Auth::check() ? route('user.storeRegister') : route('guest.storeRegister') }}" method="post">
@@ -283,7 +281,6 @@
 <script src="{{asset('assets/libraries/toastr/toastr.min.js' ) }}"></script>
 <script src="{{asset('js/notification.js')}}"></script>
 <script src="{{asset('js/registerBoss.js?t='.config('constants.app_version'))}}"></script>
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

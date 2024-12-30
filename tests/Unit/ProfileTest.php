@@ -18,7 +18,7 @@ class ProfileTest extends TestCase
         $this->actingAs($user);
 
         $response = $this->get(route('user.profile.index'));
-        $response->assertStatus(500);
+        $response->assertStatus(200);
 
         $updatedData = [
             'full_name' => 'Updated Name',
@@ -41,7 +41,7 @@ class ProfileTest extends TestCase
         ];
 
         $response = $this->get(route('user.profile.index'), $invalidData);
-        $response->assertStatus(500);
+        $response->assertStatus(200);
     }
 
     public function test_update_password()
