@@ -52,7 +52,7 @@
 </a>
 
 <div class="invoice-container">
-    <div class="steps">
+    <div class="step-indicator">
         <div class="step">
             <i class="fa fa-th-large"></i>
             <span>Choose Yard</span>
@@ -79,7 +79,7 @@
                 <div class="font-bold">Yards:</div>
                 <div class="w-[64%]">
                     @foreach($groupedSchedules as $aYardSchedule)
-                        <div class="mb-1">
+                        <div class="mb-1 text-sm absolute top-[537px] left-[174px] md:static md:mb-1">
                             {{$aYardSchedule[0]->Yard->yard_name}}:
                             @foreach($aYardSchedule as $slot)
                                 {{$slot->time_slot}}

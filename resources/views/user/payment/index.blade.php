@@ -80,9 +80,9 @@
          $name= Auth::check()?'user':'guest';
         @endphp
 
-        <div class="p-10 rounded mx-auto border bg-white">
-            <div class="flex justify-center">
-                <div class="mx-5">
+        <div class="p-6 rounded mx-auto border bg-white max-w-screen-lg w-full">
+            <div class="flex flex-col lg:flex-row lg:justify-center">
+                <div class="mx-4 lg:w-1/2">
                     <form action="{{url($name.'/payment/cancel')}}" method="post" id="form-cancel">
                         @csrf
                         @foreach($yardSchedules as $yardSchedule)
@@ -142,7 +142,7 @@
                                         </x-select>
                                     @endif
                                 </div>
-                            <div class="payment_method mt-6">
+                            <div class="payment_method mt-6 ">
                                 <div id="momoContainer" onclick="chooseMomo()" class="flex border rounded h-[60px] p-4 mt-4 justify-between items-center border-green-500">
                                     <div class="flex">
                                         <img src="https://homepage.momocdn.net/fileuploads/svg/momo-file-240411162904.svg" width="30">

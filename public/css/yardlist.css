@@ -493,7 +493,7 @@ footer {
     }
 
     .card img {
-        height: 120px; /* Thu nhỏ chiều cao ảnh */
+        height: 22vh; /* Thu nhỏ chiều cao ảnh */
     }
 
     .card-content h3 {

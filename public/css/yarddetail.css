@@ -752,6 +752,15 @@ button#submit-rating:hover {
         width: 100%; /* Chiếm toàn bộ chiều ngang */
     }
 
+    .review-section{
+        padding: 0;
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+
+    .review-section h3{
+        padding-left: 3.5vw;
+    }
     /* Reviews */
     #review-form {
         gap: 5px;

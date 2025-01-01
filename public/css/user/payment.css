@@ -379,6 +379,7 @@ hr {
         font-size: 10px;
         border-radius: 15px;
     }
+
     .registration input
     {
         width: 100%;
@@ -416,10 +417,10 @@ hr {
         width: 90%;
         height: 6.5vh;
     }
+    .payment-container,
+    .payment {
+        max-width: 100%;
+        margin: 0;
+        padding: 15px;
+    }
 }
-
-
-
-
-
-
