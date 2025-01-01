@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -49,7 +48,7 @@ class User extends Authenticatable
 
     public function Rating()
     {
-        return $this->hasMany(Raiting::class);
+        return $this->hasMany(Rating::class);
     }
 
     public function image()
