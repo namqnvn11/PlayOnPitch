@@ -38,7 +38,7 @@
                                 <thead>
                                 <tr class="p-2">
                                     <th class="w-[20%]">Author</th>
-                                    <th class="w-[10%]">Point</th>
+                                    <th class="w-[10%]">Star</th>
                                     <th class="w-[40%]">Comment</th>
                                     <th class="w-[18%]">Rating Time</th>
                                     <th class="flex items-center max-w-[80px] mt-2" style="border: none">
@@ -59,7 +59,7 @@
                                     <tr><th colspan="5" class="font-medium">No Reported</th></tr>
                                 @endif
                                     @foreach($ratings as $rating)
-                                        <tr onclick="showContentModal('{{$rating->comment}}')">
+                                        <tr onclick="showContentModal('{{$rating->id}}','{{$rating->comment}}')">
                                             <td>{{$rating->User->full_name}}</td>
                                             <td>{{$rating->point}}</td>
                                             <td class="text-ellipsis max-w-[200px] overflow-hidden">{{$rating->comment}}</td>
@@ -95,6 +95,7 @@
         const RESET_PASSWORD_URL= '{{url('admin/user/reset-password')}}';
         const BLOCK_RATING="{{url('admin/reported/block')}}";
         const UNBLOCK_RATING="{{url('admin/reported/unblock')}}";
+        const GET_REPORTS_URL="{{url('/admin/reported/getReports')}}"
     </script>
     <script src="{{ asset('js/admin/reportedRating/index.js?t='.config('constants.app_version') )}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>

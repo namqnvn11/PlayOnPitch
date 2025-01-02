@@ -66,4 +66,33 @@ class ReportController extends Controller
             'message' => 'Ratings has been unblocked successfully.'
         ]);
     }
+
+    //ratingId
+    function getReports($id) {
+        $currentRating = Rating::with(['Reports.User'])->find($id);
+
+        if (!$currentRating) {
+            return response()->json(
+                [    'success' => false,
+                    'message' => 'Rating not found'
+                ]);
+        }
+
+        // Nhóm các reports theo user
+        $groupedReports = $currentRating->Reports
+            ->where('status', 'pending')
+            ->groupBy('user_id')->map(function ($reports, $userId) {
+            return [
+                'user' => $reports->first()->User,
+                'reports' => $reports,
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'groupedReports' => $groupedReports->toArray(),
+        ]);
+    }
+
+
 }

@@ -88,6 +88,7 @@ Route::middleware(['auth:admin'])->group(function () {
             Route::get('/index', [ReportController::class, 'index'])->name('index');
             Route::post('/block', [ReportController::class, 'block'])->name('block');
             Route::post('/unblock', [ReportController::class, 'unblock'])->name('unblock');
+            Route::get('/getReports/{id}', [ReportController::class, 'getReports'])->name('getReports');
         });
     });
 });
