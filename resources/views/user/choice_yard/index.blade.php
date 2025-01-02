@@ -52,22 +52,42 @@
 </a>
 
 <div class="booking-container">
-    <div class="step-indicator">
-        <div class="step active">
-            <i class="fa fa-th-large"></i>
-            <span>Choose Yard</span>
+
+{{--    <div class="step-indicator">--}}
+{{--        <div class="step active">--}}
+{{--            <i class="fa fa-th-large"></i>--}}
+{{--            <span>Choose Yard</span>--}}
+{{--        </div>--}}
+{{--        <span class="arrow">></span>--}}
+{{--        <div class="step">--}}
+{{--            <i class="fa fa-credit-card"></i>--}}
+{{--            <span>Payment</span>--}}
+{{--        </div>--}}
+{{--        <span class="arrow">></span>--}}
+{{--        <div class="step">--}}
+{{--            <i class="fa fa-ticket-alt"></i>--}}
+{{--            <span>Booking Info</span>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+    <div class="flex text-[16px] flex-col">
+        <div class="flex justify-center mb-3">
+            <div class="flex items-center justify-between w-full max-w-[800px]">
+                <div class="flex flex-col text-red-600 items-center">
+                    <i class="fa fa-th-large mb-1 text-[24px]"></i>
+                    <span>Choose Yard</span>
+                </div>
+                <div class="text-[18px] text-center">></div>
+                <div class="flex flex-col items-center">
+                    <i class="fa fa-credit-card mb-1 text-[24px]"></i>
+                    <span>Payment</span>
+                </div>
+                <div class="text-[18px] text-center">></div>
+                <div class="flex flex-col items-center">
+                    <i class="fa fa-ticket-alt mb-1 text-[24px]"></i>
+                    <span>Booking Info</span>
+                </div>
+            </div>
         </div>
-        <span class="arrow">></span>
-        <div class="step">
-            <i class="fa fa-credit-card"></i>
-            <span>Payment</span>
-        </div>
-        <span class="arrow">></span>
-        <div class="step">
-            <i class="fa fa-ticket-alt"></i>
-            <span>Booking Info</span>
-        </div>
-    </div>
 
     <div class="time-selector flex items-center mt-3">
         <form method="get" id="selectedTime">

@@ -52,24 +52,45 @@
 </a>
 
 <div class="invoice-container">
-    <div class="step-indicator">
-        <div class="step">
-            <i class="fa fa-th-large"></i>
-            <span>Choose Yard</span>
-        </div>
-        <div class="arrow">></div>
-        <div class="step">
-            <i class="fa fa-credit-card"></i>
-            <span>Payment</span>
-        </div>
-        <div class="arrow">></div>
-        <div class="step active">
-            <i class="fa fa-ticket-alt"></i>
-            <span>Booking Info</span>
-        </div>
-    </div>
+{{--    <div class="step-indicator">--}}
+{{--        <div class="step">--}}
+{{--            <i class="fa fa-th-large"></i>--}}
+{{--            <span>Choose Yard</span>--}}
+{{--        </div>--}}
+{{--        <div class="arrow">></div>--}}
+{{--        <div class="step">--}}
+{{--            <i class="fa fa-credit-card"></i>--}}
+{{--            <span>Payment</span>--}}
+{{--        </div>--}}
+{{--        <div class="arrow">></div>--}}
+{{--        <div class="step active">--}}
+{{--            <i class="fa fa-ticket-alt"></i>--}}
+{{--            <span>Booking Info</span>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 
-    <div class="invoice">
+    <div class="flex text-[16px] flex-col">
+        <div class="flex justify-center mb-3">
+            <div class="flex items-center justify-between w-full max-w-[800px]">
+                <div class="flex flex-col items-center">
+                    <i class="fa fa-th-large mb-1 text-[24px]"></i>
+                    <span>Choose Yard</span>
+                </div>
+                <div class="text-[18px] text-center">></div>
+                <div class="flex flex-col items-center">
+                    <i class="fa fa-credit-card mb-1 text-[24px]"></i>
+                    <span>Payment</span>
+                </div>
+                <div class="text-[18px] text-center">></div>
+                <div class="flex flex-col text-red-600 items-center">
+                    <i class="fa fa-ticket-alt mb-1 text-[24px]"></i>
+                    <span>Booking Info</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="invoice">
         <h2>Invoice</h2>
         <hr>
         <div class="invoice-info">
@@ -79,7 +100,7 @@
                 <div class="font-bold">Yards:</div>
                 <div class="w-[64%]">
                     @foreach($groupedSchedules as $aYardSchedule)
-                        <div class="mb-1 text-sm absolute top-[537px] left-[174px] md:static md:mb-1">
+                        <div class="mb-1 text-sm absolute top-[560px] left-[174px] md:static md:mb-1">
                             {{$aYardSchedule[0]->Yard->yard_name}}:
                             @foreach($aYardSchedule as $slot)
                                 {{$slot->time_slot}}

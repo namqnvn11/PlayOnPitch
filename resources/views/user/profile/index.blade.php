@@ -89,8 +89,8 @@
         </div>
         <div class="details-box">
             <div class="info-row">
-                <label>Email:</label>
-                <span>
+                <label class="mr-[330px]">Email:</label>
+                <span class="">
                     {{ Auth::user()->email}}
                     @if(Auth::user()->email_verified_at!==null)
                         <i class="bi bi-patch-check-fill text-green-600 text-[24px] ml-2"></i>
@@ -99,18 +99,17 @@
                 </span>
             </div>
             <div class="info-row">
-                <label>Name:</label>
-                <span>{{ Auth::user()->full_name}}</span>
+                <label class="mr-[330px]">Name:</label>
+                <span class="mr-[10px]">{{ Auth::user()->full_name}}</span>
             </div>
             <div class="info-row">
-                <label>Phone Number:</label>
+                <label class="mr-[320px]">Phone Number:</label>
                 <span>{{ Auth::user()->phone?Auth::user()->phone:'Not Provide'}}</span>
             </div>
             <div class="info-row">
-                <label>Address:</label>
+                <label class="mr-[320px]">Address:</label>
                 <span>{{ Auth::user()->address?(Auth::user()->address . ", " . Auth::user()->District?->name . ", " . Auth::user()->District?->Province?->name) : 'Not Provide'}}</span>
             </div>
-
         </div>
         <div class="flex w-full">
             <button class="edit-btn js-on-edit" onclick="openEditProfileForm()">Edit Info</button>
