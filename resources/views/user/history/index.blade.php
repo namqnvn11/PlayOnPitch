@@ -70,6 +70,7 @@
             <li class="border-green-600 border-1 rounded"><a href="{{route("user.logout")}}" class="flex justify-center text-green-600" style="color: #0b2e13 !important;"><div class="text-[#4CAF50]">Logout</div></a></li>
         </ul>
     </div>
+
     <div class="history-section">
         <h2 class="section-title">Booking History</h2>
         <div class="booking-list">
@@ -78,7 +79,7 @@
                     @php
                         $boss=$history->Reservation->YardSchedules->first()->Yard->Boss
                     @endphp
-                    <div class="booking-item min-w-[560px]">
+                    <div class="booking-item flex flex-col md:flex-row bg-white border border-gray-300 rounded-lg shadow-md md:p-5">
                         <div class="booking-details">
                             <img src="{{$boss->images->first()->img??asset('img/sanbong.jpg')}}" alt="Field Image">
                             <div></div>

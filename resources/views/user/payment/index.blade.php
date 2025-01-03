@@ -130,7 +130,7 @@
                                     <option value="2">Deposit 20%</option>
                                 </x-select>
                             </div>
-                                <div class="mt-6 flex {{auth::check()?'':'hidden'}}">
+                                <div class="mt-6 flex {{auth::check()?'':'hidden'}} flex-col md:flex-row gap-4">
                                     @if(auth::check()&&$currentUser)
                                         <x-select name="voucher_id" id="selectVoucher" onchange="voucherSelectOnchange(this)">
                                             <option value="0">Choose Your Voucher</option>
