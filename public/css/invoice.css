@@ -326,7 +326,7 @@ footer {
 }
 
 .total-info p span {
-    font-size: 16px;
+    /*font-size: 16px;*/
     font-weight: normal;
     color: black;
 }
@@ -490,5 +490,14 @@ hr {
         position: relative;
         top: -25px;
         left: 120px;
+    }
+}
+@media (max-width: 768px) {
+    .invoice-info, .customer-info, .total-info {
+        font-size: 13.5px;
+    }
+
+    .customer-info p, .total-info p{
+        font-size: 13.5px;
     }
 }
