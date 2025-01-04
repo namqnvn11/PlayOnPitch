@@ -20,7 +20,6 @@
                     <button type="button" class="btn btn-default mr-1" data-dismiss="modal" onclick="$(`#${'modal-rating-content'}`).modal('hide')">Close</button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
