@@ -569,6 +569,7 @@ footer {
         height: 6.5vh;
     }
 }
+
 @media (max-width: 768px) {
     .profile-container {
         flex-direction: column; /* Sắp xếp hàng dọc */
