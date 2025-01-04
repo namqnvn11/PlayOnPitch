@@ -528,7 +528,8 @@ table tr:hover {
     }
 
     .profile-details {
-        width: 400px; /* Chiếm toàn bộ chiều rộng */
+        width: 388px; /* Chiếm toàn bộ chiều rộng */
+        margin-left: 10px;
     }
     table {
         display: block;
@@ -537,7 +538,7 @@ table tr:hover {
     }
 
     table img {
-        max-width: 80px;
+        width: 100px;
         height: auto;
     }
 

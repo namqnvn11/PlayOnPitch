@@ -130,7 +130,7 @@
             </div>
         </section>
     </form>
-</div>>
+</div>
 
 <footer id="footer">
     <div class="footer-section">

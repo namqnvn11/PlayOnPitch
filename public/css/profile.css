@@ -471,7 +471,8 @@ footer {
     }
 
     .profile-details {
-        width: 400px; /* Chiếm toàn bộ chiều rộng */
+        width: 388px; /* Chiếm toàn bộ chiều rộng */
+        margin-left: 10px;
     }
 
     .details-box {
@@ -481,8 +482,29 @@ footer {
     }
 
     .edit-btn {
-        width: 100%; /* Nút chiếm toàn bộ chiều rộng */
-        margin-bottom: 10px;
+        width: 100%; /* Để các nút chiếm toàn bộ chiều rộng */
+        margin-left: 0;
+        margin-bottom: 10px; /* Tạo khoảng cách giữa các nút */
+        font-size: 13px; /* Giảm kích thước font */
+        padding: 8px 0; /* Giảm padding */
     }
 }
 
+@media (max-width: 768px) {
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .info-row label {
+        margin-right: 310px;
+        margin-bottom: 5px;
+        text-align: left;
+    }
+
+    .info-row span {
+        width: 100%;
+        text-align: left;
+        margin-right: 50px;
+        transform: translateY(-55px);    }
+}

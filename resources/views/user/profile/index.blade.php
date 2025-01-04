@@ -113,7 +113,7 @@
         </div>
         <div class="flex w-full">
             <button class="edit-btn js-on-edit" onclick="openEditProfileForm()">Edit Info</button>
-            <button class="edit-btn js-on-edit ml-2 w-[200px]" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change Password</button>
+            <button class="edit-btn js-on-edit ml-2 " data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change Password</button>
             @if(Auth::user()->email_verified_at===null)
                 <a href="{{route('verification.notice')}}"><button class="edit-btn ml-2" type="submit">Verify you account</button></a>
             @endif
