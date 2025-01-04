@@ -485,3 +485,11 @@ hr {
     }
 }
 
+/* Khi màn hình nhỏ hơn 768px */
+@media (max-width: 768px) {
+    .mb-1 {
+        position: relative;
+        bottom: 25px;
+        left: 120px;
+    }
+}
