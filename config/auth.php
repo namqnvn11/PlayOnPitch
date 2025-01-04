@@ -123,6 +123,12 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+        'bosses' => [
+            'provider' => 'bosses',
+            'table' => 'boss_password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
     ],
 
     /*

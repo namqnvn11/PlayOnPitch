@@ -33,6 +33,7 @@
 <body class="d-flex justify-content-center align-items-center vh-100">
 <div class="login-container text-center">
     <h2 class="mb-3">WELCOME</h2>
+    <x-auth-session-status class="mb-4 text-green-600" :status="session('status')" />
     <p class="text-muted mb-4">Please enter your email and password to continue</p>
 
     <!-- Login Form -->
