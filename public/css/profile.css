@@ -465,8 +465,9 @@ footer {
     }
 
     .sidebar {
-        width: 100%; /* Chiếm toàn bộ chiều rộng */
-        margin-bottom: 10px; /* Thêm khoảng cách bên dưới */
+        width: 100%;
+        margin-bottom: 10px;
+        margin-left: 50px;
     }
 
     .profile-details {

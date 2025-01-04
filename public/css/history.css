@@ -578,6 +578,7 @@ footer {
     .sidebar {
         width: 100%; /* Chiếm toàn bộ chiều rộng */
         margin-bottom: 10px; /* Thêm khoảng cách bên dưới */
+        margin-left: 50px;
     }
 
     .profile-details {
@@ -586,4 +587,5 @@ footer {
     .booking-list{
         width:370px;
     }
+
 }

@@ -86,8 +86,8 @@
                             <div class="details">
                                 <p><strong>Code:</strong> {{ $history->reservation->code ?? 'No code available' }}</p>
                                 @if ($history->reservation->YardSchedules->first())
-                                    <h6>{{$boss->company_name }}</h6>
-                                    <h6>{{ $boss->company_address .", " . $boss->district->name . ", " . $boss->district->province->name  }}</h6>
+                                    <h6 class="font-bold">{{$boss->company_name }}</h6>
+                                    <h6 class="text-sm sm:text-base">{{ $boss->company_address .", " . $boss->district->name . ", " . $boss->district->province->name  }}</h6>
                                 @else
                                     <p>Field information not found</p>
                                 @endif
@@ -97,8 +97,8 @@
                             <p class="status success">Successful</p>
                             <p><strong>Total Amount:</strong> {{ number_format($history->reservation->total_price ?? 0, 0, ',', '.') }}đ</p>
                             <p><strong>Deposit Paid:</strong> {{ number_format($history->reservation->deposit_amount ?? 0, 0, ',', '.') }}đ</p>
-                           <div class="flex flex-row">
-                               <button class="reorder-btn mr-2 w-[130px] py-2" onclick="redirectToInvoice({{ $history->reservation->invoice->id ?? '' }})">View Invoice</button>
+                           <div class="flex flex-row gap-4 md:gap-0">
+                               <button class="reorder-btn w-[130px] py-2" onclick="redirectToInvoice({{ $history->reservation->invoice->id ?? '' }})">View Invoice</button>
                                <button class="reorder-btn w-[130px] py-2" onclick="redirectToYardDetail({{ $history->reservation->YardSchedules->first()->yard->boss->id ?? '' }})">Book Again</button>
                            </div>
                         </div>
