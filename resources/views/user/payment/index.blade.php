@@ -114,7 +114,7 @@
                     <hr>
                     <div class="customer-info">
                         <p><strong>Customer:</strong> <span>{{$contact->name??''}}</span></p>
-                        <p><strong>Phone number:</strong> <span>{{$contact->phone??''}}</span></p>
+                        <p><strong>Phone number:</strong> <span class=" md:mt-0 mt-[26px]">{{$contact->phone??''}}</span></p>
                         <p><strong>Email:</strong> <span>{{$currentUser->email??'trống'}}</span></p>
                     </div>
                 </div>
