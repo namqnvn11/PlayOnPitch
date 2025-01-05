@@ -30,6 +30,11 @@
     <link rel="stylesheet" href="{{  asset('css/custom.css?v='.config('constant.app_version') ) }}">
     <link rel="stylesheet" href="{{  asset('css/admin/admin.css?v='.config('constant.app_version') ) }}">
 
+    <link
+        rel="icon"
+        href="{{asset('img/logo.png')}}"
+        type="image/x-icon"
+    />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

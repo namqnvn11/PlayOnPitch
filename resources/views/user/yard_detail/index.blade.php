@@ -13,6 +13,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@flasher/flasher@1.1.2/dist/flasher.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <link
+        rel="icon"
+        href="{{asset('img/logo.png')}}"
+        type="image/x-icon"
+    />
+
 </head>
 <body>
 <header>

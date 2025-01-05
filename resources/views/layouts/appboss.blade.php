@@ -31,6 +31,12 @@
     <link rel="stylesheet" href="{{  asset('css/custom.css?v='.config('constant.app_version') ) }}">
     <link rel="stylesheet" href="{{  asset('css/boss/boss.css?v='.config('constant.app_version') ) }}">
 
+
+    <link
+        rel="icon"
+        href="{{asset('img/logo.png')}}"
+        type="image/x-icon"
+    />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
