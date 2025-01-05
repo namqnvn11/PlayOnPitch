@@ -28,7 +28,9 @@ class User extends Authenticatable
         'booking_count',
         'score',
         'block',
-        'email_verified_at'
+        'email_verified_at',
+        'otp_code',
+        'otp_expires_at'
     ];
 
     public function District()

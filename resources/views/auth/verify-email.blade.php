@@ -1,25 +1,34 @@
 <x-guest-layout>
     <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+        {{ __('Thank you for signing up! Please verify your email address by entering the OTP code sent to your email. If you did not receive the email or the code has expired, you can request a new one.') }}
     </div>
 
-    @if (session('status') == 'verification-link-sent')
+    @if (session('status') == 'otp-sent')
         <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
+            {{ __('A new OTP code has been sent to the email address you provided during registration. Please check your inbox or spam folder. This code will expire in 10 minutes.') }}
         </div>
     @endif
 
-    <div class="mt-4 flex items-center justify-between">
-        <form method="POST" action="{{ route('verification.send') }}">
+    <div class="mt-4">
+        <form method="POST" action="{{ route('verification.verify') }}" class="mt-4">
             @csrf
-
-            <div>
-                <x-primary-button>
-                    {{ __('Resend Verification Email') }}
+            <x-input-label for="otp_code" :value="__('OTP CODE')"/>
+            <div class="mb-3 flex w-full items-start">
+                <div class="w-full">
+                    <x-text-input id="email" class="block mt-1 w-full" type="text" name="otp_code" required autofocus />
+                    <x-input-error :messages="$errors->get('otp_code')" class="mt-2" />
+                </div>
+                <x-primary-button class="ml-4 mt-1 py-3">
+                    {{ __('Verify') }}
                 </x-primary-button>
             </div>
         </form>
-
+        <form method="POST" action="{{ route('verification.send') }}" class="mb-2">
+            @csrf
+            <x-primary-button>
+                {{ __('Resend Verification Email') }}
+            </x-primary-button>
+        </form>
         <form method="POST" action="{{ route('logout') }}">
             @csrf
 
