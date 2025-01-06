@@ -32,7 +32,7 @@
                                 <div class="modal-body">
                                     <div class="form-group">
                                         <label for="email">Email</label>
-                                        <input type="text" name="email" id="email" class="form-control rounded-md border-gray-400" placeholder="Enter email" value="{{$boss->email}}">
+                                        <input type="text" name="email" id="email" class="form-control rounded-md border-gray-400" placeholder="Enter email" value="{{$boss->email}}" disabled>
                                     </div>
 
                                     <div class="form-group">

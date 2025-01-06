@@ -31,7 +31,6 @@ class InformationController extends Controller
 
     public function informationUpdate(Request $request){
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
             'full_name' => 'required',
             'phone' => ['required', 'string', 'regex:/^((\+84|0)(\d{9,10}))|((0\d{2,3})\d{7,8})$/'],
             'company_name' => 'required',
