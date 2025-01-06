@@ -130,7 +130,9 @@
 
                 <p><strong>Payment Type:</strong> <span>{{$reservation->deposit_amount!=0?'Deposit 20%':'Pay in Full'}}</span></p>
 
-                <p><strong>Paid Amount:</strong> <span>{{ number_format($reservation->deposit_amount==0?$reservation->total_price:$reservation->deposit_amount, 0, ',') }} VND</span></p>
+                <p><strong>Discount</strong> <span>{{number_format($invoice->discount??0)}} VND</span></p>
+
+                <p><strong>Paid Amount:</strong> <span>{{ number_format($reservation->deposit_amount==0?($reservation->total_price-($invoice->discount??0)):$reservation->deposit_amount, 0, ',') }} VND</span></p>
             </div>
             <hr>
             <button class="export-invoice rounded" id="export-invoice">Export Invoice</button>

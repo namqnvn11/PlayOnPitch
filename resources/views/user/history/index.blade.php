@@ -102,8 +102,13 @@
                         </div>
                         <div class="booking-status">
                             <p class="status success">Successful</p>
-                            <p><strong>Total Amount:</strong> {{ number_format($history->reservation->total_price ?? 0, 0, ',', '.') }}đ</p>
-                            <p><strong>Deposit Paid:</strong> {{ number_format($history->reservation->deposit_amount ?? 0, 0, ',', '.') }}đ</p>
+                            <p><strong>Total Amount:</strong> {{ number_format($history->reservation->total_price ?? 0, 0, ',', '.') }} VND</p>
+                            @if($history->reservation->invoice->discount)
+                                <p><strong>Discount :</strong> {{ number_format($history->reservation->invoice->discount ?? 0, 0, ',', '.') }} VND</p>
+                            @else
+                                <p><strong>Deposit Paid:</strong> {{ number_format($history->reservation->deposit_amount ?? 0, 0, ',', '.') }} VND</p>
+                            @endif
+
                            <div class="flex flex-row gap-4 md:gap-0">
                                <button class="reorder-btn w-[130px] py-2" onclick="redirectToInvoice({{ $history->reservation->invoice->id ?? '' }})">View Invoice</button>
                                <button class="reorder-btn w-[130px] py-2" onclick="redirectToYardDetail({{ $history->reservation->YardSchedules->first()->yard->boss->id ?? '' }})">Book Again</button>

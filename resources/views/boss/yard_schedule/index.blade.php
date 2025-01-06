@@ -110,8 +110,8 @@
 
                                                     @if ($invoiceId)
                                                         <a href="{{ route('boss.invoice.index', ['id' => $invoiceId]) }}" target="_blank" style="text-decoration: none; color: inherit;">
-                                                            <div><span>Name: </span>{{ $reservation->user->full_name ?? '' }}</div>
-                                                            <div><span>Phone: </span>{{ $reservation->user->phone ?? '' }}</div>
+                                                            <div><span>Name: </span>{{ $reservation->user->full_name ?? $reservation->Contact->name ?? '' }}</div>
+                                                            <div><span>Phone: </span>{{ $reservation->user->phone ?? $reservation->Contact->phone ??'' }}</div>
                                                             <div><span>Price: </span>{{ number_format($matchingSchedule->price_per_hour, 0, ',', '.') }} VNĐ</div>
                                                         </a>
                                                     @else

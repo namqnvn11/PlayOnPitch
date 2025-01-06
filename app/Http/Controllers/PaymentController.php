@@ -118,13 +118,19 @@ class PaymentController extends Controller
         // Kiểm tra phản hồi từ MoMo bằng 'resultCode'
         if ($momoResponse['resultCode'] === 0) {
             // Lưu thông tin thanh toán vào cơ sở dữ liệu
-            $invoice= Invoice::create([
+            $invoice = Invoice::create([
                 'reservation_id'=>$request->reservationId,
                 'invoice_date'=> now(),
                 'total_price'=>$totalPrice,
                 'payment_method'=>'momo',
                 'status'=>'pending',
             ]);
+
+            //thêm trường discount nếu có
+            if($userVoucherId!=0){
+                $invoice->discount=$addedVoucher->Voucher->price;
+                $invoice->save();
+            }
             session()->put('invoiceId',$invoice->id);
 
             PaymentTransaction::create([
@@ -199,12 +205,14 @@ class PaymentController extends Controller
             ]);
         }
         $totalPrice= $paymentType=='1'? $request->totalPrice: $request->totalPrice*0.2;
+
         //voucher nếu có
         $userVoucherId = $request->user_voucher_id;
         if ($userVoucherId!=0){
             $addedVoucher=User_voucher::find($userVoucherId);
             $totalPrice-=$addedVoucher->Voucher->price;
             session()->put('userVoucherId',$userVoucherId);
+            session()->put('discount',$addedVoucher->Voucher->price);
         }
 
         $stripe = new StripeClient(config('payment.stripe.stripe_secret'));
@@ -258,6 +266,14 @@ class PaymentController extends Controller
                 'payment_method'=>'stripe',
                 'status'=>$invoiceStatus,
             ]);
+
+            if (session()->has('discount')) {
+                $discount = session()->get('discount');
+                $invoice->discount = $discount;
+                $invoice->save();
+                session()->forget('discount');
+            }
+
             session()->put('invoiceId',$invoice->id);
 
             PaymentTransaction::create([
